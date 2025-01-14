@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
-import food from './models/food'
+import userInfo from './models/userInfo'
 
 const store = configureStore({
     reducer:{
-        food
+        userInfo
     }
 })
 

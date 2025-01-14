@@ -81,7 +81,7 @@ const Login: React.FC = () => {
                   size: 'large',
                   prefix: <LockOutlined className={'prefixIcon'} />,
                   strengthText:
-                    'Password should contain numbers, letters and special characters, at least 8 characters long.',
+                    '密码由数字、字母和特殊字符组成，长度至少为8个字符',
                   statusRender: (value) => {
                     const getStatus = () => {
                       if (value && value.length > 12) {

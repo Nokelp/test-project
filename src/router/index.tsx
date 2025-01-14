@@ -35,7 +35,7 @@ const  routes:Route[]=[
         path: '/',
         element: <Home />,
         layout: true,
-
+        islogin: true
     },
     {
         path: '/exam/record',
