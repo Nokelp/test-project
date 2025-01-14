@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import logstyle from './Login.module.scss'
 import {
     LockOutlined,
@@ -10,11 +10,47 @@ import {
     ProFormText,
 } from '@ant-design/pro-components'
 import { message, theme } from 'antd'
-import style  from './Login.module.scss'
+import style from './Login.module.scss'
+import { getCaptchaApi, getLoginApi } from '../../services'
+import { LoginRes } from '../../types'
+import { useNavigate } from 'react-router-dom'
 
 const Login: React.FC = () => {
   const { token } = theme.useToken();
+  const [codImg, setCodeImg] = useState('')
+  const navigate = useNavigate()
+  
+  const onFinish = async(values: LoginRes) => {
+    try {
+      const res = await getLoginApi(values)
+      console.log(res.data.code) 
+      if(res.data.code === 200){
+        message.success('登录成功')
+        localStorage.setItem('token', res.data.data.token)
+        navigate('/')
+      }else if(res.data.code === 1005){
+        message.error('验证码过期')
+        getCaptcha()
+      }else{
+        message.error(res.data.msg)
+      }
+    }catch(e){
+      console.log(e)
+    }
+  };
 
+  const getCaptcha = async () => {
+    try {
+      const res = await getCaptchaApi() 
+      setCodeImg(res.data.data.code)
+    }catch(e){
+      console.log(e)
+    }
+  }
+
+  useEffect(() => {
+    getCaptcha()
+  },[])
 
   return (
     <ProConfigProvider hashed={false} >
@@ -22,9 +58,7 @@ const Login: React.FC = () => {
         <LoginForm
           title="OnlineExam"
           subTitle="在线考试平台"
-          onFinish={(values) => {
-            message.success('登录成功！');
-          }}
+          onFinish={onFinish}
         >
             <>
               <ProFormText
@@ -101,8 +135,8 @@ const Login: React.FC = () => {
                     },
                   ]}
                 />
-                <div>
-                  <img src="" alt="" />
+                <div className={style.codeImg}>
+                  <img src={codImg} alt="" />
                 </div>
               </div>
             </>
