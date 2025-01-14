@@ -1,12 +1,13 @@
 import Home from "../pages/home/Home"
-import Detail from "../pages/detail/Detail"
+import Detail from "../pages/permission/Permission"
 import Login from "../pages/login/Login"
 import NotFound from "../pages/notfound/NotFound"
+import Layout from "../Layout/Layout"
 
 export default  [
     {
         path: '/',
-        element: <Home />
+        element: <Layout><Home /></Layout>
     },
     {
         path: '/detail',

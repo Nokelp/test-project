@@ -7,10 +7,10 @@ import {
 import {
     LoginForm,
     ProConfigProvider,
-    ProFormCaptcha,
     ProFormText,
 } from '@ant-design/pro-components'
 import { message, theme } from 'antd'
+import style  from './Login.module.scss'
 
 const Login: React.FC = () => {
   const { token } = theme.useToken();
@@ -86,32 +86,25 @@ const Login: React.FC = () => {
                   },
                 ]}
               />
-               <ProFormCaptcha
-                fieldProps={{
-                  size: 'large',
-                  prefix: <LockOutlined className={'prefixIcon'} />,
-                }}
-                captchaProps={{
-                  size: 'large',
-                }}
-                placeholder={'验证码'}
-                captchaTextRender={(timing, count) => {
-                  if (timing) {
-                    return `${count} ${'获取验证码'}`;
-                  }
-                  return '获取验证码';
-                }}
-                name="captcha"
-                rules={[
-                  {
-                    required: true,
-                    message: '请输入验证码！',
-                  },
-                ]}
-                onGetCaptcha={async () => {
-                  message.success('获取验证码成功！验证码为：1234');
-                }}
-              />
+              <div className={style.code}>
+                <ProFormText
+                  name="code"
+                  fieldProps={{
+                    size: 'large',
+                    prefix: <UserOutlined className={'prefixIcon'} />,
+                  }}
+                  placeholder={'验证码'}
+                  rules={[
+                    {
+                      required: true,
+                      message: '请输入验证码!',
+                    },
+                  ]}
+                />
+                <div>
+                  <img src="" alt="" />
+                </div>
+              </div>
             </>
           <div
             style={{
