@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import logstyle from './Login.module.scss'
 import {
     LockOutlined,
@@ -7,14 +7,50 @@ import {
 import {
     LoginForm,
     ProConfigProvider,
-    ProFormCaptcha,
     ProFormText,
 } from '@ant-design/pro-components'
 import { message, theme } from 'antd'
+import style from './Login.module.scss'
+import { getCaptchaApi, getLoginApi } from '../../services'
+import { LoginRes } from '../../types'
+import { useNavigate } from 'react-router-dom'
 
 const Login: React.FC = () => {
   const { token } = theme.useToken();
+  const [codImg, setCodeImg] = useState('')
+  const navigate = useNavigate()
+  
+  const onFinish = async(values: LoginRes) => {
+    try {
+      const res = await getLoginApi(values)
+      console.log(res.data.code) 
+      if(res.data.code === 200){
+        message.success('登录成功')
+        localStorage.setItem('token', res.data.data.token)
+        navigate('/')
+      }else if(res.data.code === 1005){
+        message.error('验证码过期')
+        getCaptcha()
+      }else{
+        message.error(res.data.msg)
+      }
+    }catch(e){
+      console.log(e)
+    }
+  };
 
+  const getCaptcha = async () => {
+    try {
+      const res = await getCaptchaApi() 
+      setCodeImg(res.data.data.code)
+    }catch(e){
+      console.log(e)
+    }
+  }
+
+  useEffect(() => {
+    getCaptcha()
+  },[])
 
   return (
     <ProConfigProvider hashed={false} >
@@ -22,9 +58,7 @@ const Login: React.FC = () => {
         <LoginForm
           title="OnlineExam"
           subTitle="在线考试平台"
-          onFinish={(values) => {
-            message.success('登录成功！');
-          }}
+          onFinish={onFinish}
         >
             <>
               <ProFormText
@@ -86,32 +120,25 @@ const Login: React.FC = () => {
                   },
                 ]}
               />
-               <ProFormCaptcha
-                fieldProps={{
-                  size: 'large',
-                  prefix: <LockOutlined className={'prefixIcon'} />,
-                }}
-                captchaProps={{
-                  size: 'large',
-                }}
-                placeholder={'验证码'}
-                captchaTextRender={(timing, count) => {
-                  if (timing) {
-                    return `${count} ${'获取验证码'}`;
-                  }
-                  return '获取验证码';
-                }}
-                name="captcha"
-                rules={[
-                  {
-                    required: true,
-                    message: '请输入验证码！',
-                  },
-                ]}
-                onGetCaptcha={async () => {
-                  message.success('获取验证码成功！验证码为：1234');
-                }}
-              />
+              <div className={style.code}>
+                <ProFormText
+                  name="code"
+                  fieldProps={{
+                    size: 'large',
+                    prefix: <UserOutlined className={'prefixIcon'} />,
+                  }}
+                  placeholder={'验证码'}
+                  rules={[
+                    {
+                      required: true,
+                      message: '请输入验证码!',
+                    },
+                  ]}
+                />
+                <div className={style.codeImg}>
+                  <img src={codImg} alt="" />
+                </div>
+              </div>
             </>
           <div
             style={{
