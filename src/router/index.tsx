@@ -109,11 +109,13 @@ const  routes:Route[]=[
     },
     {
         path: '/user/login',
-        element: <Login />
+        element: <Login />,
+        islogin: true
     },
     {
         path: '*',
-        element: <NotFound />
+        element: <NotFound />,
+        islogin: true
     }
     
 ]

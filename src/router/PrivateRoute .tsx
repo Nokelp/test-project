@@ -7,8 +7,8 @@ import { Navigate, Outlet,useNavigate } from 'react-router-dom';
     }
     const PrivateRoute :React.FC<Props>= ({ islogin,children }) => {
         const navigate = useNavigate();
-        const token = localStorage.getItem('token');
-    return !islogin || token? (
+        const token=localStorage.getItem('token')
+    return islogin || token ? (
         children
     ) : (
         <Navigate to="/user/login" replace />
