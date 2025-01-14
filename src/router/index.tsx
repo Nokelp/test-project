@@ -1,9 +1,9 @@
 import Home from "../pages/home/Home"
 import Login from "../pages/login/Login"
-import Permission from "../pages/permission/Permission"
+import Permission from "../pages/system/permission/Permission"
 import NotFound from "../pages/notfound/NotFound"
-import Role from "../pages/role/Role"
-import Users from "../pages/user/User"
+import Role from "../pages/system/role/Role"
+import Users from "../pages/system/user/User"
 import Layout from "../Layout/Layout"
 import { Navigate } from "react-router-dom"
 import PrivateRoute from "./PrivateRoute "
@@ -20,6 +20,10 @@ const  routes:Route[]=[
         element: <Home />,
         layout: true,
         islogin: true
+    },
+    {
+        path: '/question',
+        element: <Navigate to="/question/item-bank" />
     },
     {
         path: '/userManage',
@@ -48,7 +52,6 @@ const  routes:Route[]=[
         path: '*',
         element: <NotFound />
     }
-    
 ]
 
 
