@@ -196,7 +196,6 @@ const Layout:React.FC<{children: React.ReactNode}>=(props) => {
                     minHeight: 800,
                 }}
                 >  
-                <div />
                 {props.children}
                 
                 </ProCard>
