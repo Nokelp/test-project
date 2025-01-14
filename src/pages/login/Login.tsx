@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import logstyle from './Login.module.scss'
 import {
     LockOutlined,
@@ -14,7 +14,40 @@ import style  from './Login.module.scss'
 
 const Login: React.FC = () => {
   const { token } = theme.useToken();
+  const [codImg, setCodeImg] = useState('')
+  const navigate = useNavigate()
+  
+  const onFinish = async(values: LoginRes) => {
+    try {
+      const res = await getLoginApi(values)
+      console.log(res.data.code) 
+      if(res.data.code === 200){
+        message.success('登录成功')
+        localStorage.setItem('token', res.data.data.token)
+        navigate('/')
+      }else if(res.data.code === 1005){
+        message.error('验证码过期')
+        getCaptcha()
+      }else{
+        message.error(res.data.msg)
+      }
+    }catch(e){
+      console.log(e)
+    }
+  };
 
+  const getCaptcha = async () => {
+    try {
+      const res = await getCaptchaApi() 
+      setCodeImg(res.data.data.code)
+    }catch(e){
+      console.log(e)
+    }
+  }
+
+  useEffect(() => {
+    getCaptcha()
+  },[])
 
   return (
     <ProConfigProvider hashed={false} >
@@ -22,9 +55,7 @@ const Login: React.FC = () => {
         <LoginForm
           title="OnlineExam"
           subTitle="在线考试平台"
-          onFinish={(values) => {
-            message.success('登录成功！');
-          }}
+          onFinish={onFinish}
         >
             <>
               <ProFormText
@@ -47,7 +78,7 @@ const Login: React.FC = () => {
                   size: 'large',
                   prefix: <LockOutlined className={'prefixIcon'} />,
                   strengthText:
-                    'Password should contain numbers, letters and special characters, at least 8 characters long.',
+                    '密码由数字、字母和特殊字符组成，长度至少为8个字符',
                   statusRender: (value) => {
                     const getStatus = () => {
                       if (value && value.length > 12) {
