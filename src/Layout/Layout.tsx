@@ -19,6 +19,9 @@ import {
 } from 'antd';
 import React, {  useState } from 'react';
 import defaultProps from './_defaultProps';
+import { useSelector, useDispatch } from 'react-redux';
+import { getInfo } from '../store/models/userInfo';
+import { AppDispatch, RootState } from '../store';
 
 const SearchInput = () => {
     const { token } = theme.useToken();
