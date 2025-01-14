@@ -1,5 +1,10 @@
 import axios from "axios"
-import type { CaptchaRes, LoginRes, LoginResData } from "../types"
+import type {
+  CaptchaRes,
+  LoginRes,
+  LoginResData,
+  InfoRes
+ } from "../types"
 
 
 axios.defaults.baseURL = process.env.NODE_ENV === 'development' ? '/bwapi' : 'https://zyxcl.xyz/exam_api'
@@ -12,5 +17,14 @@ export const getCaptchaApi = () => {
 // 登录
 export const getLoginApi = (params: LoginRes) => {
   return axios.post<LoginResData>('/login', params)
+}
+
+// 个人信息
+export const getInfoApi = () => {
+  return axios.get<InfoRes>('/user/info',{
+    headers: {
+      Authorization: localStorage.getItem('token') 
+    }
+  })
 }
   

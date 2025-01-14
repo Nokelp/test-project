@@ -1,20 +1,39 @@
 import Home from "../pages/home/Home"
-import Detail from "../pages/permission/Permission"
+import Permission from "../pages/permission/Permission"
 import Login from "../pages/login/Login"
 import NotFound from "../pages/notfound/NotFound"
 import Layout from "../Layout/Layout"
+import Role from "../pages/role/Role"
+import User from "../pages/user/User"
+import { Navigate } from "react-router-dom"
 
-export default  [
+const routes =  [
     {
         path: '/',
-        element: <Layout><Home /></Layout>
+        element: <Home />,
+        isLayout: true
     },
     {
-        path: '/detail',
-        element: <Detail />
+        path: '/userManage',
+        element: <Navigate to="/userManage/manage-page" />
     },
     {
-        path: '/login',
+        path: '/userManage/menuManage',
+        element: <Permission />,
+        isLayout: true
+    },
+    {
+        path: '/userManage/system',
+        element: <Role />,
+        isLayout: true
+    },
+    {
+        path: '/userManage/manage-page',
+        element: <User />,
+        isLayout: true
+    },
+    {
+        path: '/user/login',
         element: <Login />
     },
     {
@@ -22,3 +41,13 @@ export default  [
         element: <NotFound />
     }
 ]
+
+export default routes.map((route) => {
+    if (route.isLayout) {
+        return {
+            ...route,
+            element: <Layout>{route.element}</Layout>
+        }
+    }
+    return route
+})
