@@ -1,5 +1,5 @@
 import React from 'react'
-import style from './Detail.module.scss'
+import style from './Permission.module.scss'
 
 const Detail: React.FC = () => {
   return (
