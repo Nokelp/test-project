@@ -59,7 +59,7 @@ import {
           ],
         },
         {
-          path: '/userManage',
+          path: '/systemManage/manage-page',
           name: '系统管理',
           icon: <CrownFilled />,
           routes: [
