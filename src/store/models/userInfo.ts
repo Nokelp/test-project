@@ -24,7 +24,6 @@ const infoSlice = createSlice({
         builder
         .addCase(getInfo.fulfilled, (state, action) => {
            state.info = action.payload
-           console.log(action.payload)
        })
     }
 }) 

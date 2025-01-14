@@ -5,7 +5,9 @@ const Home: React.FC = () => {
   
 
   return (
-    <div className={style.home}>Home</div>
+    <div className={style.home}>
+      Home
+    </div>
   )
 }
 

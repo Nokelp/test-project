@@ -3,7 +3,8 @@ import type {
   CaptchaRes,
   LoginRes,
   LoginResData,
-  InfoRes
+  InfoRes,
+  RoleRes
  } from "../types"
 
 
@@ -22,6 +23,15 @@ export const getLoginApi = (params: LoginRes) => {
 // 个人信息
 export const getInfoApi = () => {
   return axios.get<InfoRes>('/user/info',{
+    headers: {
+      Authorization: localStorage.getItem('token') 
+    }
+  })
+}
+
+// 角色列表
+export const getRoleListApi = () => {
+  return axios.get<RoleRes>('role/list',{
     headers: {
       Authorization: localStorage.getItem('token') 
     }
