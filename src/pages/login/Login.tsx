@@ -2,45 +2,30 @@ import React, { useState } from 'react'
 import logstyle from './Login.module.scss'
 import {
     LockOutlined,
-    MobileOutlined,
     UserOutlined,
 } from '@ant-design/icons'
 import {
     LoginForm,
     ProConfigProvider,
     ProFormCaptcha,
-    ProFormCheckbox,
     ProFormText,
-    setAlpha,
 } from '@ant-design/pro-components'
-import { Space, Tabs, message, theme } from 'antd'
-import type { CSSProperties } from 'react'
-
-type LoginType = 'phone' | 'account';
+import { message, theme } from 'antd'
 
 const Login: React.FC = () => {
-  const [title, setTitle] = useState(false)
   const { token } = theme.useToken();
-  const [loginType, setLoginType] = useState<LoginType>('phone')
 
 
   return (
     <ProConfigProvider hashed={false} >
       <div className={logstyle.login}>
         <LoginForm
-          logo="https://github.githubassets.com/favicons/favicon.png"
-          title={title ? 'OnlineExamAdmin' : 'OnlineExam'}
+          title="OnlineExam"
           subTitle="在线考试平台"
+          onFinish={(values) => {
+            message.success('登录成功！');
+          }}
         >
-          <Tabs
-            centered
-            activeKey={loginType}
-            onChange={(activeKey) => setLoginType(activeKey as LoginType)}
-          >
-            <Tabs.TabPane key={'account'} tab={'我是学生'} />
-            <Tabs.TabPane key={'phone'} tab={'我是老师'} />
-          </Tabs>
-          {loginType === 'account' && (
             <>
               <ProFormText
                 name="username"
@@ -48,7 +33,7 @@ const Login: React.FC = () => {
                   size: 'large',
                   prefix: <UserOutlined className={'prefixIcon'} />,
                 }}
-                placeholder={'请输入用户名'}
+                placeholder={'用户名'}
                 rules={[
                   {
                     required: true,
@@ -93,7 +78,7 @@ const Login: React.FC = () => {
                     );
                   },
                 }}
-                placeholder={'请输入密码'}
+                placeholder={'密码'}
                 rules={[
                   {
                     required: true,
@@ -109,7 +94,7 @@ const Login: React.FC = () => {
                 captchaProps={{
                   size: 'large',
                 }}
-                placeholder={'请输入验证码'}
+                placeholder={'验证码'}
                 captchaTextRender={(timing, count) => {
                   if (timing) {
                     return `${count} ${'获取验证码'}`;
@@ -128,55 +113,6 @@ const Login: React.FC = () => {
                 }}
               />
             </>
-          )}
-          {loginType === 'phone' && (
-            <>
-              <ProFormText
-                fieldProps={{
-                  size: 'large',
-                  prefix: <MobileOutlined className={'prefixIcon'} />,
-                }}
-                name="mobile"
-                placeholder={'手机号'}
-                rules={[
-                  {
-                    required: true,
-                    message: '请输入手机号！',
-                  },
-                  {
-                    pattern: /^1\d{10}$/,
-                    message: '手机号格式错误！',
-                  },
-                ]}
-              />
-              <ProFormCaptcha
-                fieldProps={{
-                  size: 'large',
-                  prefix: <LockOutlined className={'prefixIcon'} />,
-                }}
-                captchaProps={{
-                  size: 'large',
-                }}
-                placeholder={'请输入验证码'}
-                captchaTextRender={(timing, count) => {
-                  if (timing) {
-                    return `${count} ${'获取验证码'}`;
-                  }
-                  return '获取验证码';
-                }}
-                name="captcha"
-                rules={[
-                  {
-                    required: true,
-                    message: '请输入验证码！',
-                  },
-                ]}
-                onGetCaptcha={async () => {
-                  message.success('获取验证码成功！验证码为：1234');
-                }}
-              />
-            </>
-          )}
           <div
             style={{
               marginBlockEnd: 24,
