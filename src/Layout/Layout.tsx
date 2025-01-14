@@ -1,43 +1,56 @@
-    import {
-        LogoutOutlined,
-    } from '@ant-design/icons';
-    import {
-        PageContainer,
-        ProCard,
-        ProConfigProvider,
-        ProLayout,
-    } from '@ant-design/pro-components';
-    import {
-        ConfigProvider,
-        Dropdown,
-    } from 'antd';
-    import React, { useState } from 'react';
-    import defaultProps from './_defaultProps';
-    import { useNavigate, useLocation } from 'react-router-dom'
+import {
+    LogoutOutlined,
+    UserOutlined
+} from '@ant-design/icons'
+import {
+    PageContainer,
+    ProCard,
+    ProConfigProvider,
+    ProLayout,
+} from '@ant-design/pro-components'
+import {
+    ConfigProvider,
+    Dropdown
+} from 'antd';
+import React, { useState, useEffect } from 'react'
+import defaultProps from './_defaultProps'
+import { useSelector, useDispatch } from 'react-redux'
+import { getInfo } from '../store/models/userInfo'
+import { AppDispatch, RootState } from '../store'
+import { useNavigate, useLocation } from 'react-router-dom';
+
+
+
+const Layout:React.FC<{children: React.ReactNode}>=(props) => {
+    const navigate = useNavigate()
+    const dispatch = useDispatch<AppDispatch>()
+    const userInfo = useSelector((state: RootState) => state.userInfo.info)
+    const [pathname, setPathname] = useState('/')
     
-    
-    const Layout: React.FC<{ children: React.ReactNode }> = (props) => {
-        const location = useLocation()
-        const navigate = useNavigate()
-    
-    
-        if (typeof document === 'undefined') {
+    if (typeof document === 'undefined') {
         return <div />;
-        }
-        return (
-        <div
-            style={{
+    }
+
+    useEffect(() => {
+        dispatch(getInfo()); 
+    },[])
+
+
+    return (
+    <div
+        id="test-pro-layout"
+        style={{
             height: '100vh',
             overflow: 'auto',
+        }}
+    >
+        <ProConfigProvider hashed={false}>
+        <ConfigProvider
+            getTargetContainer={() => {
+            return document.getElementById('test-pro-layout') || document.body;
             }}
         >
-            <ProConfigProvider hashed={false}>
-            <ConfigProvider
-                getTargetContainer={() => {
-                return document.getElementById('test-pro-layout') || document.body;
-                }}
-            >
-                <ProLayout
+            <ProLayout
                 prefixCls="my-prefix"
                 bgLayoutImgList={[
                     {
@@ -75,15 +88,15 @@
                 avatarProps={{
                     src: 'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
                     size: 'small',
-                    title: 'root',
-                    render: (props, dom) => {
-                    return (
-                        <Dropdown
-                        menu={{
-                            items: [
+                    title: `${ userInfo.username }`,
+                render: (props, dom) => {
+                return (
+                    <Dropdown
+                    menu={{
+                        items: [
                             {
-                                key: 'userinfo',
-                                icon: <LogoutOutlined />,
+                                key: 'user',
+                                icon: <UserOutlined />,
                                 label: '个人中心',
                             },
                             {
@@ -91,65 +104,69 @@
                                 icon: <LogoutOutlined />,
                                 label: '退出登录',
                             },
-                            ],
-                        }}
-                        >
-                        {dom}
-                        </Dropdown>
-                    );
-                    },
-                }}
-                headerTitleRender={(logo, title, _) => {
-                    const defaultDom = (
-                    <a>
-                        {logo}
-                        {title}
-                    </a>
-                    );
-                    if (typeof window === 'undefined') return defaultDom;
-                    if (document.body.clientWidth < 1400) {
+                        ],
+                    }}
+                    >
+                    {dom}
+                    </Dropdown>
+                );
+                },
+            }}
+            headerTitleRender={(logo, title, _) => {
+                const defaultDom = (
+                <a>
+                    {logo}
+                    {title}
+                </a>
+                );
+                if (typeof window === 'undefined') return defaultDom;
+                if (document.body.clientWidth < 1400) {
                     return defaultDom;
-                    }
-                    if (_.isMobile) return defaultDom;
-                    return (
+                }
+                if (_.isMobile) return defaultDom;
+                return (
                     <>
                         {defaultDom}
                         {/* <MenuCard /> */}
                     </>
-                    );
-                }}
-                menuItemRender={(item, dom) => (
-                    <div onClick={() => {
-                    navigate(item?.path ||'/404')
-                    console.log(item)
-                    }}>
+                );
+            }}
+            onMenuHeaderClick={(e) => console.log(e)}
+            menuItemRender={(item, dom) => (
+                <div
+                    onClick={() => {
+                        navigate(item?.path || '/404')
+                    }}
+                >
                     {dom}
-                    </div>
-                )}
-                fixSiderbar={true}
-                layout="mix"
-                splitMenus={true}
-                >
-                <PageContainer
-                    token={{
+                </div>
+            )}
+            fixSiderbar={true}
+            layout='mix'
+            splitMenus={true}  
+            >
+            <PageContainer
+                token={{
                     paddingInlinePageContainerContent: 30,
-                    }}
-                    // subTitle="简单的描述"
-                >
-                    <ProCard
+                }}
+            >
+                <ProCard
                     style={{
-                        minHeight: 500,
+                        minHeight: 550,
                     }}
-                    >
-                    {props.children}
-                    </ProCard>
-                </PageContainer>
-                </ProLayout>
-            </ConfigProvider>
-            </ProConfigProvider>
-        </div>
-        );
-    };
-    
-    export default Layout
-  
+                >  
+                {props.children}
+                
+                </ProCard>
+                
+            </PageContainer>
+            </ProLayout>
+        </ConfigProvider>
+        </ProConfigProvider>
+    </div>
+    )
+}
+
+export default Layout
+
+

@@ -1,7 +1,9 @@
 import Home from "../pages/home/Home"
 import Login from "../pages/login/Login"
-import Permission from "../pages/permission/Permission"
+import Permission from "../pages/system/permission/Permission"
 import NotFound from "../pages/notfound/NotFound"
+import Role from "../pages/system/role/Role"
+import Users from "../pages/system/user/User"
 import Layout from "../Layout/Layout"
 // 考试管理
 import Record from "../pages/test/record/Record"
@@ -41,6 +43,14 @@ const  routes:Route[]=[
         path: '/exam/record',
         element: <Record />,
         layout: true,
+    },
+    {
+        path: '/question',
+        element: <Navigate to="/question/item-bank" />
+    },
+    {
+        path: '/userManage',
+        element: <Navigate to="/userManage/manage-page" />
     },
     {
         path: '/exam/create',
@@ -117,7 +127,6 @@ const  routes:Route[]=[
         element: <NotFound />,
         islogin: true
     }
-    
 ]
 
 

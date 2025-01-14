@@ -1,7 +1,6 @@
 import {
     CrownFilled,
     SmileFilled,
-    TabletFilled,
     FileTextOutlined,
     FormOutlined,
     TeamOutlined,
@@ -60,7 +59,7 @@ import {
           ],
         },
         {
-          path: '/systemManage/manage-page',
+          path: '/userManage',
           name: '系统管理',
           icon: <CrownFilled />,
           routes: [
