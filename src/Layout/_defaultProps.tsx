@@ -1,5 +1,4 @@
 import {
-    ChromeFilled,
     CrownFilled,
     SmileFilled,
     TabletFilled,
@@ -88,8 +87,5 @@ import {
           ],
         },
       ],
-    },
-    location: {
-      pathname: '/',
     },
   };

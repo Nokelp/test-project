@@ -1,4 +1,4 @@
-import routerConfig from './router'
+import routerConfig from './router/index'
 import { useRoutes } from 'react-router-dom'
 
 const App = () => {

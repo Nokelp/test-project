@@ -17,7 +17,7 @@ import {
     Input,
     theme,
 } from 'antd';
-import React, { useState } from 'react';
+import React, {  useState } from 'react';
 import defaultProps from './_defaultProps';
 
 const SearchInput = () => {
@@ -195,9 +195,12 @@ const Layout:React.FC<{children: React.ReactNode}>=(props) => {
                     height: '200vh',
                     minHeight: 800,
                 }}
-                >
+                >  
                 <div />
+                {props.children}
+                
                 </ProCard>
+                
             </PageContainer>
             </ProLayout>
         </ConfigProvider>
