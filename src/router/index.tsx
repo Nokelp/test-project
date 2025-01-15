@@ -11,7 +11,7 @@ import Groupdetail from "../pages/user/group-detail/Groupdetail"
 import Grouplist from "../pages/user/group-list/Grouplist"
 import Groupstudents from "../pages/user/group-students/Groupstudents"
 //系统管理
-import Managepage from "../pages/role/manage-page/Managepage"
+import ManagePage from "../pages/role/manage-page/Managepage"
 import MenuManage from "../pages/role/menuManage/MenuManage"
 import System from "../pages/role/system/System"
 //题库管理
@@ -96,19 +96,18 @@ const  routes:Route[]=[
         element: <Groupdetail />,
         layout: true
     },
-    
     {
-        path: '/systemManage/manage-page',
-        element: <Managepage />,
+        path: '/userManage/manage-page',
+        element: <ManagePage />,
         layout: true
     },
     {
-        path: '/systemManage/menuManage',
+        path: '/userManage/menuManage',
         element: <MenuManage />,
         layout: true
     },
     {
-        path: '/systemManage/system',
+        path: '/userManage/system',
         element: <System />,
         layout: true
     },

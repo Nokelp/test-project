@@ -1,6 +1,7 @@
 import {
     LogoutOutlined,
-    UserOutlined
+    UserOutlined,
+    PlusCircleOutlined
 } from '@ant-design/icons'
 import {
     PageContainer,
@@ -10,7 +11,8 @@ import {
 } from '@ant-design/pro-components'
 import {
     ConfigProvider,
-    Dropdown
+    Dropdown,
+    Button
 } from 'antd';
 import React, { useState, useEffect } from 'react'
 import defaultProps from './_defaultProps'
@@ -19,20 +21,25 @@ import { getInfo } from '../store/models/userInfo'
 import { AppDispatch, RootState } from '../store'
 import { useNavigate, useLocation } from 'react-router-dom';
 
-
+enum Pathname {
+    MANAGE_PAGE = '/userManage/manage-page', // 用户管理
+    USER_OPTIONS = '/userManage/userOptions', // 用户
+    SYSTEM = '/userManage/system', // 角色管理
+}
 
 const Layout:React.FC<{children: React.ReactNode}>=(props) => {
     const navigate = useNavigate()
+    const location = useLocation()
     const dispatch = useDispatch<AppDispatch>()
     const userInfo = useSelector((state: RootState) => state.userInfo.info)
-    const [pathname, setPathname] = useState('/')
-    
+    console.log("location", location.pathname)
+
     if (typeof document === 'undefined') {
         return <div />;
     }
 
     useEffect(() => {
-        dispatch(getInfo()); 
+        dispatch(getInfo());
     },[])
 
 
@@ -143,22 +150,31 @@ const Layout:React.FC<{children: React.ReactNode}>=(props) => {
             )}
             fixSiderbar={true}
             layout='mix'
-            splitMenus={true}  
+            splitMenus={true}
             >
             <PageContainer
                 token={{
                     paddingInlinePageContainerContent: 30,
                 }}
             >
+                { location.pathname === Pathname.MANAGE_PAGE && (
+                    <Button
+                        type='primary'
+                        style={{ marginBottom: 15 }}
+                        shape="round"
+                        icon={<PlusCircleOutlined />}
+                        size='large'
+                    >
+                        添加用户
+                    </Button>
+                )}
                 <ProCard
                     style={{
                         minHeight: 550,
                     }}
-                >  
-                {props.children}
-                
+                >
+                    {props.children}
                 </ProCard>
-                
             </PageContainer>
             </ProLayout>
         </ConfigProvider>

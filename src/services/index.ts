@@ -7,6 +7,8 @@ import type {
   InfoRes,
   RoleRes,
   MenuRes
+  UserListParams,
+  UserListRes,
  } from "../types"
 
 
@@ -51,4 +53,13 @@ export const getRoleListApi = () => {
     }
   })
 }
-  
+
+// 用户管理列表
+export const getUserListApi = (params: UserListParams) => {
+  return axios.get<UserListRes>('/user/list', {
+    params,
+    headers: {
+      Authorization: localStorage.getItem('token')
+    }
+  })
+}
