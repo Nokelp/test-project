@@ -1,22 +1,42 @@
-import type { ProColumns } from '@ant-design/pro-components'
+import type { ProColumns, ProFormInstance} from '@ant-design/pro-components'
 import {
   ProTable,
-} from '@ant-design/pro-components';
-import { Button } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { getRoleListApi } from '../../../services';
-import { RoleItem } from '../../../types';
-import dayjs from 'dayjs';
+  ModalForm,
+  ProFormText
+} from '@ant-design/pro-components'
+import { Button, Drawer, message } from 'antd';
+import React, { useEffect, useState, useRef } from 'react'
+import { getCreateRoleApi, getRoleListApi } from '../../../services'
+import { RoleItem } from '../../../types'
+import dayjs from 'dayjs'
 
+const waitTime = (time: number = 100) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(true)
+    }, time)
+  })
+}
 
 
 const Role: React.FC = () => {
   const [roles, setRoles] = useState<RoleItem[]>([])
+  const [open, setOpen] = useState(false);
+  const restFormRef = useRef<ProFormInstance>()
+  const formRef = useRef<ProFormInstance>()
+  const [modalVisible, setModalVisible] = useState<boolean>(false)
+
+  const showDrawer = () => {
+    setOpen(true);
+  };
+
+  const onClose = () => {
+    setOpen(false);
+  };
 
   const getRoles = async () => {
     try {
      const res = await getRoleListApi()
-     console.log(res.data.data.list) 
      setRoles(res.data.data.list)
     }catch(e){
       console.log(e)
@@ -33,7 +53,6 @@ const Role: React.FC = () => {
       dataIndex: 'name',
       width: '15%',
       render: (_, value) => {
-        console.log(_, value)
         return (
           <div>{_}</div>
         )
@@ -41,10 +60,9 @@ const Role: React.FC = () => {
     },
     {
       title: '角色关键字',
-      dataIndex: 'containers',
+      dataIndex: 'value',
       width: '15%',
       render: (_, value) => {
-        console.log(_, value)
         return (
           <div>{value.value}</div>
         )
@@ -62,7 +80,7 @@ const Role: React.FC = () => {
     },
     {
       title: '创建时间',
-      dataIndex: 'creator',
+      dataIndex: 'createTime',
       valueType: 'select',
       render: (_, value) => {
         return (
@@ -76,44 +94,79 @@ const Role: React.FC = () => {
       width: 250,
       valueType: 'option',
       render: () => [
-        <Button key="link" type="primary">分配角色</Button>,
+        <Button key="link" type="primary" onClick={showDrawer}>分配角色</Button>,
         <Button key="warn" danger>删除</Button>
       ],
     },
-  ];
+  ]
+
 
   return (
-    <ProTable<RoleItem>
-      columns={columns}
-      request={(params, sorter, filter) => {
-        // 表单搜索项会从 params 传入，传递给后端接口。
-        console.log(params, sorter, filter);
-        return Promise.resolve({
-          data: roles,
-          success: true,
-        });
-      }}
-      toolbar={{
-        search: {
-          onSearch: (value: string) => {
-            alert(value);
+    <div>
+      <ProTable<RoleItem>
+        columns={columns}
+        dataSource={roles}
+        toolbar={{
+          search: {
+            onSearch: (value: string) => {
+              alert(value);
+            },
           },
-        },
-        actions: [
-          <Button
-            key="primary"
-            type="primary"
-            onClick={() => {
-              alert('add');
-            }}
-          >
-            新增角色
-          </Button>,
-        ],
-      }}
-      rowKey="key"
-      search={false}
-    />
+          actions: [
+            <ModalForm
+              title="新增角色"
+              trigger={<Button type="primary">新增角色</Button>}
+              formRef={restFormRef}
+              submitter={{
+                searchConfig: {
+                  submitText: '确认',
+                  resetText: '取消',
+                },
+              }}
+              onFinish={async (values) => {
+                try{
+                  const res = await getCreateRoleApi({
+                    name: values.name,
+                    value: values.company
+                  })
+                  if(res.data.code === 200){
+                    message.success('提交成功')
+                    getRoles()
+                    restFormRef.current?.resetFields()
+                    return true
+                  }
+                }catch(e){
+                  console.log(e)
+                }
+                
+              }}
+            >
+              <ProFormText
+                width="md"
+                name="name"
+                label="角色名称"
+                // tooltip="最长为 24 位"
+                placeholder="请输入名称"
+              />
+
+              <ProFormText
+                width="md"
+                name="company"
+                label="角色关键字"
+                placeholder="请输入关键字"
+              />
+            </ModalForm>
+          ],
+        }}
+        rowKey="_id"
+        search={false}
+      />
+      <Drawer title="分配角色" onClose={onClose} open={open}>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+      </Drawer>
+    </div>
   )
 }
 
