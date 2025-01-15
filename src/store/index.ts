@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import userInfo from './models/userInfo'
+import classList from './models/classlist'
 
 const store = configureStore({
     reducer:{
-        userInfo
+        userInfo,
+        classList
     }
 })
 

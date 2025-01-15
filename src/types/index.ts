@@ -41,3 +41,26 @@ export type InfoRes = {
     msg: string
     data: InfoData
 }
+
+
+//班级列表
+export type ClassListRes = {
+    code: number
+    msg: string
+    data: ClassListData
+}
+export type ClassListData = {
+    list: ClassListItem[]
+    total: number
+    totalPage: number
+}
+export type ClassListItem = {
+    classify:string
+    creator:string
+    _id: string
+    name: string
+    createTime: number
+    teacher: string
+    students:[]
+    __v: number
+}

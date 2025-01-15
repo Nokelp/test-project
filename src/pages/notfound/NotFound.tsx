@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Result } from 'antd';
+import { UseSelector } from 'react-redux';
 
 const NotFound: React.FC = () => (
   <Result

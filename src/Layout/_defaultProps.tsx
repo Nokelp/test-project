@@ -36,7 +36,7 @@ import {
         {
           name: '班级管理',
           icon: <TeamOutlined />,
-          path: '/manage-group/group-list',
+          path: '/manage-group/',
           routes: [
             {
               path: '/manage-group/group-list',
@@ -60,7 +60,7 @@ import {
           ],
         },
         {
-          path: '/systemManage/manage-page',
+          path: '/systemManage',
           name: '系统管理',
           icon: <CrownFilled />,
           routes: [
@@ -101,7 +101,7 @@ import {
           ],
         },
         {
-          path: '/paper/paper-bank',
+          path: '/paper',
           name: '试卷管理',
           icon: <FileTextOutlined />,
           access: 'canAdmin',
@@ -120,5 +120,8 @@ import {
           ],
         },
       ],
+    },
+    location: {
+      pathname: '/',
     },
   };

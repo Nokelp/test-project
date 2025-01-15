@@ -23,6 +23,7 @@ import Paperbank from "../pages/examination/paper-bank/PaperBank"
 import CreatePaper from "../pages/examination/create-paper/CreatePaper"
 import { Navigate } from "react-router-dom"
 import PrivateRoute from "./PrivateRoute "
+import Role from "../pages/role/Role"
 
 type Route = {
     path: string,
@@ -89,6 +90,11 @@ const  routes:Route[]=[
     {
         path: '/manage-group/group-detail/:id',
         element: <Groupdetail />,
+        layout: true
+    },
+    {
+        path: '/systemManage',
+        element: <Role />,
         layout: true
     },
     

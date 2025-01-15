@@ -27,4 +27,16 @@ export const getInfoApi = () => {
     }
   })
 }
+//班级列表
+export const getClassListApi = (params: {
+  page: number,
+  pagesize: number
+}) => {
+  return axios.get('/studentGroup/list', {
+    params,
+    headers: {
+      Authorization: localStorage.getItem('token')
+    }
+  })
+}
   

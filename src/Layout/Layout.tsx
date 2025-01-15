@@ -14,9 +14,16 @@
     import React, { useState } from 'react';
     import defaultProps from './_defaultProps';
     import { useNavigate, useLocation } from 'react-router-dom'
+    import type { ProSettings } from '@ant-design/pro-components';
     
     
     const Layout: React.FC<{ children: React.ReactNode }> = (props) => {
+        const [settings, setSetting] = useState<Partial<ProSettings> | undefined>({
+            fixSiderbar: true,
+            layout: 'mix',
+            splitMenus: true,
+        });
+        const [pathname, setPathname] = useState('/list/sub-page/sub-sub-page1');
         const location = useLocation()
         const navigate = useNavigate()
     
@@ -118,23 +125,22 @@
                     </>
                     );
                 }}
+                onMenuHeaderClick={(e) => console.log(e)}
                 menuItemRender={(item, dom) => (
                     <div onClick={() => {
-                    navigate(item?.path ||'/404')
-                    console.log(item)
+                    navigate(item?.path ||'/')
+                    console.log(dom)
                     }}>
-                    {dom}
+                    {dom }
                     </div>
                 )}
-                fixSiderbar={true}
-                layout="mix"
-                splitMenus={true}
+                {...settings}
                 >
                 <PageContainer
                     token={{
                     paddingInlinePageContainerContent: 30,
                     }}
-                    // subTitle="简单的描述"
+                    subTitle="简单的描述"
                 >
                     <ProCard
                     style={{
@@ -152,4 +158,3 @@
     };
     
     export default Layout
-  
