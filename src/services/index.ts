@@ -6,7 +6,9 @@ import type {
   LoginResData,
   InfoRes,
   RoleRes,
-  MenuRes
+  MenuRes,
+  UserListParams,
+  UserListRes,
  } from "../types"
 
 
@@ -60,6 +62,26 @@ export const getClassListApi = (params: {
     params,
     headers: {
       Authorization: localStorage.getItem('token')
+    }
+  })
+}
+
+// 用户管理列表
+export const getUserListApi = (params: UserListParams) => {
+  return axios.get<UserListRes>('/user/list', {
+    params,
+    headers: {
+      Authorization: localStorage.getItem('token')
+    }
+  })
+}
+
+// 新增角色
+export const getCreateRoleApi = (params:{name: string, value: string}) => {
+  return axios.get('/role/create',{
+    params,
+    headers: {
+      Authorization: localStorage.getItem('token') || ''
     }
   })
 }

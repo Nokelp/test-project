@@ -1,5 +1,6 @@
 import Home from "../pages/home/Home"
 import Login from "../pages/login/Login"
+
 import NotFound from "../pages/notfound/NotFound"
 import Layout from "../Layout/Layout"
 // 考试管理
@@ -32,20 +33,14 @@ type Route = {
 const  routes:Route[]=[
     {
         path: '/',
-        element: <Layout><Home /></Layout>
+        element: <Home />,
+        layout: true,
+        islogin: true
     },
     {
         path: '/exam/record',
         element: <Record />,
         layout: true,
-    },
-    {
-        path: '/question',
-        element: <Navigate to="/question/item-bank" />
-    },
-    {
-        path: '/userManage',
-        element: <Navigate to="/userManage/manage-page" />
     },
     {
         path: '/exam/create',
@@ -96,11 +91,6 @@ const  routes:Route[]=[
         element: <Groupdetail />,
         layout: true
     },
-    {
-        path: '/systemManage',
-        element: <Role />,
-        layout: true
-    },
     
     {
         path: '/systemManage/manage-page',
@@ -127,6 +117,7 @@ const  routes:Route[]=[
         element: <NotFound />,
         islogin: true
     }
+    
 ]
 
 

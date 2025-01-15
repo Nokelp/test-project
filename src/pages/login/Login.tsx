@@ -10,7 +10,10 @@ import {
     ProFormText,
 } from '@ant-design/pro-components'
 import { message, theme } from 'antd'
-import style  from './Login.module.scss'
+import style from './Login.module.scss'
+import { getCaptchaApi, getLoginApi } from '../../services'
+import { LoginRes } from '../../types'
+import { useNavigate } from 'react-router-dom'
 
 const Login: React.FC = () => {
   const { token } = theme.useToken();
@@ -132,8 +135,8 @@ const Login: React.FC = () => {
                     },
                   ]}
                 />
-                <div>
-                  <img src="" alt="" />
+                <div className={style.codeImg}>
+                  <img src={codImg} alt="" />
                 </div>
               </div>
             </>

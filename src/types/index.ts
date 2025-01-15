@@ -89,3 +89,31 @@ export type RoleRes = {
     total: number
     totalPage: 1
 }
+
+// 用户管理列表入参格式
+export type UserListParams = {
+    page: number
+    pageSize: number
+}
+
+// 用户管理列表返回值
+export type ListItem = {
+    creator: string
+    lastOnlineTime: number
+    password: string
+    role: []
+    status: number
+    username: string
+    __v: number
+    _id: string
+}
+
+export type UserListRes = {
+    code: number
+    msg: string
+    data: {
+        totalPage: number
+        total: number
+        list: ListItem[]
+    }
+}
