@@ -32,9 +32,7 @@ type Route = {
 const  routes:Route[]=[
     {
         path: '/',
-        element: <Home />,
-        layout: true,
-        islogin: true
+        element: <Layout><Home /></Layout>
     },
     {
         path: '/exam/record',
