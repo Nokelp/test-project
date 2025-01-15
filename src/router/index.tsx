@@ -1,7 +1,5 @@
 import Home from "../pages/home/Home"
-
 import Login from "../pages/login/Login"
-
 import NotFound from "../pages/notfound/NotFound"
 import Layout from "../Layout/Layout"
 // 考试管理
@@ -24,7 +22,6 @@ import Paperbank from "../pages/examination/paper-bank/PaperBank"
 import CreatePaper from "../pages/examination/create-paper/CreatePaper"
 import { Navigate } from "react-router-dom"
 import PrivateRoute from "./PrivateRoute "
-import Role from "../pages/role/Role"
 
 type Route = {
     path: string,

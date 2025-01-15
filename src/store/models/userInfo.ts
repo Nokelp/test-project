@@ -1,18 +1,23 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import { getInfoApi } from "../../services"
-import { InfoData } from "../../types"
+import { getInfoApi, getUserMenuListApi } from "../../services"
+import { InfoData, MenuItem } from "../../types"
 
 export const getInfo = createAsyncThunk('info/getInfo',async() =>{
-    const res = await getInfoApi()
-    return res.data.data
+    const [UserInfoRes, menulistRes] = await Promise.all([getInfoApi(), getUserMenuListApi()])
+    return {
+        info: UserInfoRes.data.data,
+        menuList: menulistRes.data.data.list
+    }
 })
 
 interface UserInfo{
-    info: InfoData
+    info: InfoData | null,
+    menuList: MenuItem[]
 }
 
 const initialState: UserInfo = {
-    info: {} as InfoData
+    info: null,
+    menuList: []
 }
 
 
@@ -22,8 +27,9 @@ const infoSlice = createSlice({
     reducers:{},
     extraReducers: builder => {
         builder
-        .addCase(getInfo.fulfilled, (state, action) => {
-           state.info = action.payload
+        .addCase(getInfo.fulfilled, (state, {payload}) => {
+           state.info = payload.info
+           state.menuList = payload.menuList
        })
     }
 }) 

@@ -1,10 +1,12 @@
-// 验证码图片
-export type CaptchaRes = {
+export interface AxiosRes<T> {
     code: number
     msg: string
-    data:{
-        code: string
-    }
+    data: T 
+}
+
+// 验证码图片
+export type CaptchaRes = {
+    code: string
 }
 
 // 登录参数
@@ -12,35 +14,42 @@ export type LoginRes = Record<'username' | 'password' | 'code', string>
 
 // 登陆返回值
 export type LoginResData = {
-    code: number
-    msg: string
-    data:{
-        token: string
-    }
+    token: string
 }
 
-// 个人信息、
-export type InfoItem = {
+// 菜单列表
+export type MenuItem = {
     createTime: number
     disabled: boolean
     isBtn: boolean
     name: string
-    path: string
-    pid: string
-    __v: number
-    _id: string
+    path: string,
+    pid: string,
+    __v: number,
+    _id: string,
+    children?: MenuItem[]
+ 
 }
+export type MenuRes = {
+    list: MenuItem[]
+}
+
+// 个人信息
+export type InfoItem = Omit<MenuItem, 'children'>
 export type InfoData = {
     permission: InfoItem[]
     role: []
     username: string
     _id: string
+    avator?: string
+    age?: number
+    email?: string
+    sex?: string
+
 }
-export type InfoRes = {
-    code: number
-    msg: string
-    data: InfoData
-}
+export type InfoRes = InfoData
+
+
 
 
 //班级列表
@@ -76,11 +85,7 @@ export type RoleItem = {
     _id: string 
 }
 export type RoleRes = {
-    code: number
-    msg: string
-    data: {
-        list: RoleItem[]
-        total: number
-        totalPage: 1
-    }
+    list: RoleItem[]
+    total: number
+    totalPage: 1
 }
