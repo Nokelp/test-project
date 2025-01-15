@@ -93,7 +93,7 @@ const Layout:React.FC<{children: React.ReactNode}>=(props) => {
                     collapsedShowGroupTitle: true,
                 }}
                 avatarProps={{
-                    src: userInfo?.avator ||  'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
+                    src: userInfo?.avator || 'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
                     size: 'small',
                     title: userInfo?.username,
                 render: (props, dom) => {
@@ -184,3 +184,5 @@ const Layout:React.FC<{children: React.ReactNode}>=(props) => {
 }
 
 export default Layout
+
+

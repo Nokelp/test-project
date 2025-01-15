@@ -63,3 +63,14 @@ export const getUserListApi = (params: UserListParams) => {
     }
   })
 }
+
+// 新增角色
+export const getCreateRoleApi = (params:{name: string, value: string}) => {
+  return axios.get('/role/create',{
+    params,
+    headers: {
+      Authorization: localStorage.getItem('token') || ''
+    }
+  })
+}
+  
