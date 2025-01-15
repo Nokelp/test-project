@@ -3,7 +3,9 @@ import type {
   CaptchaRes,
   LoginRes,
   LoginResData,
-  InfoRes
+  InfoRes,
+  classListRes,
+  studentListRes
  } from "../types"
 
 
@@ -28,3 +30,25 @@ export const getInfoApi = () => {
   })
 }
   
+//班级列表
+export const getClassListApi = () => {
+  return axios.get<classListRes>('/studentGroup/list',{
+    params: {
+      page: 1,
+      pagesize: 10
+    },
+    headers: {
+      Authorization: localStorage.getItem('token') 
+    }
+  })
+}
+//学生列表
+
+export const getstudentListApi = ( params:{page:number,pagesize:number}) => {
+  return axios.get<studentListRes>('/student/list',{
+    params,
+    headers: {
+      Authorization: localStorage.getItem('token') 
+    }
+  })
+}
