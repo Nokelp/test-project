@@ -1,9 +1,6 @@
 import Home from "../pages/home/Home"
 import Login from "../pages/login/Login"
-import Permission from "../pages/system/permission/Permission"
 import NotFound from "../pages/notfound/NotFound"
-import Role from "../pages/system/role/Role"
-import Users from "../pages/system/user/User"
 import Layout from "../Layout/Layout"
 // 考试管理
 import Record from "../pages/test/record/Record"
