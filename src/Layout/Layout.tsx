@@ -14,12 +14,12 @@ import {
     Dropdown,
     Button
 } from 'antd';
-import React, { useState, useEffect } from 'react'
-import defaultProps from './_defaultProps'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { getInfo } from '../store/models/userInfo'
 import { AppDispatch, RootState } from '../store'
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom'
+import { useMenu } from './hooks/useMenu';
 
 enum Pathname {
     MANAGE_PAGE = '/userManage/manage-page', // 用户管理
@@ -32,7 +32,9 @@ const Layout:React.FC<{children: React.ReactNode}>=(props) => {
     const location = useLocation()
     const dispatch = useDispatch<AppDispatch>()
     const userInfo = useSelector((state: RootState) => state.userInfo.info)
-    console.log("location", location.pathname)
+    // 获取要渲染的菜单
+    const route = useMenu()
+    
 
     if (typeof document === 'undefined') {
         return <div />;
@@ -79,7 +81,8 @@ const Layout:React.FC<{children: React.ReactNode}>=(props) => {
                         width: '331px',
                     },
                 ]}
-                {...defaultProps}
+                // {...defaultProps}
+                route={route}
                 location={{
                     pathname: location.pathname,
                 }}

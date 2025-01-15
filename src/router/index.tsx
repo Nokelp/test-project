@@ -14,6 +14,7 @@ import Groupstudents from "../pages/user/group-students/Groupstudents"
 import ManagePage from "../pages/role/manage-page/Managepage"
 import MenuManage from "../pages/role/menuManage/MenuManage"
 import System from "../pages/role/system/System"
+import Personal from "../pages/role/personal/Personal"
 //题库管理
 import ItemBank from "../pages/question/item-bank/ItemBank"
 import CreateItem from "../pages/question/create- item/CreateItem"
@@ -34,23 +35,25 @@ const  routes:Route[]=[
         path: '/',
         element: <Layout><Home /></Layout>
     },
+    // 考试管理
+    {
+        path: '/exam',
+        element: <Navigate to="/exam/record" />
+    },
     {
         path: '/exam/record',
         element: <Record />,
         layout: true,
     },
     {
-        path: '/question',
-        element: <Navigate to="/question/item-bank" />
-    },
-    {
-        path: '/userManage',
-        element: <Navigate to="/userManage/manage-page" />
-    },
-    {
         path: '/exam/create',
         element: <Create />,
         layout: true,
+    },
+    // 试题管理
+    {
+        path: '/question',
+        element: <Navigate to="/question/item-bank" />
     },
     {
         path: '/question/item-bank',
@@ -62,6 +65,41 @@ const  routes:Route[]=[
         element: <CreateItem />,
         layout: true,
     },
+    // 系统管理
+    {
+        path: '/userManage',
+        element: <Navigate to="/userManage/manage-page" />
+    },
+    {
+        path: '/userManage/manage-page',  // 用户管理
+        element: <ManagePage />,
+        layout: true
+    },
+    {
+        path: '/userManage/menuManage',  // 权限管理
+        element: <MenuManage />,
+        layout: true
+    },
+    {
+        path: '/userManage/system',  // 角色管理
+        element: <System />,
+        layout: true
+    },
+    {
+        path: '/userManage/personal', //个人信息
+        element: <Personal />,
+        layout: true
+    },
+    {
+        path: '/userManage/userOptions', //用户管理
+        element: <ManagePage />,
+        layout: true
+    },
+    // 试卷管理
+    {
+        path: '/paper',
+        element: <Navigate to="/paper/paper-bank" />
+    },
     {
         path: '/paper/paper-bank',
         element: <Paperbank />,
@@ -72,6 +110,7 @@ const  routes:Route[]=[
         element: <CreatePaper />,
         layout: true,
     },
+    // 班级管理
     {
         path: '/manage-group',
         element: <Navigate to="/manage-group/group-list" />
@@ -92,23 +131,8 @@ const  routes:Route[]=[
         layout: true
     },
     {
-        path: '/manage-group/group-detail/:id',
+        path: '/group-detail/:id',
         element: <Groupdetail />,
-        layout: true
-    },
-    {
-        path: '/userManage/manage-page',
-        element: <ManagePage />,
-        layout: true
-    },
-    {
-        path: '/userManage/menuManage',
-        element: <MenuManage />,
-        layout: true
-    },
-    {
-        path: '/userManage/system',
-        element: <System />,
         layout: true
     },
     {
