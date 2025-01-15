@@ -6,9 +6,7 @@ import type {
   LoginResData,
   InfoRes,
   RoleRes,
-  MenuRes,
-  UserListParams,
-  UserListRes,
+
   MenuRes,
   UserListParams,
   UserListRes,
