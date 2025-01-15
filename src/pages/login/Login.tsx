@@ -42,7 +42,8 @@ const Login: React.FC = () => {
   const getCaptcha = async () => {
     try {
       const res = await getCaptchaApi() 
-      setCodeImg(res.data.code)
+      console.log(res.data)
+      setCodeImg(res.data.data.code)
     }catch(e){
       console.log(e)
     }

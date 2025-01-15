@@ -2,7 +2,7 @@ import axios from "axios";
 import { message } from "antd";
 
 //根据环境变量配置请求的基础路径
-const baseURL = process.env.NODE_ENV === 'development'?'bwapi':'https://zyxcl.xyz/exam_api'
+const baseURL =process.env.NODE_ENV === 'development'?'bwapi':'https://zyxcl.xyz/exam_api'
 
 const request = axios.create({
     baseURL,

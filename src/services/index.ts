@@ -13,8 +13,9 @@ import request from "./request"
 
 // 验证码
 export const getCaptchaApi = () => {
-  return axios.get<CaptchaRes>('/login/captcha')
+  return request.get<BaseRes<CaptchaRes>>('/login/captcha')
 }
+
 
 // 登录
 export const getLoginApi = (params: LoginRes) => {
