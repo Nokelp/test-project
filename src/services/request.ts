@@ -2,7 +2,7 @@ import axios from "axios";
 import { message } from "antd";
 
 //根据环境变量配置请求的基础路径
-const baseURL =process.env.NODE_ENV === 'development'?'bwapi':'https://zyxcl.xyz/exam_api'
+const baseURL =process.env.NODE_ENV === 'development'?'/bwapi':'https://zyxcl.xyz/exam_api'
 
 const request = axios.create({
     baseURL,
@@ -31,7 +31,7 @@ request.interceptors.response.use(function (response) {
     console.log('响应拦截', error)
     if (error.status === 401) {
         message.error('用户登录信息失效，请重新登录！')
-        window.location.assign('/user/login')
+        window.location.href='/user/login'
     } else {
         message.error(error.message)
     }
