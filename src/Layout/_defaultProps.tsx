@@ -59,22 +59,22 @@ import {
           ],
         },
         {
-          path: '/systemManage/manage-page',
+          path: '/userManage',
           name: '系统管理',
           icon: <CrownFilled />,
           routes: [
             {
-              path: '/systemManage/manage-page',
+              path: '/userManage/manage-page',
               name: '用户管理',
               component: './Welcome',
             },
             {
-              path: '/systemManage/menuManage',
+              path: '/userManage/menuManage',
               name: '权限管理',
               component: './Welcome',
             },
             {
-              path: '/systemManage/system',
+              path: '/userManage/system',
               name: '角色管理',
               component: './Welcome',
             }
