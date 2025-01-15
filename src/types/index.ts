@@ -64,3 +64,23 @@ export type ClassListItem = {
     students:[]
     __v: number
 }
+// 角色列表
+export type RoleItem = {
+    createTime: number
+    creator: string
+    disabled: boolean
+    name: string
+    permission: string[]
+    value: string
+    __v: number
+    _id: string 
+}
+export type RoleRes = {
+    code: number
+    msg: string
+    data: {
+        list: RoleItem[]
+        total: number
+        totalPage: 1
+    }
+}

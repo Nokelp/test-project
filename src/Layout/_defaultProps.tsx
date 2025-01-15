@@ -1,12 +1,10 @@
 import {
+    ChromeFilled,
     CrownFilled,
     SmileFilled,
     TabletFilled,
-    FileTextOutlined,
-    FormOutlined,
     TeamOutlined,
-    CopyOutlined
-
+    FileTextOutlined,
   } from '@ant-design/icons';
   
   export default {
@@ -14,14 +12,17 @@ import {
       path: '/',
       routes: [
         {
-          path: '/',
-          name: '首页',
+          path: '/welcome',
+          name: '欢迎',
           icon: <SmileFilled />,
+          component: './Welcome',
         },
         {
-          path: '/exam/record',
-          name: '考试管理',
-          icon: <FormOutlined />,
+          path: '/admin',
+          name: '管理页',
+          icon: <CrownFilled />,
+          access: 'canAdmin',
+          component: './Admin',
           routes: [
             {
               path: '/exam/record',
@@ -48,13 +49,15 @@ import {
               component: './Welcome',
             },
             {
-              path: '/manage-group/group-class',
-              name: 'group-class',
+              path: '/admin/sub-page2',
+              name: '二级页面',
+              icon: <CrownFilled />,
               component: './Welcome',
             },
             {
-              path: '/manage-group/group-detail/:id',
-              name: ':id',
+              path: '/admin/sub-page3',
+              name: '三级页面',
+              icon: <CrownFilled />,
               component: './Welcome',
             },
           ],
@@ -65,39 +68,42 @@ import {
           icon: <CrownFilled />,
           routes: [
             {
-              path: '/systemManage/manage-page',
-              name: '用户管理',
+              path: '/list/sub-page',
+              name: '列表页面',
+              icon: <CrownFilled />,
+              routes: [
+                {
+                  path: 'sub-sub-page1',
+                  name: '一一级列表页面',
+                  icon: <CrownFilled />,
+                  component: './Welcome',
+                },
+                {
+                  path: 'sub-sub-page2',
+                  name: '一二级列表页面',
+                  icon: <CrownFilled />,
+                  component: './Welcome',
+                },
+                {
+                  path: 'sub-sub-page3',
+                  name: '一三级列表页面',
+                  icon: <CrownFilled />,
+                  component: './Welcome',
+                },
+              ],
+            },
+            {
+              path: '/list/sub-page2',
+              name: '二级列表页面',
+              icon: <CrownFilled />,
               component: './Welcome',
             },
             {
-              path: '/systemManage/menuManage',
-              name: '权限管理',
+              path: '/list/sub-page3',
+              name: '三级列表页面',
+              icon: <CrownFilled />,
               component: './Welcome',
             },
-            {
-              path: '/systemManage/system',
-              name: '角色管理',
-              component: './Welcome',
-            }
-          ],
-        },
-        {
-          path: '/question/item-bank',
-          name: '试题管理',
-          icon: <CopyOutlined />,
-          access: 'canAdmin',
-          component: './Admin',
-          routes: [
-            {
-              path: '/question/item-bank',
-              name: '试题库',
-              component: './Welcome',
-            },
-            {
-              path: '/question/create-item',
-              name: '添加试题',
-              component: './Welcome',
-            }
           ],
         },
         {

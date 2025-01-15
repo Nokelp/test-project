@@ -1,6 +1,7 @@
 import Home from "../pages/home/Home"
+
 import Login from "../pages/login/Login"
-import Permission from "../pages/permission/Permission"
+
 import NotFound from "../pages/notfound/NotFound"
 import Layout from "../Layout/Layout"
 // 考试管理
@@ -34,14 +35,20 @@ type Route = {
 const  routes:Route[]=[
     {
         path: '/',
-        element: <Home />,
-        layout: true,
-        islogin: true
+        element: <Layout><Home /></Layout>
     },
     {
         path: '/exam/record',
         element: <Record />,
         layout: true,
+    },
+    {
+        path: '/question',
+        element: <Navigate to="/question/item-bank" />
+    },
+    {
+        path: '/userManage',
+        element: <Navigate to="/userManage/manage-page" />
     },
     {
         path: '/exam/create',
@@ -123,7 +130,6 @@ const  routes:Route[]=[
         element: <NotFound />,
         islogin: true
     }
-    
 ]
 
 

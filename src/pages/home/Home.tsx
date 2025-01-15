@@ -4,7 +4,9 @@ import { useDispatch, useSelector } from'react-redux'
 import type { AppDispatch, RootState } from '../../store/index'
 const Home: React.FC = () => {
   return (
-    <div className={style.home}>Home</div>
+    <div className={style.home}>
+      Home
+    </div>
   )
 }
 
