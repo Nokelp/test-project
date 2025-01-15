@@ -28,44 +28,49 @@ type Route = {
     path: string,
     element: React.ReactNode,
     layout?: boolean,
-    islogin?: boolean
+    permission?: boolean
 }
 const  routes:Route[]=[
     {
         path: '/',
         element: <Home />,
         layout: true,
-        islogin: true
     },
     {
         path: '/exam/record',
         element: <Record />,
         layout: true,
+        permission: true
     },
     {
         path: '/exam/create',
         element: <Create />,
         layout: true,
+        permission: true
     },
     {
         path: '/question/item-bank',
         element: <ItemBank />,
         layout: true,
+        permission: true
     },
     {
         path: '/question/create-item',
         element: <CreateItem />,
         layout: true,
+        permission: true
     },
     {
         path: '/paper/paper-bank',
         element: <Paperbank />,
         layout: true,
+        permission: true
     },
     {
         path: '/paper/create-paper',
         element: <CreatePaper />,
         layout: true,
+        permission: true
     },
     {
         path: '/manage-group',
@@ -74,48 +79,54 @@ const  routes:Route[]=[
     {
         path: '/manage-group/group-list',
         element: <Grouplist />,
-        layout: true
+        layout: true,
+        permission: true
     },
     {
         path: '/manage-group/group-students',
         element: <Groupstudents />,
-        layout: true
+        layout: true,
+        permission: true
     },
     {
         path: '/manage-group/group-class',
         element: <Groupclass />,
-        layout: true
+        layout: true,
+        permission: true
     },
+    
     {
         path: '/manage-group/group-detail/:id',
         element: <Groupdetail />,
-        layout: true
+        layout: true,
+        permission: true
     },
     
     {
         path: '/systemManage/manage-page',
         element: <Managepage />,
-        layout: true
+        layout: true,
+        permission: true
     },
     {
         path: '/systemManage/menuManage',
         element: <MenuManage />,
-        layout: true
+        layout: true,
+        permission: true
     },
     {
         path: '/systemManage/system',
         element: <System />,
-        layout: true
+        layout: true,
+        permission: true
     },
     {
         path: '/user/login',
         element: <Login />,
-        islogin: true
     },
     {
         path: '*',
         element: <NotFound />,
-        islogin: true
     }
     
 ]
@@ -123,14 +134,13 @@ const  routes:Route[]=[
 
 export default routes.map(route => {
     if (route.layout) {
-        return {
-            ...route,
-            element: <PrivateRoute islogin={route.islogin}><Layout>{route.element}</Layout></PrivateRoute>
-        }
-    }else{
-        return {
-            ...route,
-            element: <PrivateRoute islogin={route.islogin}>{route.element}</PrivateRoute>
-        }
-    }
+        route.element = <Layout>{route.element}</Layout>
+        
+}
+    // if (route.permission) {
+    // route.element = <PrivateRoute>{route.element}</PrivateRoute>
+    
+    // }
+    return route
+    
 })

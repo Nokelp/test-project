@@ -1,15 +1,15 @@
 import axios from "axios"
 import type {
+  BaseRes,
   CaptchaRes,
   LoginRes,
   LoginResData,
-  InfoRes,
-  classListRes,
-  studentListRes
- } from "../types"
+  InfoData,
+  classListData,
+  studentListData
+} from "../types"
+import request from "./request"
 
-
-axios.defaults.baseURL = process.env.NODE_ENV === 'development' ? '/bwapi' : 'https://zyxcl.xyz/exam_api'
 
 // 验证码
 export const getCaptchaApi = () => {
@@ -18,37 +18,27 @@ export const getCaptchaApi = () => {
 
 // 登录
 export const getLoginApi = (params: LoginRes) => {
-  return axios.post<LoginResData>('/login', params)
+  return request.post<BaseRes<LoginResData>>('/login', params)
 }
 
 // 个人信息
 export const getInfoApi = () => {
-  return axios.get<InfoRes>('/user/info',{
-    headers: {
-      Authorization: localStorage.getItem('token') 
-    }
-  })
+  return request.get<BaseRes<InfoData>>('/user/info')
 }
   
 //班级列表
 export const getClassListApi = () => {
-  return axios.get<classListRes>('/studentGroup/list',{
+  return request.get<BaseRes<classListData>>('/studentGroup/list',{
     params: {
       page: 1,
       pagesize: 10
     },
-    headers: {
-      Authorization: localStorage.getItem('token') 
-    }
   })
 }
 //学生列表
 
 export const getstudentListApi = ( params:{page:number,pagesize:number}) => {
-  return axios.get<studentListRes>('/student/list',{
+  return request.get<BaseRes<studentListData>>('/student/list',{
     params,
-    headers: {
-      Authorization: localStorage.getItem('token') 
-    }
   })
 }

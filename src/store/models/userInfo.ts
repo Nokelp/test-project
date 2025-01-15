@@ -9,10 +9,12 @@ export const getInfo = createAsyncThunk('info/getInfo',async() =>{
 
 interface UserInfo{
     info: InfoData
+    loading:boolean
 }
 
 const initialState: UserInfo = {
-    info: {} as InfoData
+    info: {} as InfoData,
+    loading:false
 }
 
 
