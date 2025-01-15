@@ -6,7 +6,7 @@ import type {
   LoginResData,
   InfoRes,
   RoleRes,
-  MenuRes
+  MenuRes,
   UserListParams,
   UserListRes,
  } from "../types"
