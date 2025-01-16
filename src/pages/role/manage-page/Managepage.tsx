@@ -26,9 +26,6 @@ const ManagePage = () => {
           onClickDel: () => {
 
           },
-          onClickRole: () => {
-
-          }
         })}
         actionRef={actionRef}
         cardBordered

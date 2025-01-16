@@ -5,10 +5,9 @@ import type { ListItem } from '../../../types';
 interface columnsProps {
     onClickEdit: (row: ListItem) => void;
     onClickDel: (row: ListItem) => void;
-    onClickRole: (row: ListItem) => void;
 }
 
-export const getColumns = ({ onClickEdit, onClickDel, onClickRole }: columnsProps) => {
+export const getColumns = ({ onClickEdit, onClickDel }: columnsProps) => {
     const columns: ProColumns<ListItem>[] = [
         {
             dataIndex: 'index',
@@ -72,9 +71,6 @@ export const getColumns = ({ onClickEdit, onClickDel, onClickRole }: columnsProp
             key: 'option',
             render: (text, record) => (
                 <Space key={record._id}>
-                <Button type='primary' onClick={() => onClickRole(record)}>
-                    分配角色
-                </Button>
                 <Button onClick={() => onClickEdit(record)}>
                     编辑
                 </Button>

@@ -3,13 +3,14 @@ import { message, Form } from 'antd';
 import {
   ModalForm,
   ProFormRadio,
+  ProFormSelect,
   ProFormText,
 } from '@ant-design/pro-components';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../../../../store';
 import { changeModalOpen } from '../../../../store/models/userInfo';
-import { createUserApi, UpdateUserApi } from '../../../../services';
-import type { ListItem } from '../../../../types';
+import { createUserApi, UpdateUserApi, getRoleListApi } from '../../../../services';
+import type { ListItem, RoleItem } from '../../../../types';
 import { useEffect } from 'react';
 
 const formLayout = {
@@ -28,6 +29,7 @@ type Values = {
   username: string;
   password: string;
   status: 0 | 1;
+  role: string[];
 }
 
 interface Props {
@@ -43,12 +45,13 @@ const UserModal = (props: Props) => {
   const [form] = Form.useForm();
 
   const createUser = async (value: Values) => {
-    const { username, password, status } = value;
+    const { username, password, status, role } = value;
     try {
       const res = await createUserApi({
         username,
         password,
         status,
+        role
       });
       if (res.data.code === 200) {
         message.success(res.data.msg);
@@ -91,8 +94,7 @@ const UserModal = (props: Props) => {
         confirmPassword: editRowInfo?.password
       });
     }
-  }, [isAddUser, editRowInfo])
-
+  }, [isAddUser, editRowInfo, open])
 
   return (
     <>
@@ -178,6 +180,25 @@ const UserModal = (props: Props) => {
               required: true,
               message: '请选择状态',
             }]}
+        />
+        <ProFormSelect
+          name="role"
+          label="分配角色"
+          width="md"
+          mode="multiple"
+          request={async () => {
+            const res = await getRoleListApi();
+            if(res.data.code === 200) {
+              return res.data.data.list.map((item: RoleItem) => ({
+                label: item.name,
+                value: item.value,
+              }))
+            } else {
+              return [];
+            }
+          }}
+          placeholder="请选择用户角色"
+          rules={[{ required: true, message: '请选择角色' }]}
         />
       </ModalForm>
     </>
