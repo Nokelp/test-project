@@ -4,11 +4,11 @@ import { ProTable, TableDropdown } from '@ant-design/pro-components';
 import { Button, Dropdown, Space, Tag } from 'antd';
 import { useRef } from 'react';
 import {getstudentListApi} from '../../../services/index'
-import type {studentListItem} from '../../../types'
+import type {StudentListItem} from '../../../types'
 
 
 
-const columns: ProColumns<studentListItem>[] = [
+const columns: ProColumns<StudentListItem>[] = [
   { 
     title: '排序',
     dataIndex: 'index',
@@ -102,7 +102,7 @@ const columns: ProColumns<studentListItem>[] = [
 const studentList:React.FC=() => {
   const actionRef = useRef<ActionType>();
   return (
-    <ProTable<studentListItem>
+    <ProTable<StudentListItem>
       columns={columns}
       actionRef={actionRef}
       cardBordered

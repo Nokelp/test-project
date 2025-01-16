@@ -8,7 +8,7 @@ import { useSelector,useDispatch } from 'react-redux';
 import {RootState,AppDispatch} from '../../../store/index'
 import { getClassList } from '../../../store/models/classList';
 import { useEffect } from 'react';
-import type { classListItem } from '../../../types';
+import type { ClassListItem } from '../../../types';
 export const waitTimePromise = async (time: number = 100) => {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -37,7 +37,7 @@ export const waitTime = async (time: number = 100) => {
 //   closed_at?: string;
 // };
 
-const columns: ProColumns<classListItem>[] = [
+const columns: ProColumns<ClassListItem>[] = [
   {
     title: '标题',
     dataIndex: 'index',
@@ -148,7 +148,7 @@ export default () => {
     dispatch(getClassList())
   }, []);
   return (
-    <ProTable<classListItem>
+    <ProTable<ClassListItem>
       columns={columns}
       actionRef={actionRef}
       cardBordered

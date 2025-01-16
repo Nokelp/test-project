@@ -6,8 +6,8 @@ import type {
   LoginRes,
   LoginResData,
   InfoData,
-  classListData,
-  studentListData,
+  ClassListData,
+  StudentListData,
   RoleRes,
 
   MenuRes,
@@ -35,20 +35,17 @@ export const getInfoApi = () => {
 
 // 当前用户菜单
 export const getUserMenuListApi = () => {
-  return axios.get<AxiosRes<MenuRes>>('/user/menulist', {
-    headers: {
-      Authorization: localStorage.getItem('token') || ''
-    }
+  return request.get<AxiosRes<MenuRes>>('/user/menulist', {
   })
 }
-
+// 退出登录
+export const getLogoutApi = () => {
+  return request.get('/user/logout')
+}
 
 // 角色列表
 export const getRoleListApi = () => {
-  return axios.get<AxiosRes<RoleRes>>('role/list',{
-    headers: {
-      Authorization: localStorage.getItem('token') || ''
-    }
+  return request.get<AxiosRes<RoleRes>>('role/list',{
   })
 }
 
@@ -62,7 +59,7 @@ export const getUserListApi = (params: UserListParams) => {
   
 //班级列表
 export const getClassListApi = () => {
-  return request.get<BaseRes<classListData>>('/studentGroup/list',{
+  return request.get<BaseRes<ClassListData>>('/studentGroup/list',{
     params: {
       page: 1,
       pagesize: 10
@@ -72,18 +69,15 @@ export const getClassListApi = () => {
 //学生列表
 
 export const getstudentListApi = ( params:{page:number,pagesize:number}) => {
-  return request.get<BaseRes<studentListData>>('/student/list',{
+  return request.get<BaseRes<StudentListData>>('/student/list',{
     params,
   })
 }
 
 // 新增角色
 export const getCreateRoleApi = (params:{name: string, value: string}) => {
-  return axios.get('/role/create',{
+  return request.get('/role/create',{
     params,
-    headers: {
-      Authorization: localStorage.getItem('token') || ''
-    }
   })
 }
   

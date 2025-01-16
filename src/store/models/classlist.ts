@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import { getClassListApi } from "../../services"
-import { classListData } from "../../types"
+import { ClassListData } from "../../types"
 
 export type params={
     page: number,
@@ -13,11 +13,11 @@ export const getClassList = createAsyncThunk('classList/fetch',async() =>{
 })
 
 interface ClassList{
-    ClassList:classListData
+    ClassList:ClassListData
 }
 
 const initialState: ClassList = {
-    ClassList:{} as classListData,
+    ClassList:{} as ClassListData,
 }
 
 
