@@ -1,4 +1,3 @@
-import axios from "axios"
 import type {
   AxiosRes,
   BaseRes,
@@ -9,7 +8,6 @@ import type {
   ClassListData,
   StudentListData,
   RoleRes,
-
   MenuRes,
   UserListParams,
   UserListRes,
