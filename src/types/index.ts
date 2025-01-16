@@ -1,7 +1,7 @@
 export interface AxiosRes<T> {
     code: number
     msg: string
-    data: T 
+    data: T
 }
 
 // 验证码图片
@@ -82,7 +82,7 @@ export type RoleItem = {
     permission: string[]
     value: string
     __v: number
-    _id: string 
+    _id: string
 }
 export type RoleRes = {
     list: RoleItem[]
@@ -94,26 +94,36 @@ export type RoleRes = {
 export type UserListParams = {
     page: number
     pageSize: number
+    username?: string,
+    creator?: string,
+    lastOnlineTime?: number | null,
+    status?: 0 | 1,
 }
 
 // 用户管理列表返回值
 export type ListItem = {
+    avator: string
     creator: string
-    lastOnlineTime: number
+    lastOnlineTime?: number
     password: string
-    role: []
-    status: number
+    role: string[]
+    status: 0 | 1
     username: string
     __v: number
     _id: string
 }
 
 export type UserListRes = {
+    totalPage: number
+    total: number
+    list: ListItem[]
+}
+
+// 创建用户入参格式
+export type createUserParams = Record<'username' | 'password' | 'status', string>
+
+// 创建用户返回值
+export type createUserRes = {
     code: number
     msg: string
-    data: {
-        totalPage: number
-        total: number
-        list: ListItem[]
-    }
 }

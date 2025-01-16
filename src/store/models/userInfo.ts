@@ -12,19 +12,25 @@ export const getInfo = createAsyncThunk('info/getInfo',async() =>{
 
 interface UserInfo{
     info: InfoData | null,
-    menuList: MenuItem[]
+    menuList: MenuItem[],
+    userModalOpen: boolean
 }
 
 const initialState: UserInfo = {
     info: null,
-    menuList: []
+    menuList: [],
+    userModalOpen: false,
 }
 
 
 const infoSlice = createSlice({
     name: 'info',
     initialState,
-    reducers:{},
+    reducers:{
+        changeModalOpen(state, actions) {
+            state.userModalOpen = actions.payload
+        }
+    },
     extraReducers: builder => {
         builder
         .addCase(getInfo.fulfilled, (state, {payload}) => {
@@ -34,6 +40,6 @@ const infoSlice = createSlice({
     }
 }) 
 
-export const {  } = infoSlice.actions
+export const { changeModalOpen } = infoSlice.actions
 
 export default infoSlice.reducer
