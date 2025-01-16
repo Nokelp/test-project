@@ -20,6 +20,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { getInfo } from '../store/models/userInfo'
 import { AppDispatch, RootState } from '../store'
 import { useNavigate, useLocation } from 'react-router-dom';
+import { changeModalOpen } from '../store/models/userInfo'
 
 enum Pathname {
     MANAGE_PAGE = '/userManage/manage-page', // 用户管理
@@ -164,6 +165,9 @@ const Layout:React.FC<{children: React.ReactNode}>=(props) => {
                         shape="round"
                         icon={<PlusCircleOutlined />}
                         size='large'
+                        onClick={() => {
+                            dispatch(changeModalOpen(true))
+                        }}
                     >
                         添加用户
                     </Button>

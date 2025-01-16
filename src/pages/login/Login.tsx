@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { getCaptchaApi, getLoginApi } from '../../services'
 import logstyle from './Login.module.scss'
 import {
     LockOutlined,
@@ -133,7 +135,7 @@ const Login: React.FC = () => {
                   ]}
                 />
                 <div>
-                  <img src="" alt="" />
+                  <img src={codImg} alt="" />
                 </div>
               </div>
             </>
