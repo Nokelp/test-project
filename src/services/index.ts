@@ -1,39 +1,36 @@
 import axios from "axios"
 import type {
   AxiosRes,
+  BaseRes,
   CaptchaRes,
   LoginRes,
   LoginResData,
-  InfoRes,
+  InfoData,
+  classListData,
+  studentListData,
   RoleRes,
 
   MenuRes,
   UserListParams,
   UserListRes,
- } from "../types"
-
-
-// 配置axios的基础路径
-axios.defaults.baseURL =  process.env.NODE_ENV === 'development' ? '/bwapi' : 'https://zyxcl.xyz/exam_api'
+} from "../types"
+import request from "./request"
 
 
 // 验证码
 export const getCaptchaApi = () => {
-  return axios.get<AxiosRes<CaptchaRes>>('/login/captcha')
+  return request.get<BaseRes<CaptchaRes>>('/login/captcha')
 }
+
 
 // 登录
 export const getLoginApi = (params: LoginRes) => {
-  return axios.post<AxiosRes<LoginResData>>('/login', params)
+  return request.post<BaseRes<LoginResData>>('/login', params)
 }
 
 // 个人信息
 export const getInfoApi = () => {
-  return axios.get<AxiosRes<InfoRes>>('/user/info',{
-    headers: {
-      Authorization: localStorage.getItem('token') || ''
-    }
-  })
+  return request.get<BaseRes<InfoData>>('/user/info')
 }
 
 // 当前用户菜单
@@ -54,26 +51,29 @@ export const getRoleListApi = () => {
     }
   })
 }
-//班级列表
-export const getClassListApi = (params: {
-  page: number,
-  pagesize: number
-}) => {
-  return axios.get('/studentGroup/list', {
+
+
+//用户管理列表
+export const getUserListApi = (params: UserListParams) => {
+  return request.get<UserListRes>('/user/list', {
     params,
-    headers: {
-      Authorization: localStorage.getItem('token')
-    }
   })
 }
+  
+//班级列表
+export const getClassListApi = () => {
+  return request.get<BaseRes<classListData>>('/studentGroup/list',{
+    params: {
+      page: 1,
+      pagesize: 10
+    },
+  })
+}
+//学生列表
 
-// 用户管理列表
-export const getUserListApi = (params: UserListParams) => {
-  return axios.get<UserListRes>('/user/list', {
+export const getstudentListApi = ( params:{page:number,pagesize:number}) => {
+  return request.get<BaseRes<studentListData>>('/student/list',{
     params,
-    headers: {
-      Authorization: localStorage.getItem('token')
-    }
   })
 }
 

@@ -2,12 +2,13 @@ import { EllipsisOutlined, PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable, TableDropdown } from '@ant-design/pro-components';
 import { Button, Dropdown, Space, Tag } from 'antd';
-import { useRef,useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getClassList } from '../../../store/models/classlist';
-import { AppDispatch,RootState } from '../../../store';
-import type { ClassListItem} from '../../../types/index';
-import dayjs from 'dayjs';
+import { useRef } from 'react';
+import request from 'umi-request';
+import { useSelector,useDispatch } from 'react-redux';
+import {RootState,AppDispatch} from '../../../store/index'
+import { getClassList } from '../../../store/models/classList';
+import { useEffect } from 'react';
+import type { classListItem } from '../../../types';
 export const waitTimePromise = async (time: number = 100) => {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -20,12 +21,27 @@ export const waitTime = async (time: number = 100) => {
   await waitTimePromise(time);
 };
 
+// type GithubIssueItem = {
+//   url: string;
+//   id: number;
+//   number: number;
+//   title: string;
+//   labels: {
+//     name: string;
+//     color: string;
+//   }[];
+//   state: string;
+//   comments: number;
+//   created_at: string;
+//   updated_at: string;
+//   closed_at?: string;
+// };
 
-const columns: ProColumns<ClassListItem>[] = [
+const columns: ProColumns<classListItem>[] = [
   {
-    title: '排序',
+    title: '标题',
     dataIndex: 'index',
-    valueType: 'index',
+    valueType: 'indexBorder',
     width: 48,
   },
   {
@@ -33,7 +49,8 @@ const columns: ProColumns<ClassListItem>[] = [
     dataIndex: 'name',
     copyable: true,
     ellipsis: true,
-    tooltip: '名称过长会自动收缩',
+    tooltip: '标题过长会自动收缩',
+
     formItemProps: {
       rules: [
         {
@@ -47,8 +64,23 @@ const columns: ProColumns<ClassListItem>[] = [
     // disable: true,
     title: '老师',
     dataIndex: 'teacher',
-    ellipsis: true,
-  
+    valueType: 'select',
+    valueEnum: {
+      all: { text: '超长'.repeat(50) },
+      open: {
+        text: '未解决',
+        status: 'Error',
+      },
+      closed: {
+        text: '已解决',
+        status: 'Success',
+        disabled: true,
+      },
+      processing: {
+        text: '解决中',
+        status: 'Processing',
+      },
+    },
   },
   {
     disable: true,
@@ -59,9 +91,24 @@ const columns: ProColumns<ClassListItem>[] = [
     title: '创建时间',
     key: '_id',
     dataIndex: 'createTime',
-    valueType: 'date',
+    valueType: 'dateTime',
     sorter: true,
     hideInSearch: true,
+  },
+  {
+    title: '创建时间',
+    dataIndex: 'created_at',
+    valueType: 'dateTimeRange',
+    hideInTable: true,
+    hideInSearch: true,
+    search: {
+      transform: (value) => {
+        return {
+          startTime: value[0],
+          endTime: value[1],
+        };
+      },
+    },
   },
   {
     title: '操作',
@@ -80,7 +127,7 @@ const columns: ProColumns<ClassListItem>[] = [
         查看
       </a>,
       <TableDropdown
-        key="_id"
+        key="actionGroup"
         onSelect={() => action?.reload()}
         menus={[
           { key: 'copy', name: '复制' },
@@ -93,18 +140,15 @@ const columns: ProColumns<ClassListItem>[] = [
 
 export default () => {
   const actionRef = useRef<ActionType>();
-  const classList = useSelector((state: RootState) => state.classList);
-  const dispatch = useDispatch<AppDispatch>();
+  const classList = useSelector((state:RootState)=>state.classList)
+  const dispatch:AppDispatch = useDispatch()
+
+
   useEffect(() => {
-      dispatch(getClassList({page:1,pagesize:5}))
+    dispatch(getClassList())
   }, []);
-
-  console.log(classList)
-
-
-
   return (
-    <ProTable<ClassListItem>
+    <ProTable<classListItem>
       columns={columns}
       actionRef={actionRef}
       cardBordered
@@ -122,7 +166,7 @@ export default () => {
           console.log('value: ', value);
         },
       }}
-      rowKey="id"
+      rowKey="_id"
       search={{
         labelWidth: 'auto',
       }}

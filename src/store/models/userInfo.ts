@@ -13,11 +13,13 @@ export const getInfo = createAsyncThunk('info/getInfo',async() =>{
 interface UserInfo{
     info: InfoData | null,
     menuList: MenuItem[]
+    loading:boolean
 }
 
 const initialState: UserInfo = {
     info: null,
-    menuList: []
+    menuList: [],
+    loading:false
 }
 
 
