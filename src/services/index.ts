@@ -29,8 +29,8 @@ export const getLoginApi = (params: LoginRes) => {
 }
 
 // 个人信息
-export const getInfoApi = () => {
-  return request.get<BaseRes<InfoData>>('/user/info')
+export const getInfoApi = (data:{}) => {
+  return request.get<BaseRes<InfoData>>('/user/info',data)
 }
 
 // 当前用户菜单
@@ -40,7 +40,7 @@ export const getUserMenuListApi = () => {
 }
 // 退出登录
 export const getLogoutApi = () => {
-  return request.get('/user/logout')
+  return request.post<BaseRes<LoginResData>>('/user/logout')
 }
 
 // 角色列表

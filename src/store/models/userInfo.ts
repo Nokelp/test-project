@@ -4,6 +4,7 @@ import { InfoData, MenuItem } from "../../types"
 
 export const getInfo = createAsyncThunk('info/getInfo',async() =>{
     const [UserInfoRes, menulistRes] = await Promise.all([getInfoApi(), getUserMenuListApi()])
+    
     return {
         info: UserInfoRes.data.data,
         menuList: menulistRes.data.data.list
@@ -30,9 +31,10 @@ const infoSlice = createSlice({
     extraReducers: builder => {
         builder
         .addCase(getInfo.fulfilled, (state, {payload}) => {
-           state.info = payload.info
-           state.menuList = payload.menuList
-       })
+            state.info = payload.info
+            state.menuList = payload.menuList
+            console.log('~~~~~~~~~~~~',payload.info,payload.menuList)
+        })
     }
 }) 
 

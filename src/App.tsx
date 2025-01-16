@@ -16,8 +16,9 @@ const App:React.FC = () => {
   useEffect(() => {
     if(location.pathname !== '/user/login') {
       dispatch(getInfo())
+      console.log('~~~~',123)
     }
-  }, []);
+  }, [location.pathname]);
   return (
     <Spin size='large' spinning={loading}>
       <div style={{width:'100vw',minHeight:'100vh'}}>

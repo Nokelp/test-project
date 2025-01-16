@@ -9,17 +9,7 @@ import {RootState,AppDispatch} from '../../../store/index'
 import { getClassList } from '../../../store/models/classList';
 import { useEffect } from 'react';
 import type { ClassListItem } from '../../../types';
-export const waitTimePromise = async (time: number = 100) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(true);
-    }, time);
-  });
-};
 
-export const waitTime = async (time: number = 100) => {
-  await waitTimePromise(time);
-};
 
 // type GithubIssueItem = {
 //   url: string;

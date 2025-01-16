@@ -12,7 +12,8 @@ import {
 import {
     ConfigProvider,
     Dropdown,
-    Button
+    Button,
+    message
 } from 'antd';
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
@@ -20,6 +21,7 @@ import { getInfo } from '../store/models/userInfo'
 import { AppDispatch, RootState } from '../store'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useMenu } from './hooks/useMenu';
+import { getLogoutApi } from '../services'
 
 enum Pathname {
     MANAGE_PAGE = '/userManage/manage-page', // 用户管理
@@ -40,11 +42,24 @@ const Layout:React.FC<{children: React.ReactNode}>=(props) => {
         return <div />;
     }
 
-    useEffect(() => {
-        dispatch(getInfo());
-    },[])
-
-
+    // useEffect(() => {
+    //     dispatch(getInfo());
+    // },[])
+    const logout = async () => {
+        const res = await getLogoutApi()
+        console.log(res.data)
+        message.success('退出成功')
+        localStorage.removeItem('token')
+        navigate('/user/login')
+    }
+    
+    const onClick: MenuProps['onClick'] = ({ key }) => {
+        if (key === 'logout') {
+            logout()
+        }
+    }
+    
+    console.log('~~~~~~' ,userInfo)
     return (
     <div
         id="test-pro-layout"
@@ -115,6 +130,7 @@ const Layout:React.FC<{children: React.ReactNode}>=(props) => {
                                 label: '退出登录',
                             },
                         ],
+                        onClick: onClick,
                     }}
                     >
                     {dom}
