@@ -1,10 +1,13 @@
 import axios from "axios"
 import type {
   AxiosRes,
+  BaseRes,
   CaptchaRes,
   LoginRes,
   LoginResData,
-  InfoRes,
+  InfoData,
+  ClassListData,
+  StudentListData,
   RoleRes,
 
   MenuRes,
@@ -12,88 +15,75 @@ import type {
   UserListRes,
   createUserParams,
   createUserRes,
- } from "../types"
-
-
-// 配置axios的基础路径
-axios.defaults.baseURL =  process.env.NODE_ENV === 'development' ? '/bwapi' : 'https://zyxcl.xyz/exam_api'
+} from "../types"
+import request from "./request"
 
 
 // 验证码
 export const getCaptchaApi = () => {
-  return axios.get<AxiosRes<CaptchaRes>>('/login/captcha')
+  return request.get<BaseRes<CaptchaRes>>('/login/captcha')
 }
+
 
 // 登录
 export const getLoginApi = (params: LoginRes) => {
-  return axios.post<AxiosRes<LoginResData>>('/login', params)
+  return request.post<BaseRes<LoginResData>>('/login', params)
 }
 
 // 个人信息
 export const getInfoApi = () => {
-  return axios.get<AxiosRes<InfoRes>>('/user/info',{
-    headers: {
-      Authorization: localStorage.getItem('token') || ''
-    }
-  })
+  return request.get<BaseRes<InfoData>>('/user/info')
 }
 
 // 当前用户菜单
 export const getUserMenuListApi = () => {
-  return axios.get<AxiosRes<MenuRes>>('/user/menulist', {
-    headers: {
-      Authorization: localStorage.getItem('token') || ''
-    }
+  return request.get<AxiosRes<MenuRes>>('/user/menulist', {
   })
 }
-
+// 退出登录
+export const getLogoutApi = () => {
+  return request.post<BaseRes<LoginResData>>('/user/logout')
+}
 
 // 角色列表
 export const getRoleListApi = () => {
-  return axios.get<AxiosRes<RoleRes>>('role/list',{
-    headers: {
-      Authorization: localStorage.getItem('token') || ''
-    }
-  })
-}
-//班级列表
-export const getClassListApi = (params: {
-  page: number,
-  pagesize: number
-}) => {
-  return axios.get('/studentGroup/list', {
-    params,
-    headers: {
-      Authorization: localStorage.getItem('token')
-    }
+  return request.get<AxiosRes<RoleRes>>('role/list',{
   })
 }
 
-// 用户管理列表
+
+//用户管理列表
 export const getUserListApi = (params: UserListParams) => {
-  return axios.get<AxiosRes<UserListRes>>('/user/list', {
+  return request.get<UserListRes>('/user/list', {
     params,
-    headers: {
-      Authorization: localStorage.getItem('token')
-    }
+  })
+}
+  
+//班级列表
+export const getClassListApi = () => {
+  return request.get<BaseRes<ClassListData>>('/studentGroup/list',{
+    params: {
+      page: 1,
+      pagesize: 10
+    },
+  })
+}
+//学生列表
+
+export const getstudentListApi = ( params:{page:number,pagesize:number}) => {
+  return request.get<BaseRes<StudentListData>>('/student/list',{
+    params,
   })
 }
 
 // 新增角色
 export const getCreateRoleApi = (params:{name: string, value: string}) => {
-  return axios.get('/role/create',{
+  return request.get('/role/create',{
     params,
-    headers: {
-      Authorization: localStorage.getItem('token') || ''
-    }
   })
 }
   
 // 创建用户
 export const createUserApi = (params: createUserParams) => {
-  return axios.post<createUserRes>('/user/create', params, {
-    headers: {
-      Authorization: localStorage.getItem('token')
-    }
-  })
+  return request.post<createUserRes>('/user/create', params)
 }

@@ -49,7 +49,33 @@ export type InfoData = {
 }
 export type InfoRes = InfoData
 
-
+//学生列表
+export type StudentListRes = {
+    code: number
+    msg: string
+    data: StudentListData
+}
+export type StudentListData = {
+    list: StudentListItem[]
+    total: number
+    totalPage: number
+}
+export type StudentListItem = {
+    age: number
+    avator: string
+    birthday: number
+    class: string
+    createTime: number
+    creator: string
+    email: string
+    gender: number
+    grade: string
+    name: string
+    phone: string
+    status: number
+    __v: number
+    _id: string
+}
 
 
 //班级列表
@@ -126,4 +152,9 @@ export type createUserParams = Record<'username' | 'password' | 'status', string
 export type createUserRes = {
     code: number
     msg: string
+}
+export type BaseRes<T> = {
+    code: number
+    msg: string
+    data: T
 }

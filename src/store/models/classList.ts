@@ -7,8 +7,8 @@ export type params={
     pagesize: number
 }
 
-export const getClassList = createAsyncThunk('classList/fetch',async(params:params) =>{
-    const res = await getClassListApi(params)
+export const getClassList = createAsyncThunk('classList/fetch',async() =>{
+    const res = await getClassListApi()
     return res.data.data
 })
 
@@ -19,6 +19,8 @@ interface ClassList{
 const initialState: ClassList = {
     ClassList:{} as ClassListData,
 }
+
+
 
 
 export const classListSlice = createSlice({
