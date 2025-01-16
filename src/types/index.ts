@@ -95,3 +95,9 @@ export type UserListRes = {
         list: ListItem[]
     }
 }
+
+// 考试记录
+export type ExamRecordItem = Omit<RoleItem, 'disabled' | 'permission'>
+export type ExamRecordRes = {
+    list: ExamRecordItem[]
+}

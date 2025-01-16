@@ -4,11 +4,12 @@ import {
   ModalForm,
   ProFormText
 } from '@ant-design/pro-components'
-import { Button, Drawer, message } from 'antd';
+import { Button, Drawer, message, Popconfirm } from 'antd';
 import React, { useEffect, useState, useRef } from 'react'
-import { getCreateRoleApi, getRoleListApi } from '../../../services'
+import { getCreateRoleApi, getRemoveRoleApi, getRoleListApi } from '../../../services'
 import { RoleItem } from '../../../types'
 import dayjs from 'dayjs'
+import type { PopconfirmProps } from 'antd'
 
 const waitTime = (time: number = 100) => {
   return new Promise((resolve) => {
@@ -23,8 +24,7 @@ const Role: React.FC = () => {
   const [roles, setRoles] = useState<RoleItem[]>([])
   const [open, setOpen] = useState(false);
   const restFormRef = useRef<ProFormInstance>()
-  const formRef = useRef<ProFormInstance>()
-  const [modalVisible, setModalVisible] = useState<boolean>(false)
+  const formRef = useRef()
 
   const showDrawer = () => {
     setOpen(true);
@@ -47,41 +47,45 @@ const Role: React.FC = () => {
     getRoles() 
   },[])
 
+  const confirm= (id: string) => {
+    getRemove(id)
+  };
+  
+  const cancel = () => {
+    return
+  };
+
+  const getRemove = async (id: string) => {
+    try{
+      const res = await getRemoveRoleApi({id})
+      console.log(res.data)
+      if(res.data.code === 200){
+        message.success('删除成功')
+        getRoles() 
+      }
+    }catch(e){
+      console.log(e)
+    }
+  }
+
   const columns: ProColumns<RoleItem>[] = [
     {
       title: '角色',
       dataIndex: 'name',
       width: '15%',
-      render: (_, value) => {
-        return (
-          <div>{_}</div>
-        )
-      },
     },
     {
       title: '角色关键字',
       dataIndex: 'value',
-      width: '15%',
-      render: (_, value) => {
-        return (
-          <div>{value.value}</div>
-        )
-      },
+      width: '15%'
     },
     {
       title: '创建人',
-      dataIndex: 'creator',
-      valueType: 'select',
-      render: (_, value) => {
-        return (
-          <div>{value.creator}</div>
-        )
-      },
+      dataIndex: 'creator'
     },
     {
       title: '创建时间',
       dataIndex: 'createTime',
-      valueType: 'select',
       render: (_, value) => {
         return (
           <div>{dayjs(value.createTime).format('YYYY-MM-DD hh:mm:ss')}</div>
@@ -93,12 +97,24 @@ const Role: React.FC = () => {
       key: 'option',
       width: 250,
       valueType: 'option',
-      render: () => [
-        <Button key="link" type="primary" onClick={showDrawer}>分配角色</Button>,
-        <Button key="warn" danger>删除</Button>
+      render: (_, value) => [
+        <>
+          <Button key="link" type="primary" onClick={showDrawer}>分配角色</Button>
+          <Popconfirm
+            title="确定删除吗？"
+            onConfirm={() => confirm(value._id)}
+            onCancel={cancel}
+            okText="确定"
+            cancelText="取消"
+          >
+            <Button key="warn" danger>删除</Button>
+          </Popconfirm>
+        </>
       ],
     },
   ]
+
+ 
 
 
   return (
@@ -106,6 +122,7 @@ const Role: React.FC = () => {
       <ProTable<RoleItem>
         columns={columns}
         dataSource={roles}
+        formRef={formRef}
         toolbar={{
           search: {
             onSearch: (value: string) => {
@@ -145,7 +162,6 @@ const Role: React.FC = () => {
                 width="md"
                 name="name"
                 label="角色名称"
-                // tooltip="最长为 24 位"
                 placeholder="请输入名称"
               />
 

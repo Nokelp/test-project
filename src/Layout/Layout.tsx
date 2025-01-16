@@ -1,25 +1,18 @@
-import {
-    LogoutOutlined,
-    UserOutlined,
-    PlusCircleOutlined
-} from '@ant-design/icons'
+import { PlusCircleOutlined } from '@ant-design/icons'
 import {
     PageContainer,
     ProCard,
     ProConfigProvider,
     ProLayout,
 } from '@ant-design/pro-components'
-import {
-    ConfigProvider,
-    Dropdown,
-    Button
-} from 'antd';
+import { ConfigProvider, Button } from 'antd'
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { getInfo } from '../store/models/userInfo'
 import { AppDispatch, RootState } from '../store'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useMenu } from './hooks/useMenu';
+import { useMenu } from './hooks/useMenu'
+import AvatarMenu from './components/AvatarMenu'
 
 enum Pathname {
     MANAGE_PAGE = '/userManage/manage-page', // 用户管理
@@ -81,7 +74,6 @@ const Layout:React.FC<{children: React.ReactNode}>=(props) => {
                         width: '331px',
                     },
                 ]}
-                // {...defaultProps}
                 route={route}
                 location={{
                     pathname: location.pathname,
@@ -101,25 +93,10 @@ const Layout:React.FC<{children: React.ReactNode}>=(props) => {
                     title: userInfo?.username,
                 render: (props, dom) => {
                 return (
-                    <Dropdown
-                    menu={{
-                        items: [
-                            {
-                                key: 'user',
-                                icon: <UserOutlined />,
-                                label: '个人中心',
-                            },
-                            {
-                                key: 'logout',
-                                icon: <LogoutOutlined />,
-                                label: '退出登录',
-                            },
-                        ],
-                    }}
-                    >
-                    {dom}
-                    </Dropdown>
-                );
+                    <AvatarMenu>
+                        {dom}
+                    </AvatarMenu>
+                )
                 },
             }}
             headerTitleRender={(logo, title, _) => {
@@ -141,15 +118,8 @@ const Layout:React.FC<{children: React.ReactNode}>=(props) => {
                     </>
                 );
             }}
-            onMenuHeaderClick={(e) => console.log(e)}
             menuItemRender={(item, dom) => (
-                <div
-                    onClick={() => {
-                        navigate(item?.path || '/404')
-                    }}
-                >
-                    {dom}
-                </div>
+                <div onClick={() => {navigate(item?.path || '/404')}}>{dom}</div>
             )}
             fixSiderbar={true}
             layout='mix'

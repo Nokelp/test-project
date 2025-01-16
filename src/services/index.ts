@@ -9,7 +9,9 @@ import type {
   MenuRes,
   UserListParams,
   UserListRes,
+  ExamRecordRes
  } from "../types"
+import { useParams } from "react-router-dom"
 
 
 // 配置axios的基础路径
@@ -24,6 +26,15 @@ export const getCaptchaApi = () => {
 // 登录
 export const getLoginApi = (params: LoginRes) => {
   return axios.post<AxiosRes<LoginResData>>('/login', params)
+}
+
+// 退出登录
+export const getLogoutApi = () => {
+  return axios.post<AxiosRes<LoginResData>>('/user/logout',{},{
+    headers: {
+      Authorization: localStorage.getItem('token') || ''
+    }
+  })
 }
 
 // 个人信息
@@ -47,7 +58,7 @@ export const getUserMenuListApi = () => {
 
 // 角色列表
 export const getRoleListApi = () => {
-  return axios.get<AxiosRes<RoleRes>>('role/list',{
+  return axios.get<AxiosRes<RoleRes>>('/role/list',{
     headers: {
       Authorization: localStorage.getItem('token') || ''
     }
@@ -66,11 +77,29 @@ export const getUserListApi = (params: UserListParams) => {
 
 // 新增角色
 export const getCreateRoleApi = (params:{name: string, value: string}) => {
-  return axios.get('/role/create',{
-    params,
+  return axios.post<AxiosRes<LoginResData>>('/role/create',params,{
     headers: {
       Authorization: localStorage.getItem('token') || ''
     }
   })
 }
-  
+
+// 删除角色
+export const getRemoveRoleApi = (data: {id: string}) => {
+  return axios.post<AxiosRes<LoginResData>>('/role/remove',data,{
+    headers: {
+      Authorization: localStorage.getItem('token') || ''
+    }
+  })
+}
+
+
+
+// 考试记录
+export const getExaminationApi = () => {
+  return axios.get<AxiosRes<ExamRecordRes>>('/classify/list',{
+    headers: {
+      Authorization: localStorage.getItem('token') || ''
+    }
+  })
+}
