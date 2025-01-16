@@ -153,8 +153,10 @@ export type createUserRes = {
     code: number
     msg: string
 }
-export type BaseRes<T> = {
-    code: number
-    msg: string
-    data: T
+
+
+// 考试记录
+export type ExamRecordItem = Omit<RoleItem, 'disabled' | 'permission'>
+export type ExamRecordRes = {
+    list: ExamRecordItem[]
 }
