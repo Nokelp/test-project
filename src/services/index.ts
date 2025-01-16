@@ -78,13 +78,11 @@ export const getstudentListApi = ( params:{page:number,pagesize:number}) => {
 
 // 新增角色
 export const getCreateRoleApi = (params:{name: string, value: string}) => {
-  return request.get('/role/create',{
-    params,
-  })
+  return request.post<AxiosRes<LoginResData>>('/role/create',params)
 }
 // 删除角色
-export const getRemoveRoleApi = (data: {id: string}) => {
-  return request.post<AxiosRes<LoginResData>>('/role/remove',data)
+export const getRemoveRoleApi = (params: {id: string}) => {
+  return request.post<AxiosRes<LoginResData>>('/role/remove',params)
 }
   
 // 创建用户
