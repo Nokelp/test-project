@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import userInfo from './models/userInfo'
-import classList from './models/classList'
+import classList from './models/classlist'
 
 const store = configureStore({
     reducer:{

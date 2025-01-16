@@ -29,8 +29,8 @@ export const getLoginApi = (params: LoginRes) => {
 }
 
 // 个人信息
-export const getInfoApi = (data:{}) => {
-  return request.get<BaseRes<InfoData>>('/user/info',data)
+export const getInfoApi = () => {
+  return request.get<BaseRes<InfoData>>('/user/info')
 }
 
 // 当前用户菜单

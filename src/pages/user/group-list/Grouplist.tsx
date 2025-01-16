@@ -6,7 +6,7 @@ import { useRef } from 'react';
 import request from 'umi-request';
 import { useSelector,useDispatch } from 'react-redux';
 import {RootState,AppDispatch} from '../../../store/index'
-import { getClassList } from '../../../store/models/classList';
+import { getClassList } from '../../../store/models/classlist';
 import { useEffect } from 'react';
 import type { ClassListItem } from '../../../types';
 
