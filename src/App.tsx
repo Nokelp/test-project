@@ -16,7 +16,6 @@ const App:React.FC = () => {
   useEffect(() => {
     if(location.pathname !== '/user/login') {
       dispatch(getInfo())
-      console.log('~~~~',123)
     }
   }, [location.pathname]);
   return (

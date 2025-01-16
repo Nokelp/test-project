@@ -91,6 +91,10 @@ export const createUserApi = (params: createUserParams) => {
 }
 
 // 考试记录
-export const getExaminationApi = () => {
-  return request.get<AxiosRes<ExamRecordRes>>('/classify/list')
+export const getExaminationApi = (params: {page: number, pagesize: number}) => {
+  return request.get<AxiosRes<ExamRecordRes>>('/examination/list',{
+    params
+  })
 }
+
+

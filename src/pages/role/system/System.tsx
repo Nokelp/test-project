@@ -94,7 +94,6 @@ const Role: React.FC = () => {
     },
     {
       title: '操作',
-      key: 'option',
       width: 250,
       valueType: 'option',
       render: (_, value) => [
