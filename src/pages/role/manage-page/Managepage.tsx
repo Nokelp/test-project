@@ -1,151 +1,136 @@
-import { EllipsisOutlined, PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
-import { ProTable, TableDropdown } from '@ant-design/pro-components';
-import { Button, Dropdown, Space, Tag } from 'antd';
+import { ProTable } from '@ant-design/pro-components';
+import { Button, Space, Image } from 'antd';
 import { useRef } from 'react';
 import { getUserListApi } from '../../../services';
 import type { ListItem } from '../../../types';
+import UserModal from './userModal/UserModal';
 
 const columns: ProColumns<ListItem>[] = [
   {
     dataIndex: 'index',
+    key: 'index',
     valueType: 'indexBorder',
     width: 48,
   },
   {
     title: '头像',
     dataIndex: 'avator',
-    copyable: true,
-    ellipsis: true,
-    formItemProps: {
-      rules: [
-        {
-          required: true,
-          message: '此项为必填项',
-        },
-      ],
+    key: 'avator',
+    hideInSearch: true,
+    render: (_, record) => {
+      return (
+        <Image src={record.avator || 'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg'} width={80}/>
+      )
     },
   },
   {
-    disable: true,
     title: '启用状态',
-    dataIndex: 'state',
-    ellipsis: true,
+    dataIndex: 'status',
+    key: 'status',
     valueType: 'select',
     valueEnum: {
-      open: {
-        text: '全部',
-        status: 'All',
-      },
-      closed: {
-        text: '启用',
-        status: 'qiyong',
-      },
-      processing: {
+      0: {
         text: '禁用',
-        status: 'jinyong',
+        status: 'Error',
+      },
+      1: {
+        text: '启用',
+        status: 'Success',
       },
     },
   },
   {
-    disable: true,
-    title: '标签',
-    dataIndex: 'labels',
-    search: false,
-    renderFormItem: (_, { defaultRender }) => {
-      return defaultRender(_);
-    },
-    // render: (_, record) => (
-    //   <Space>
-    //   </Space>
-    // ),
+    title: '用户名',
+    dataIndex: 'username',
+    key: 'username',
+  },
+  {
+    title: '密码',
+    dataIndex: 'password',
+    key: 'password',
+    hideInSearch: true,
+  },
+  {
+    title: '最近登录',
+    dataIndex: 'lastOnlineTime',
+    key: 'lastOnlineTime',
+    valueType: 'dateTime',
+    sorter: (a, b) => a.lastOnlineTime - b.lastOnlineTime,
+  },
+  {
+    title: '创建人',
+    dataIndex: 'creator',
+    key: 'creator',
   },
   {
     title: '操作',
     valueType: 'option',
     key: 'option',
-    render: (text, record, _, action) => [
-      <a
-        key="editable"
-        onClick={() => {
-          action?.startEditable?.(record.id);
-        }}
-      >
-        编辑
-      </a>,
-      <a href={record.url} target="_blank" rel="noopener noreferrer" key="view">
-        查看
-      </a>,
-      <TableDropdown
-        key="actionGroup"
-        onSelect={() => action?.reload()}
-        menus={[
-          { key: 'copy', name: '复制' },
-          { key: 'delete', name: '删除' },
-        ]}
-      />,
-    ],
+    render: (text, record, _, action) => (
+      <Space key={record._id}>
+        <Button type='primary'>
+          分配角色
+        </Button>
+        <Button>
+          编辑
+        </Button>
+        <Button danger>
+          删除
+        </Button>
+      </Space>
+    )
+    ,
   },
 ];
 
 const ManagePage = () => {
   const actionRef = useRef<ActionType>();
+
   return (
-    <ProTable<ListItem>
-      columns={columns}
-      actionRef={actionRef}
-      cardBordered
-      request={async (params) => {
-        const res = await getUserListApi({
-          page: params.current,
-          pagesize: params.pageSize,
-        })
-        return {
-          data: res.data.data.list,
-          total: res.data.data.total,
-          success: true
-        }
-      }}
-      editable={{
-        type: 'multiple',
-      }}
-      columnsState={{
-        persistenceKey: 'pro-table-singe-demos',
-        persistenceType: 'localStorage',
-        defaultValue: {
-          option: { fixed: 'right', disable: true },
-        },
-        onChange(value) {
-          console.log('value: ', value);
-        },
-      }}
-      rowKey="id"
-      search={{
-        labelWidth: 'auto',
-      }}
-      options={{
-        setting: {
-          listsHeight: 400,
-        },
-      }}
-      form={{
-        // 由于配置了 transform，提交的参数与定义的不同这里需要转化一下
-        syncToUrl: (values, type) => {
-          if (type === 'get') {
-            return {
-              ...values,
-              created_at: [values.startTime, values.endTime],
-            };
+    <>
+      <ProTable<ListItem>
+        columns={columns}
+        actionRef={actionRef}
+        cardBordered
+        rowKey="_id"
+        request={async (params) => {
+          const { current, pageSize, ...other } = params;
+          const res = await getUserListApi({
+            page: current,
+            pagesize: pageSize,
+            ...other
+          })
+          return {
+            data: res.data.data.list,
+            total: res.data.data.total,
+            success: true
           }
-          return values;
-        },
-      }}
-      pagination={{
-        pageSize: 5,
-        onChange: (page) => console.log("page", page),
-      }}
-      dateFormatter="string"
-    />
+        }}
+        editable={{
+          type: 'multiple',
+        }}
+        columnsState={{
+          persistenceKey: 'pro-table-singe-demos',
+          persistenceType: 'localStorage',
+          defaultValue: {
+            option: { fixed: 'right', disable: true },
+          },
+        }}
+        search={{
+          labelWidth: 'auto',
+          showHiddenNum: true,
+        }}
+        options={false}
+        pagination={{
+          defaultPageSize: 5,
+          showSizeChanger: true,
+          pageSizeOptions: ['5', '10', '20', '30', '50'],
+        }}
+        dateFormatter="string"
+      />
+      <UserModal reload={actionRef.current?.reload()}/>
+    </>
   );
 };
 

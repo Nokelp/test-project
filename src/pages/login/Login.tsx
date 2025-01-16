@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { getCaptchaApi, getLoginApi } from '../../services'
 import logstyle from './Login.module.scss'
 import {
     LockOutlined,
@@ -11,19 +13,17 @@ import {
 } from '@ant-design/pro-components'
 import { message, theme } from 'antd'
 import style from './Login.module.scss'
-import { getCaptchaApi, getLoginApi } from '../../services'
 import { LoginRes } from '../../types'
-import { useNavigate } from 'react-router-dom'
+
 
 const Login: React.FC = () => {
   const { token } = theme.useToken();
   const [codImg, setCodeImg] = useState('')
   const navigate = useNavigate()
-  
+
   const onFinish = async(values: LoginRes) => {
     try {
       const res = await getLoginApi(values)
-      console.log(res.data.code) 
       if(res.data.code === 200){
         message.success('登录成功')
         localStorage.setItem('token', res.data.data.token)
@@ -41,7 +41,7 @@ const Login: React.FC = () => {
 
   const getCaptcha = async () => {
     try {
-      const res = await getCaptchaApi() 
+      const res = await getCaptchaApi()
       setCodeImg(res.data.data.code)
     }catch(e){
       console.log(e)

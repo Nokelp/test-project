@@ -9,6 +9,8 @@ import type {
   MenuRes,
   UserListParams,
   UserListRes,
+  createUserParams,
+  createUserRes,
  } from "../types"
 
 
@@ -56,7 +58,7 @@ export const getRoleListApi = () => {
 
 // 用户管理列表
 export const getUserListApi = (params: UserListParams) => {
-  return axios.get<UserListRes>('/user/list', {
+  return axios.get<AxiosRes<UserListRes>>('/user/list', {
     params,
     headers: {
       Authorization: localStorage.getItem('token')
@@ -74,3 +76,11 @@ export const getCreateRoleApi = (params:{name: string, value: string}) => {
   })
 }
   
+// 创建用户
+export const createUserApi = (params: createUserParams) => {
+  return axios.post<createUserRes>('/user/create', params, {
+    headers: {
+      Authorization: localStorage.getItem('token')
+    }
+  })
+}
