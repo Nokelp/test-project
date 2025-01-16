@@ -155,9 +155,34 @@ export type createUserRes = {
 }
 
 // 考试记录
-export type ExamRecordItem = Omit<RoleItem, 'disabled' | 'permission'>
+export type QuestionsListItem = {
+    answer: string
+    classify: string
+    options: string[]
+    question: string
+    type: string
+    __v: number
+    _id: string
+}
+export type ExamRecordItem = {
+    classify: string
+    createTime: number
+    creator: string
+    endTime: number
+    examId: string
+    examiner: string[]
+    group: string[]
+    name: string
+    questionsList: QuestionsListItem[]
+    startTime: number
+    status: 0 | 1
+    __v: number
+    _id: string
+}
 export type ExamRecordRes = {
     list: ExamRecordItem[]
+    total: number
+    totalPage: number
 }
 
 // 编辑用户入参格式

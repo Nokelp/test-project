@@ -87,8 +87,10 @@ export const getRemoveRoleApi = (params: {id: string}) => {
 }
 
 // 考试记录
-export const getExaminationApi = () => {
-  return request.get<AxiosRes<ExamRecordRes>>('/classify/list')
+export const getExaminationApi = (params: {page: number, pagesize: number}) => {
+  return request.get<AxiosRes<ExamRecordRes>>('/examination/list',{
+    params
+  })
 }
 
 // 创建用户
@@ -105,3 +107,4 @@ export const UpdateUserApi = (params: updateUserParams) => {
 export const RemoveUserApi = (params: { id: string }) => {
   return request.post<createUserRes>('/user/remove', params)
 }
+

@@ -5,7 +5,7 @@ import {RootState,AppDispatch} from './store'
 import * as React from 'react';
 import {  useEffect } from 'react';
 import {getInfo} from './store/models/userInfo'
-import { Spin } from 'antd';
+import { Spin } from 'antd'
 const App:React.FC = () => {
   const routes = useRoutes(routerConfig)
   const dispatch = useDispatch<AppDispatch>()
@@ -16,7 +16,6 @@ const App:React.FC = () => {
   useEffect(() => {
     if(location.pathname !== '/user/login') {
       dispatch(getInfo())
-      console.log('~~~~',123)
     }
   }, [location.pathname]);
   return (
