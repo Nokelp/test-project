@@ -1,15 +1,14 @@
+import './UserModal.scss';
+import { message } from 'antd';
 import {
   ModalForm,
   ProFormRadio,
   ProFormText,
 } from '@ant-design/pro-components';
-import { message } from 'antd';
-import './UserModal.scss';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../../../../store';
 import { changeModalOpen } from '../../../../store/models/userInfo';
 import { createUserApi } from '../../../../services';
-import { useRef, useState } from 'react';
 
 const formLayout = {
   labelCol: {
@@ -22,7 +21,12 @@ const formLayout = {
   },
 };
 
-type Values = Record<'confirmPassword' | 'username' | 'password' | 'status', string>;
+type Values = {
+  confirmPassword: string;
+  username: string;
+  password: string;
+  status: 0 | 1;
+}
 
 interface Props {
   reload: () => void;
@@ -31,23 +35,24 @@ interface Props {
 const UserModal = (props: Props) => {
   const dispatch = useDispatch();
   const open = useSelector((state: RootState) => state.userInfo.userModalOpen);
-  const [ errorCode, setErrorCode ] = useState<number | null>(null);
 
   const createUser = async (value: Values) => {
     const { username, password, status } = value;
-    try{
+    try {
       const res = await createUserApi({
         username,
         password,
         status,
       });
-      setErrorCode(res.data.code)
       if (res.data.code === 200) {
         message.success(res.data.msg);
-        // 调表格接口刷新数据
+        dispatch(changeModalOpen(false))
+        // 刷新表格
         props.reload();
       } else if (res.data.code === 1001) {
+        dispatch(changeModalOpen(true))
         message.error(res.data.msg);
+        return false;
       } else {
         message.error(res.data.msg);
       }
@@ -70,8 +75,6 @@ const UserModal = (props: Props) => {
         className='user-modal'
         onFinish={async (values: Values) => {
           createUser(values);
-          message.success('提交成功');
-          dispatch(changeModalOpen(false))
           return true;
         }}
       >
@@ -124,11 +127,11 @@ const UserModal = (props: Props) => {
             options={[
               {
                 label: '禁用',
-                value: '0',
+                value: 0,
               },
               {
                 label: '启用',
-                value: '1',
+                value: 1,
               }
             ]}
             rules={[{

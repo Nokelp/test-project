@@ -98,10 +98,4 @@ export type UserListRes = {
 }
 
 // 创建用户入参格式
-export type createUserParams = Record<'username' | 'password' | 'status', string>
-
-// 创建用户返回值
-export type createUserRes = {
-    code: number
-    msg: string
-}
+export type createUserParams = Pick<ListItem, 'username' | 'password' | 'status'>

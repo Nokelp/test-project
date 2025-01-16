@@ -75,10 +75,10 @@ export const getCreateRoleApi = (params:{name: string, value: string}) => {
     }
   })
 }
-  
+
 // 创建用户
 export const createUserApi = (params: createUserParams) => {
-  return axios.post<createUserRes>('/user/create', params, {
+  return axios.post<AxiosRes>('/user/create', params, {
     headers: {
       Authorization: localStorage.getItem('token')
     }
