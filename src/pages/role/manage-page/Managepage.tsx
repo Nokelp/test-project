@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { ActionType } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
 import { useRef } from 'react';
@@ -5,19 +6,22 @@ import { getUserListApi } from '../../../services';
 import type { ListItem } from '../../../types';
 import UserModal from './userModal/UserModal';
 import { useDispatch } from 'react-redux';
-import { changeModalOpen } from '../../../store/models/userInfo';
+import { changeModalOpen, isAdd } from '../../../store/models/userInfo';
 import { getColumns } from './constant';
 
 const ManagePage = () => {
   const actionRef = useRef<ActionType>();
   const dispatch = useDispatch();
+  const [ editRowInfo, setEditRowInfo ] = useState<ListItem | null>(null);
 
   return (
     <>
       <ProTable<ListItem>
         columns={getColumns({
-          onClickEdit: () => {
+          onClickEdit: (row) => {
             dispatch(changeModalOpen(true))
+            dispatch(isAdd(false))
+            setEditRowInfo(row);
           },
           onClickDel: () => {
 
@@ -64,7 +68,10 @@ const ManagePage = () => {
         }}
         dateFormatter="string"
       />
-      <UserModal reload={() => actionRef.current?.reload()}/>
+      <UserModal
+        reload={() => actionRef.current?.reload()}
+        editRowInfo={editRowInfo}
+      />
     </>
   );
 };

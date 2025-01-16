@@ -99,3 +99,6 @@ export type UserListRes = {
 
 // 创建用户入参格式
 export type createUserParams = Pick<ListItem, 'username' | 'password' | 'status'>
+
+// 编辑用户入参格式
+export type updateUserParams = Partial<Omit<ListItem, 'creator' | 'lastOnlineTime'>> & {id: string}

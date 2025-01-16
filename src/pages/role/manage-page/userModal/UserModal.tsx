@@ -1,5 +1,5 @@
 import './UserModal.scss';
-import { message } from 'antd';
+import { message, Form } from 'antd';
 import {
   ModalForm,
   ProFormRadio,
@@ -8,7 +8,9 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../../../../store';
 import { changeModalOpen } from '../../../../store/models/userInfo';
-import { createUserApi } from '../../../../services';
+import { createUserApi, UpdateUserApi } from '../../../../services';
+import type { ListItem } from '../../../../types';
+import { useEffect } from 'react';
 
 const formLayout = {
   labelCol: {
@@ -30,11 +32,15 @@ type Values = {
 
 interface Props {
   reload: () => void;
+  editRowInfo: ListItem | null;
 }
 
 const UserModal = (props: Props) => {
+  const { reload, editRowInfo } = props;
   const dispatch = useDispatch();
   const open = useSelector((state: RootState) => state.userInfo.userModalOpen);
+  const isAddUser = useSelector((state: RootState) => state.userInfo.isAddUser);
+  const [form] = Form.useForm();
 
   const createUser = async (value: Values) => {
     const { username, password, status } = value;
@@ -48,7 +54,7 @@ const UserModal = (props: Props) => {
         message.success(res.data.msg);
         dispatch(changeModalOpen(false))
         // 刷新表格
-        props.reload();
+        reload();
       } else if (res.data.code === 1001) {
         dispatch(changeModalOpen(true))
         message.error(res.data.msg);
@@ -61,20 +67,54 @@ const UserModal = (props: Props) => {
     }
   }
 
+  const UpdateUser = async (values: Values) => {
+    const { confirmPassword, ...other } = values;
+    try {
+      const res = await UpdateUserApi({...other, id: editRowInfo?._id})
+      if(res.data.code === 200) {
+        message.success(res.data.msg);
+        dispatch(changeModalOpen(false))
+        // 刷新表格
+        reload();
+      } else {
+        message.error(res.data.msg);
+      }
+    }catch(err) {
+      console.log("err", err)
+    }
+  }
+
+  useEffect(() => {
+    if(!isAddUser) {
+      form.setFieldsValue({
+        ...editRowInfo,
+        confirmPassword: editRowInfo?.password
+      });
+    }
+  }, [isAddUser, editRowInfo])
+
+
   return (
     <>
       <ModalForm
         {...formLayout}
-        title="添加用户"
+        title={isAddUser ? '添加用户' : '编辑用户'}
         open={open}
         modalProps={{
           destroyOnClose: true,  // 重制表单
           onCancel: () => dispatch(changeModalOpen(false)),
         }}
+        form={form}
         width={520}
         className='user-modal'
         onFinish={async (values: Values) => {
-          createUser(values);
+          if(isAddUser) {
+            // 添加用户
+            createUser(values);
+          } else {
+            // 编辑用户
+            UpdateUser(values);
+          }
           return true;
         }}
       >

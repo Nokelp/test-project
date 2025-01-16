@@ -13,13 +13,15 @@ export const getInfo = createAsyncThunk('info/getInfo',async() =>{
 interface UserInfo{
     info: InfoData | null,
     menuList: MenuItem[],
-    userModalOpen: boolean
+    userModalOpen: boolean,
+    isAddUser: boolean,
 }
 
 const initialState: UserInfo = {
     info: null,
     menuList: [],
     userModalOpen: false,
+    isAddUser: false,
 }
 
 
@@ -29,6 +31,9 @@ const infoSlice = createSlice({
     reducers:{
         changeModalOpen(state, actions) {
             state.userModalOpen = actions.payload
+        },
+        isAdd(state, actions) {
+            state.isAddUser = actions.payload
         }
     },
     extraReducers: builder => {
@@ -40,6 +45,6 @@ const infoSlice = createSlice({
     }
 }) 
 
-export const { changeModalOpen } = infoSlice.actions
+export const { changeModalOpen, isAdd } = infoSlice.actions
 
 export default infoSlice.reducer
