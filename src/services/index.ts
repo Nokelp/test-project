@@ -93,3 +93,12 @@ export const UpdateUserApi = (params: updateUserParams) => {
     }
   })
 }
+
+// 删除用户
+export const RemoveUserApi = (params: { id: string }) => {
+  return axios.post<AxiosRes>('/user/remove', params, {
+    headers: {
+      Authorization: localStorage.getItem('token')
+    }
+  })
+}

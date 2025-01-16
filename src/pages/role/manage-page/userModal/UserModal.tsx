@@ -105,6 +105,7 @@ const UserModal = (props: Props) => {
         modalProps={{
           destroyOnClose: true,  // 重制表单
           onCancel: () => dispatch(changeModalOpen(false)),
+          forceRender: true,
         }}
         form={form}
         width={520}

@@ -1,13 +1,13 @@
-import { Button, Space, Image } from 'antd';
+import { Button, Space, Image, Popconfirm } from 'antd';
 import type { ProColumns } from '@ant-design/pro-components';
 import type { ListItem } from '../../../types';
 
 interface columnsProps {
     onClickEdit: (row: ListItem) => void;
-    onClickDel: (row: ListItem) => void;
+    onConfirm: (row: ListItem) => void;
 }
 
-export const getColumns = ({ onClickEdit, onClickDel }: columnsProps) => {
+export const getColumns = ({ onClickEdit, onConfirm }: columnsProps) => {
     const columns: ProColumns<ListItem>[] = [
         {
             dataIndex: 'index',
@@ -74,9 +74,16 @@ export const getColumns = ({ onClickEdit, onClickDel }: columnsProps) => {
                 <Button onClick={() => onClickEdit(record)}>
                     编辑
                 </Button>
-                <Button danger onClick={() => onClickDel(record)}>
-                    删除
-                </Button>
+                <Popconfirm
+                    title="确定删除吗?"
+                    onConfirm={() => onConfirm(record)}
+                    okText="确定"
+                    cancelText="取消"
+                >
+                    <Button danger>
+                        删除
+                    </Button>
+                </Popconfirm>
                 </Space>
             ),
         },

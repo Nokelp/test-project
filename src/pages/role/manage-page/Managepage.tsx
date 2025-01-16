@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import { message } from 'antd';
 import type { ActionType } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
-import { useRef } from 'react';
-import { getUserListApi } from '../../../services';
+import { getUserListApi, RemoveUserApi } from '../../../services';
 import type { ListItem } from '../../../types';
 import UserModal from './userModal/UserModal';
 import { useDispatch } from 'react-redux';
@@ -23,9 +23,11 @@ const ManagePage = () => {
             dispatch(isAdd(false))
             setEditRowInfo(row);
           },
-          onClickDel: () => {
-
-          },
+          onConfirm: async (row) => {
+            await RemoveUserApi({id: row._id});
+            actionRef.current?.reload();
+            message.success('删除成功');
+          }
         })}
         actionRef={actionRef}
         cardBordered
