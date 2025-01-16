@@ -28,7 +28,7 @@ export type MenuItem = {
     __v: number,
     _id: string,
     children?: MenuItem[]
- 
+
 }
 export type MenuRes = {
     list: MenuItem[]
@@ -146,7 +146,7 @@ export type UserListRes = {
 }
 
 // 创建用户入参格式
-export type createUserParams = Record<'username' | 'password' | 'status', string>
+export type createUserParams = Pick<ListItem, 'username' | 'password' | 'status' | 'role'>
 
 // 创建用户返回值
 export type createUserRes = {
@@ -154,9 +154,11 @@ export type createUserRes = {
     msg: string
 }
 
-
 // 考试记录
 export type ExamRecordItem = Omit<RoleItem, 'disabled' | 'permission'>
 export type ExamRecordRes = {
     list: ExamRecordItem[]
 }
+
+// 编辑用户入参格式
+export type updateUserParams = Partial<Omit<ListItem, 'creator' | 'lastOnlineTime'>> & {id: string}

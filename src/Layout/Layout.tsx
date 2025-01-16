@@ -8,11 +8,10 @@ import {
 import { ConfigProvider, Button } from 'antd'
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { getInfo } from '../store/models/userInfo'
+import { getInfo, changeModalOpen, isAdd } from '../store/models/userInfo'
 import { AppDispatch, RootState } from '../store'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useMenu } from './hooks/useMenu';
-import { changeModalOpen } from '../store/models/userInfo'
 import { getLogoutApi } from '../services'
 import AvatarMenu from './components/AvatarMenu'
 
@@ -29,14 +28,13 @@ const Layout:React.FC<{children: React.ReactNode}>=(props) => {
     const userInfo = useSelector((state: RootState) => state.userInfo.info)
     // 获取要渲染的菜单
     const route = useMenu()
-    
+
 
     if (typeof document === 'undefined') {
         return <div />;
     }
 
-    
-    
+
     return (
     <div
         id="test-pro-layout"
@@ -138,6 +136,7 @@ const Layout:React.FC<{children: React.ReactNode}>=(props) => {
                         size='large'
                         onClick={() => {
                             dispatch(changeModalOpen(true))
+                            dispatch(isAdd(true))
                         }}
                     >
                         添加用户

@@ -4,7 +4,7 @@ import { InfoData, MenuItem } from "../../types"
 
 export const getInfo = createAsyncThunk('info/getInfo',async() =>{
     const [UserInfoRes, menulistRes] = await Promise.all([getInfoApi(), getUserMenuListApi()])
-    
+
     return {
         info: UserInfoRes.data.data,
         menuList: menulistRes.data.data.list
@@ -12,17 +12,19 @@ export const getInfo = createAsyncThunk('info/getInfo',async() =>{
 })
 
 interface UserInfo{
-    info: InfoData | null,
-    menuList: MenuItem[],
+    info: InfoData | null
+    menuList: MenuItem[]
     userModalOpen: boolean
     loading:boolean
+    isAddUser: boolean
 }
 
 const initialState: UserInfo = {
     info: null,
     menuList: [],
     userModalOpen: false,
-    loading:false
+    loading:false,
+    isAddUser: false,
 }
 
 
@@ -32,6 +34,9 @@ const infoSlice = createSlice({
     reducers:{
         changeModalOpen(state, actions) {
             state.userModalOpen = actions.payload
+        },
+        isAdd(state, actions) {
+            state.isAddUser = actions.payload
         }
     },
     extraReducers: builder => {
@@ -44,6 +49,6 @@ const infoSlice = createSlice({
     }
 }) 
 
-export const { changeModalOpen } = infoSlice.actions
+export const { changeModalOpen, isAdd } = infoSlice.actions
 
 export default infoSlice.reducer
