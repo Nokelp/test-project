@@ -53,8 +53,8 @@ const Layout:React.FC<{children: React.ReactNode}>=(props) => {
         navigate('/user/login')
     }
     
-    const onClick: MenuProps['onClick'] = ({ key }) => {
-        if (key === 'logout') {
+    const onClick = (e: { key: string; }) => {
+        if (e.key === 'logout') {
             logout()
         }
     }
