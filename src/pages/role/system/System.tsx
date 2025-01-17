@@ -176,7 +176,7 @@ const Role: React.FC = () => {
         rowKey="_id"
         search={false}
       />
-      <Drawer title="分配角色" onClose={onClose} open={open}>
+      <Drawer title="分配权限" onClose={onClose} open={open}>
         <p>Some contents...</p>
         <p>Some contents...</p>
         <p>Some contents...</p>
