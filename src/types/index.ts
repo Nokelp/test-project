@@ -153,7 +153,7 @@ export type createUserRes = {
     code: number
     msg: string
 }
-export type BaseRes<T> = {
+export type BaseRes<T=null> = {
     code: number
     msg: string
     data: T

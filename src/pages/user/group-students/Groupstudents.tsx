@@ -1,12 +1,28 @@
 import { EllipsisOutlined, PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable, TableDropdown } from '@ant-design/pro-components';
-import { Button, Dropdown, Space, Tag } from 'antd';
-import { useRef } from 'react';
-import {getstudentListApi} from '../../../services/index'
+import { Button, Dropdown, Space, Tag,message } from 'antd';
+import { useRef,useState } from 'react';
+import {getstudentListApi,editeStudentListApi,delStudentListApi} from '../../../services/index'
 import type {StudentListItem} from '../../../types'
 
-
+interface saveclass{
+  id:string;
+  age: number
+  avator: string
+  birthday: number
+  class: string
+  createTime: number
+  creator: string
+  email: string
+  gender: number
+  grade: string
+  name: string
+  phone: string
+  status: number
+  __v: number
+  _id: string
+}
 
 const columns: ProColumns<StudentListItem>[] = [
   { 
@@ -35,8 +51,8 @@ const columns: ProColumns<StudentListItem>[] = [
     dataIndex: 'sex',
     valueType: 'select',
     valueEnum: {
-      0: { text: '男' },
-      1: { text: '女' },
+      男: { text: '男' },
+      女: { text: '女' },
     },
   },
   {
@@ -101,6 +117,38 @@ const columns: ProColumns<StudentListItem>[] = [
 
 const studentList:React.FC=() => {
   const actionRef = useRef<ActionType>();
+  const [data, setData] = useState<any>()
+
+
+  const getSave=async ( data:saveclass )=>{
+    try{
+      const res = await editeStudentListApi(data)
+      if(res.data.code===200){
+        message.success('保存成功')
+      }else{
+        message.error('修改失败')
+      }
+    }catch(e){
+      console.log(e)
+    }
+  }
+
+  const delListItem = async (id:string)=>{
+    try{
+      const res = await delStudentListApi({id})
+      if(res.data.code===200){
+        message.success('删除成功')
+        actionRef.current?.reload()
+      }else{
+        message.error('删除失败')
+      }
+    }catch(e){
+      console.log(e)
+    }
+  }
+
+
+
   return (
     <ProTable<StudentListItem>
       columns={columns}
@@ -108,7 +156,9 @@ const studentList:React.FC=() => {
       cardBordered
       request={async (params, sort, filter) => {
         console.log(sort, filter);
-        const res = await getstudentListApi({ page: params.current!, pagesize: params.pageSize! })
+        console.log(sort, filter,params);
+        const{current,pageSize,...keywords}=params
+        const res = await getstudentListApi({ page: params.current!, pagesize: params.pageSize!,...keywords })
         return {
           data: res.data.data.list,
           success: true,
@@ -118,6 +168,18 @@ const studentList:React.FC=() => {
       }}
       editable={{
         type: 'multiple',
+        onSave:async (rowKey, data, row)=>{
+          console.log(rowKey, data,row)
+          setData(()=>Date.now())
+          getSave({id:data._id,...data})
+          actionRef.current?.reload()
+        },
+        onDelete:async (data,row)=>{
+          console.log( data,row)
+          setData(()=>Date.now())
+          delListItem(row._id)
+          actionRef.current?.reload()
+        },
       }}
       columnsState={{
         persistenceKey: 'pro-table-singe-demos',

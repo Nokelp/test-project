@@ -39,7 +39,6 @@ const infoSlice = createSlice({
         .addCase(getInfo.fulfilled, (state, {payload}) => {
             state.info = payload.info
             state.menuList = payload.menuList
-            console.log('~~~~~~~~~~~~',payload.info,payload.menuList)
         })
     }
 }) 

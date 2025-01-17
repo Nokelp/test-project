@@ -9,12 +9,13 @@ import type {
   ClassListData,
   StudentListData,
   RoleRes,
-
+  ClassListItem,
   MenuRes,
   UserListParams,
   UserListRes,
   createUserParams,
   createUserRes,
+  StudentListItem,
 } from "../types"
 import request from "./request"
 
@@ -60,13 +61,25 @@ export const getUserListApi = (params: UserListParams) => {
 }
   
 //班级列表
-export const getClassListApi = () => {
+export const getClassListApi = (params:{page?:number,pagesize?:number,name?:string}={page:1},current?:number) => {
   return request.get<BaseRes<ClassListData>>('/studentGroup/list',{
-    params: {
-      page: 1,
-      pagesize: 10
-    },
+    params
   })
+}
+//查询班级接口
+
+
+//编辑班级接口
+export const editeClassListApi = (params:ClassListItem) => {
+  return request.post<BaseRes>('/studentGroup/update',
+    params
+  )
+}
+//删除班级接口
+export const delClassListApi = (params:{id:string}) => {
+  return request.post<BaseRes>('/studentGroup/remove',
+    params
+  )
 }
 //学生列表
 
@@ -75,7 +88,19 @@ export const getstudentListApi = ( params:{page:number,pagesize:number}) => {
     params,
   })
 }
+//编辑学生
+export const editeStudentListApi = (params:StudentListItem) => {
+  return request.post<BaseRes>('student/update',
+    params
+  )
+}
 
+//删除xxx学生
+export const delStudentListApi = (params:{id:string}) => {
+  return request.post<BaseRes>('/student/remove',
+    params
+  )
+}
 // 新增角色
 export const getCreateRoleApi = (params:{name: string, value: string}) => {
   return request.get('/role/create',{
@@ -86,4 +111,9 @@ export const getCreateRoleApi = (params:{name: string, value: string}) => {
 // 创建用户
 export const createUserApi = (params: createUserParams) => {
   return request.post<createUserRes>('/user/create', params)
+}
+
+//创建班级
+export const createClassApi = (data:{name: string,classify:string,teacher:string,students:[]}) => {
+  return request.post<BaseRes>('/studentGroup/create', data)
 }
