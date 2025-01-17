@@ -1,11 +1,11 @@
 import { Button, Image, Space } from 'antd'
-import type { ProColumns } from '@ant-design/pro-components'
+import type { ProColumns, ProSchemaValueEnumObj } from '@ant-design/pro-components'
 import type { ProFormColumnsType } from '@ant-design/pro-components'
 import { Input } from 'antd'
 import type { ClassListItem } from '../../../types'
-import { ProTable, TableDropdown } from '@ant-design/pro-components';
-import { useSelector } from 'react-redux'
-import type { RootState } from '../../../store/index'
+import {  TableDropdown } from '@ant-design/pro-components';
+
+
 
 
 
@@ -15,11 +15,6 @@ interface ColumnsProps {
 
 
 export const getColumns = ({teachers }: ColumnsProps) => {
-    console.log(teachers?.map((item) =>{return item.teacher +':'+{text:`${item.teacher}`}}))
-    // const valueEnum = {...teachers?.map((item) => {
-    //     return item.teacher 
-    // })}
-    // console.log(valueEnum)
     const columns: ProColumns<ClassListItem>[] = [
         {
             title: '标题',
@@ -48,9 +43,7 @@ export const getColumns = ({teachers }: ColumnsProps) => {
             title: '老师',
             dataIndex: 'teacher',
             valueType: 'select',
-            valueEnum : {...teachers?.map((item) => {
-                return item.teacher 
-            })}
+            valueEnum : new Map(teachers?.map((item) => [item.teacher,item.teacher])) 
         //     valueEnum={...teachers.map((item) => {item.teacher }
         // },
         },
@@ -58,10 +51,11 @@ export const getColumns = ({teachers }: ColumnsProps) => {
             disable: true,
             title: '科目类别',
             dataIndex: 'classify',
+            valueEnum : new Map(teachers?.map((item) => [item.classify,item.classify])) 
         },
         {
             title: '创建时间',
-            key: '_id',
+            key: 'createTime',
             dataIndex: 'createTime',
             valueType: 'dateTime',
             sorter: true,
@@ -69,7 +63,7 @@ export const getColumns = ({teachers }: ColumnsProps) => {
         },
         {
             title: '创建时间',
-            dataIndex: 'created_at',
+            dataIndex: 'createTime',
             valueType: 'dateTimeRange',
             hideInTable: true,
             hideInSearch: true,
@@ -90,7 +84,7 @@ export const getColumns = ({teachers }: ColumnsProps) => {
             <a
                 key="editable"
                 onClick={() => {
-                action?.startEditable?.(record._id);
+                action?.startEditable?.(record._id);    
                 }}
             >
                 编辑
