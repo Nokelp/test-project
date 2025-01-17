@@ -1,5 +1,6 @@
 import type {
   AxiosRes,
+  BaseRes,
   CaptchaRes,
   LoginRes,
   LoginResData,
