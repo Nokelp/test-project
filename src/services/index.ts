@@ -14,6 +14,7 @@ import type {
   createUserRes,
   ExamRecordRes,
   updateUserParams,
+  SubjectRes
 } from "../types"
 import request from "./request"
 
@@ -55,7 +56,7 @@ export const getRoleListApi = () => {
 
 //用户管理列表
 export const getUserListApi = (params: UserListParams) => {
-  return request.get<UserListRes>('/user/list', {
+  return request.get<AxiosRes<UserListRes>>('/user/list', {
     params,
   })
 }
@@ -69,8 +70,8 @@ export const getClassListApi = () => {
     },
   })
 }
-//学生列表
 
+//学生列表
 export const getstudentListApi = ( params:{page:number,pagesize:number}) => {
   return request.get<AxiosRes<StudentListData>>('/student/list',{
     params,
@@ -81,6 +82,7 @@ export const getstudentListApi = ( params:{page:number,pagesize:number}) => {
 export const getCreateRoleApi = (params:{name: string, value: string}) => {
   return request.post<AxiosRes<LoginResData>>('/role/create',params)
 }
+
 // 删除角色
 export const getRemoveRoleApi = (params: {id: string}) => {
   return request.post<AxiosRes<LoginResData>>('/role/remove',params)
@@ -108,3 +110,17 @@ export const RemoveUserApi = (params: { id: string }) => {
   return request.post<createUserRes>('/user/remove', params)
 }
 
+// 创建考试
+export const createExamApi = (params: {name: string, time: number}) => {
+  return request.post<createUserRes>('/examination/create', params)  
+}
+
+// 监考人
+export const getInvigilateApi = () => {
+  return request.get<AxiosRes<UserListRes>>('/user/list')
+}
+
+// 考试科目
+export const getSubjectApi = () => {
+  return request.get<AxiosRes<SubjectRes>>('/classify/list')
+}

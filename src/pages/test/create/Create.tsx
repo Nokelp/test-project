@@ -3,15 +3,15 @@ import {
   ProCard,
   ProForm,
   ProFormCheckbox,
-  ProFormDatePicker,
   ProFormDateRangePicker,
   ProFormSelect,
   ProFormText,
-  ProFormTextArea,
   StepsForm,
 } from '@ant-design/pro-components';
 import { message } from 'antd';
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
+import { getInvigilateApi, getSubjectApi } from '../../../services';
+import { InvigilateItem, SubjectItem } from '../../../types';
 
 const waitTime = (time: number = 100) => {
   return new Promise((resolve) => {
@@ -22,7 +22,24 @@ const waitTime = (time: number = 100) => {
 };
 
 export default () => {
-  const formRef = useRef<ProFormInstance>();
+  const formRef = useRef<ProFormInstance>()
+  const [invigilate, setInvigilate] = useState<InvigilateItem[]>([])
+  const [subject, setSubject] = useState<SubjectItem[]>([])
+
+  const getInvigilate = async () => {
+    const res = await getInvigilateApi()
+    setInvigilate(res.data.data.list)
+  }
+
+  const getSubject = async () => {
+    const res = await getSubjectApi()
+    setSubject(res.data.data.list)
+  }
+
+  useEffect(() => {
+    getInvigilate()
+    getSubject()
+  }, [])
 
   return (
     <ProCard>
@@ -30,9 +47,9 @@ export default () => {
         name: string;
       }>
         formRef={formRef}
-        onFinish={async () => {
-          await waitTime(1000);
-          message.success('提交成功');
+        onFinish={async (value) => {
+          console.log(value)
+          message.success('提交成功')
         }}
         formProps={{
           validateMessages: {
@@ -57,41 +74,40 @@ export default () => {
             width="md"
             tooltip="最长为 24 位，用于标定的唯一 id"
             placeholder="请输入名称"
-            // rules={[{ required: true }]}
+            rules={[{ required: true }]}
           />
           <ProFormDateRangePicker 
             name="dateTime" 
             label="考试时间" 
-            // rules={[{ required: true }]}
+            rules={[{ required: true }]}
           />
           <ProFormSelect
               name="stor"
               label="科目分类"
-              // rules={[{ required: true }]}
+              rules={[{ required: true }]}
               fieldProps={{
               }}
               // width="lg"
-              options={['吴家豪', '周星星', '陈拉风'].map((item) => ({
-                label: item,
-                value: item,
+              options={subject.map((item) => ({
+                label: item.name,
+                value: item.name,
               }))}
           />
           <ProFormSelect
               name="invigilate"
               label="监考人"
-              // rules={[{ required: true }]}
+              rules={[{ required: true }]}
               fieldProps={{
               }}
-              // width="lg"
-              options={['吴家豪', '周星星', '陈拉风'].map((item) => ({
-                label: item,
-                value: item,
+              options={invigilate.map((item) => ({
+                label: item.username,
+                value: item.username,
               }))}
           />
           <ProFormSelect
               name="class"
               label="考试班级"
-              // rules={[{ required: true }]}
+              rules={[{ required: true }]}
               fieldProps={{
               }}
               // width="lg"
@@ -120,10 +136,7 @@ export default () => {
         </StepsForm.StepForm>
         <StepsForm.StepForm
           name="time"
-          title="发布实验"
-          stepProps={{
-            description: '这里填入发布判断',
-          }}
+          title="发布考试"
         >
           <ProFormCheckbox.Group
             name="checkbox"
