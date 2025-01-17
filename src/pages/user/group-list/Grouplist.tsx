@@ -64,9 +64,9 @@ export default () => {
     }
   }
 
-  // useEffect(() => {
-  //   dispatch(getClassList())
-  // }, [create,data]);
+  useEffect(() => {
+    dispatch(getClassList())
+  }, [create,data]);
   return (
     <>
     <CreateItem  modalVisible={modalVisible} setModalVisible={setModalVisible} setCreate={setCreate} creat={create}/>
