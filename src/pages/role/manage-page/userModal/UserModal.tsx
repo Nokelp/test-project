@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import './UserModal.scss';
 import { message, Form } from 'antd';
 import {
@@ -11,7 +12,6 @@ import type { RootState } from '../../../../store';
 import { changeModalOpen } from '../../../../store/models/userInfo';
 import { createUserApi, UpdateUserApi, getRoleListApi } from '../../../../services';
 import type { ListItem, RoleItem } from '../../../../types';
-import { useEffect } from 'react';
 
 const formLayout = {
   labelCol: {
