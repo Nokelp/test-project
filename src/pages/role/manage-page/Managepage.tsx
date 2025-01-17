@@ -36,6 +36,9 @@ const ManagePage = () => {
             message.success('删除成功');
           }
         })}
+        form={{
+          ignoreRules: false,
+        }}
         actionRef={actionRef}
         cardBordered
         rowKey="_id"
