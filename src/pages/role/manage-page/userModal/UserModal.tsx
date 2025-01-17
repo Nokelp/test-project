@@ -1,15 +1,17 @@
+import './UserModal.scss';
+import { message, Form } from 'antd';
 import {
   ModalForm,
   ProFormRadio,
+  ProFormSelect,
   ProFormText,
 } from '@ant-design/pro-components';
-import { message } from 'antd';
-import './UserModal.scss';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../../../../store';
 import { changeModalOpen } from '../../../../store/models/userInfo';
-import { createUserApi } from '../../../../services';
-import { useRef, useState } from 'react';
+import { createUserApi, UpdateUserApi, getRoleListApi } from '../../../../services';
+import type { ListItem, RoleItem } from '../../../../types';
+import { useEffect } from 'react';
 
 const formLayout = {
   labelCol: {
@@ -22,32 +24,44 @@ const formLayout = {
   },
 };
 
-type Values = Record<'confirmPassword' | 'username' | 'password' | 'status', string>;
+type Values = {
+  confirmPassword: string;
+  username: string;
+  password: string;
+  status: 0 | 1;
+  role: string[];
+}
 
 interface Props {
   reload: () => void;
+  editRowInfo: ListItem | null;
 }
 
 const UserModal = (props: Props) => {
+  const { reload, editRowInfo } = props;
   const dispatch = useDispatch();
   const open = useSelector((state: RootState) => state.userInfo.userModalOpen);
-  const [ errorCode, setErrorCode ] = useState<number | null>(null);
+  const isAddUser = useSelector((state: RootState) => state.userInfo.isAddUser);
+  const [form] = Form.useForm();
 
   const createUser = async (value: Values) => {
-    const { username, password, status } = value;
-    try{
+    const { username, password, status, role } = value;
+    try {
       const res = await createUserApi({
         username,
         password,
         status,
+        role
       });
-      setErrorCode(res.data.code)
       if (res.data.code === 200) {
         message.success(res.data.msg);
-        // 调表格接口刷新数据
-        props.reload();
+        dispatch(changeModalOpen(false))
+        // 刷新表格
+        reload();
       } else if (res.data.code === 1001) {
+        dispatch(changeModalOpen(true))
         message.error(res.data.msg);
+        return false;
       } else {
         message.error(res.data.msg);
       }
@@ -56,22 +70,54 @@ const UserModal = (props: Props) => {
     }
   }
 
+  const UpdateUser = async (values: Values) => {
+    const { confirmPassword, ...other } = values;
+    try {
+      const res = await UpdateUserApi({...other, id: editRowInfo?._id})
+      if(res.data.code === 200) {
+        message.success(res.data.msg);
+        dispatch(changeModalOpen(false))
+        // 刷新表格
+        reload();
+      } else {
+        message.error(res.data.msg);
+      }
+    }catch(err) {
+      console.log("err", err)
+    }
+  }
+
+  useEffect(() => {
+    if(!isAddUser) {
+      form.setFieldsValue({
+        ...editRowInfo,
+        confirmPassword: editRowInfo?.password
+      });
+    }
+  }, [isAddUser, editRowInfo, open])
+
   return (
     <>
       <ModalForm
         {...formLayout}
-        title="添加用户"
+        title={isAddUser ? '添加用户' : '编辑用户'}
         open={open}
         modalProps={{
           destroyOnClose: true,  // 重制表单
           onCancel: () => dispatch(changeModalOpen(false)),
+          forceRender: true,
         }}
+        form={form}
         width={520}
         className='user-modal'
         onFinish={async (values: Values) => {
-          createUser(values);
-          message.success('提交成功');
-          dispatch(changeModalOpen(false))
+          if(isAddUser) {
+            // 添加用户
+            createUser(values);
+          } else {
+            // 编辑用户
+            UpdateUser(values);
+          }
           return true;
         }}
       >
@@ -124,17 +170,36 @@ const UserModal = (props: Props) => {
             options={[
               {
                 label: '禁用',
-                value: '0',
+                value: 0,
               },
               {
                 label: '启用',
-                value: '1',
+                value: 1,
               }
             ]}
             rules={[{
               required: true,
               message: '请选择状态',
             }]}
+        />
+        <ProFormSelect
+          name="role"
+          label="分配角色"
+          width="md"
+          mode="multiple"
+          request={async () => {
+            const res = await getRoleListApi();
+            if(res.data.code === 200) {
+              return res.data.data.list.map((item: RoleItem) => ({
+                label: item.name,
+                value: item.value,
+              }))
+            } else {
+              return [];
+            }
+          }}
+          placeholder="请选择用户角色"
+          rules={[{ required: true, message: '请选择角色' }]}
         />
       </ModalForm>
     </>
