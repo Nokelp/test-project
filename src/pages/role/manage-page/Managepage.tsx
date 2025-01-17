@@ -24,6 +24,13 @@ const ManagePage = () => {
             setEditRowInfo(row);
           },
           onConfirm: async (row) => {
+            if (!actionRef?.current?.pageInfo) return;
+            const { total, current, pageSize } = actionRef.current?.pageInfo;
+            if (current > 1 && total - ((current - 1) * pageSize) === 1) {
+              actionRef.current.setPageInfo({
+                current: current == 1 ? 1 : current - 1,
+              });
+            }
             await RemoveUserApi({id: row._id});
             actionRef.current?.reload();
             message.success('删除成功');
