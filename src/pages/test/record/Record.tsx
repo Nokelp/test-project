@@ -1,12 +1,12 @@
-import React, { useState, useRef } from 'react'
-import { EllipsisOutlined, PlusOutlined } from '@ant-design/icons'
+import React, { useState, useRef, useEffect } from 'react'
 import type { ActionType, ProColumns } from '@ant-design/pro-components'
 import { ProTable } from '@ant-design/pro-components'
-import { Button, Dropdown, Space, Drawer } from 'antd'
+import { Button, Space } from 'antd'
 import { getExaminationApi } from '../../../services'
 import dayjs from 'dayjs'
 import { ExamRecordItem } from '../../../types'
 import TestPreview from './components/TestPreview'
+import { getSubjectApi } from '../../../services'
 
 const valueEnum = {
   0: '未开始',
@@ -18,6 +18,29 @@ const Record: React.FC = () => {
   const actionRef = useRef<ActionType>()
   const [open, setOpen] = useState(false)
   const [testItem, setTestItem] = useState<ExamRecordItem | null>(null)
+  const [subject, setSubject] = useState([])
+
+
+  const getSubject = async () => {
+    const res = await getSubjectApi()
+    const list = res.data.data.list.map( v => v.name)
+    // 使用Set去重数组中的元素
+    const newList = [...new Set(list)]
+    
+    // 使用reduce方法将数组转换为对象
+    const resultObject = newList.reduce((acc, subject) => {
+      // 如果键不存在于累加器中，则添加它
+      if (!acc[subject]) {
+        acc[subject] = subject; // 这里的值也可以是subject.trim()如果要去除值前后的空格
+      }
+      return acc;
+    }, {})
+    setSubject(resultObject)
+  }
+
+  useEffect(() => {
+    getSubject()
+  }, [])
 
   const showDrawer = (record: ExamRecordItem) => {
     setOpen(true)
@@ -37,7 +60,9 @@ const Record: React.FC = () => {
     {
       title: '科目分类',
       dataIndex: 'classify',
+      valueType: 'select',
       width: 130,
+      valueEnum: subject
     },
     {
       title: '创建者',
@@ -127,7 +152,13 @@ const Record: React.FC = () => {
         cardBordered
         scroll={{x: 1500}}
         request={async (params) => {
-          const res = await getExaminationApi({page: params.current!, pagesize: params.pageSize!})
+          const { current, pageSize, ...other} = params
+          console.log(params)
+          const res = await getExaminationApi({
+            page: current!,
+            pagesize: pageSize!,
+            ...other
+          })
           return {
             data: res.data.data.list,
             total: res.data.data.total,

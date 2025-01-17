@@ -192,3 +192,22 @@ export type ExamRecordRes = {
 
 // 编辑用户入参格式
 export type updateUserParams = Partial<Omit<ListItem, 'creator' | 'lastOnlineTime'>> & {id: string}
+
+// 监考人
+export type InvigilateItem = {
+    username: string
+    _id: string
+}
+
+// 考试科目
+export type SubjectItem = {
+    createTime: number
+    creator: string
+    name: string
+    value: string
+    __v: number
+    _id: string
+}
+export type SubjectRes = {
+    list: []
+}
