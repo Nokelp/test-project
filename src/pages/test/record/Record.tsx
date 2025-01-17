@@ -4,7 +4,7 @@ import { ProTable } from '@ant-design/pro-components'
 import { Button, Space } from 'antd'
 import { getExaminationApi } from '../../../services'
 import dayjs from 'dayjs'
-import { ExamRecordItem } from '../../../types'
+import { ExamRecordItem, ExamClassItem } from '../../../types'
 import TestPreview from './components/TestPreview'
 import { getSubjectApi } from '../../../services'
 
@@ -18,24 +18,13 @@ const Record: React.FC = () => {
   const actionRef = useRef<ActionType>()
   const [open, setOpen] = useState(false)
   const [testItem, setTestItem] = useState<ExamRecordItem | null>(null)
-  const [subject, setSubject] = useState([])
+  const [subject, setSubject] = useState<ExamClassItem[]>([])
 
 
   const getSubject = async () => {
     const res = await getSubjectApi()
-    const list = res.data.data.list.map( v => v.name)
-    // 使用Set去重数组中的元素
-    const newList = [...new Set(list)]
-    
-    // 使用reduce方法将数组转换为对象
-    const resultObject = newList.reduce((acc, subject) => {
-      // 如果键不存在于累加器中，则添加它
-      if (!acc[subject]) {
-        acc[subject] = subject; // 这里的值也可以是subject.trim()如果要去除值前后的空格
-      }
-      return acc;
-    }, {})
-    setSubject(resultObject)
+    console.log(res.data.data.list)
+    setSubject(res.data.data.list)
   }
 
   useEffect(() => {
@@ -51,6 +40,7 @@ const Record: React.FC = () => {
     setOpen(false)
   }
 
+
   const columns: ProColumns<ExamRecordItem>[] = [
     {
       title: '考试名称',
@@ -62,7 +52,7 @@ const Record: React.FC = () => {
       dataIndex: 'classify',
       valueType: 'select',
       width: 130,
-      valueEnum: subject
+      valueEnum: new Map(subject?.map(item => [item.name, item.name])),
     },
     {
       title: '创建者',
@@ -153,7 +143,6 @@ const Record: React.FC = () => {
         scroll={{x: 1500}}
         request={async (params) => {
           const { current, pageSize, ...other} = params
-          console.log(params)
           const res = await getExaminationApi({
             page: current!,
             pagesize: pageSize!,

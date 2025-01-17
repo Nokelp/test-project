@@ -14,7 +14,9 @@ import type {
   createUserRes,
   ExamRecordRes,
   updateUserParams,
-  SubjectRes
+  SubjectRes,
+  ExamClassRes,
+  createExamParams
 } from "../types"
 import request from "./request"
 
@@ -123,4 +125,21 @@ export const getInvigilateApi = () => {
 // 考试科目
 export const getSubjectApi = () => {
   return request.get<AxiosRes<SubjectRes>>('/classify/list')
+}
+
+// 考试班级
+export const getStudentGroupApi = () => {
+  return request.get<AxiosRes<ExamClassRes>>('/studentGroup/list') 
+}
+
+// 试卷列表
+export const getQuestionsListApi = (params: {classify: string}) => {
+  return request.get('/exam/list',{
+    params
+  })
+}
+
+// 创建考试
+export const createExamRecordApi = (params: createExamParams) => {
+  return request.post<AxiosRes<LoginRes>>('/examination/create', params)
 }

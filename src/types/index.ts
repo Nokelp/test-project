@@ -206,3 +206,31 @@ export type SubjectItem = {
 export type SubjectRes = {
     list: []
 }
+
+// 考试班级
+export type ExamClassItem = {
+    classify: string
+    createTime: number
+    creator: string
+    name: string
+    students: []
+    teacher: string
+    __v: number
+    _id: string
+}
+export type ExamClassRes = {
+    list: ExamClassItem[]
+    total: number
+    totalPage: number
+}
+
+// 创建考试
+export type createExamParams = {
+    name: string
+    classify: string
+    examId?: string
+    group?: string
+    examiner: string
+    startTime: string
+    endTime: string
+}
