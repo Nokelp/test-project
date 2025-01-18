@@ -1,6 +1,7 @@
 import { Button, Space, Image, Popconfirm } from 'antd';
 import type { ProColumns } from '@ant-design/pro-components';
 import type { ListItem } from '../../../types';
+import PermissionButton from '../../../components/PermissionButton';
 
 interface columnsProps {
     onClickEdit: (row: ListItem) => void;
@@ -46,6 +47,14 @@ export const getColumns = ({ onClickEdit, onConfirm }: columnsProps) => {
             title: '用户名',
             dataIndex: 'username',
             key: 'username',
+            formItemProps: {
+                rules: [
+                    {
+                        pattern: /^[^\s]*$/,
+                        message: '禁止输入空格',
+                    }
+                ],
+            },
         },
         {
             title: '密码',
@@ -64,6 +73,14 @@ export const getColumns = ({ onClickEdit, onConfirm }: columnsProps) => {
             title: '创建人',
             dataIndex: 'creator',
             key: 'creator',
+            formItemProps: {
+                rules: [
+                    {
+                        pattern: /^[^\s]*$/,
+                        message: '禁止输入空格',
+                    }
+                ],
+            },
         },
         {
             title: '操作',
@@ -80,9 +97,7 @@ export const getColumns = ({ onClickEdit, onConfirm }: columnsProps) => {
                     okText="确定"
                     cancelText="取消"
                 >
-                    <Button danger>
-                        删除
-                    </Button>
+                    <PermissionButton permissionKey='delUser' danger>删除</PermissionButton>
                 </Popconfirm>
                 </Space>
             ),

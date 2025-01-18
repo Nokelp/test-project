@@ -18,6 +18,10 @@ import type {
   ExamRecordRes,
   updateUserParams,
   SubjectRes,
+  ExamClassRes,
+  createExamParams,
+  QuestionsListRes,
+  UpdateUserInfoParams,,
   exampaper,
   exampaperInfo,
   questionlist,
@@ -143,7 +147,7 @@ export const RemoveUserApi = (params: { id: string }) => {
 
 // 创建考试
 export const createExamApi = (params: {name: string, time: number}) => {
-  return request.post<createUserRes>('/examination/create', params)  
+  return request.post<createUserRes>('/examination/create', params)
 }
 
 // 监考人
@@ -187,4 +191,47 @@ export const createExampaper = (params:Partial<exampaperInfo>) => {
   return request.post<BaseRes>('/exam/create',
     params
   )
+}
+
+// 考试班级
+export const getStudentGroupApi = () => {
+  return request.get<AxiosRes<ExamClassRes>>('/studentGroup/list') 
+}
+
+// 试卷列表
+export const getQuestionsListApi = (params: {classify: string}) => {
+  return request.get('/exam/list',{
+    params
+  })
+}
+
+// 创建考试
+export const createExamRecordApi = (params: createExamParams) => {
+  return request.post<AxiosRes<LoginRes>>('/examination/create', params)
+}
+
+// 试题库
+export const getQuestionListApi = (params: {page: number, pagesize: number}) => {
+  return request.get<AxiosRes<QuestionsListRes>>('/question/list',{
+    params
+  })
+}
+
+// 删除题目
+export const removeQuestionApi = (params: {id: string}) => {
+  return request.post<AxiosRes<LoginRes>>('/question/remove', params)
+}
+
+// 编辑题目
+export const getUpdateQuestionApi = (params: {id: string, question: string }) => {
+  return request.post<AxiosRes<LoginRes>>('/question/update', params)
+}
+// 上传头像
+export const UploaderAvatarApi = (params: { avatar: string }) => {
+  return request.post<createUserRes>('/profile', params)
+}
+
+// 修改个人信息
+export const UpdateUserInfoApi = (params: UpdateUserInfoParams) => {
+  return request.post<createUserRes>('/user/update/info', params)
 }

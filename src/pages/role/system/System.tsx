@@ -10,6 +10,7 @@ import { getCreateRoleApi, getRemoveRoleApi, getRoleListApi } from '../../../ser
 import { RoleItem } from '../../../types'
 import dayjs from 'dayjs'
 import type { PopconfirmProps } from 'antd'
+import Tree from './components/Tree';
 
 const waitTime = (time: number = 100) => {
   return new Promise((resolve) => {
@@ -176,10 +177,8 @@ const Role: React.FC = () => {
         rowKey="_id"
         search={false}
       />
-      <Drawer title="分配角色" onClose={onClose} open={open}>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+      <Drawer title="分配权限" onClose={onClose} open={open}>
+        <Tree />
       </Drawer>
     </div>
   )

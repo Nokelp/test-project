@@ -1,30 +1,50 @@
-import type { ProFormInstance } from '@ant-design/pro-components';
+import type { ProFormInstance } from '@ant-design/pro-components'
 import {
   ProCard,
   ProForm,
-  ProFormCheckbox,
-  ProFormDateRangePicker,
+  ProFormDateTimeRangePicker,
   ProFormSelect,
   ProFormText,
   StepsForm,
-} from '@ant-design/pro-components';
-import { message } from 'antd';
-import { useRef, useState, useEffect } from 'react';
-import { getInvigilateApi, getSubjectApi } from '../../../services';
-import { InvigilateItem, SubjectItem } from '../../../types';
+} from '@ant-design/pro-components'
+import { message, Table } from 'antd'
+import { useRef, useState, useEffect } from 'react'
+import type { TableProps } from 'antd'
+import { getInvigilateApi, getSubjectApi, getStudentGroupApi, getQuestionsListApi } from '../../../services'
+import { InvigilateItem, SubjectItem, ExamClassItem } from '../../../types'
+import { columns } from './constant'
+import dayjs from 'dayjs'
+import { useNavigate } from 'react-router-dom'
 
-const waitTime = (time: number = 100) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(true);
-    }, time);
-  });
+type TestItem = {
+  class: string;
+  dateTime: string[]
+  invigilate: string
+  name: string
+  classify: string
+}
+
+
+const rowSelection: TableProps<ExamClassItem>['rowSelection'] = {
+  onChange: (selectedRowKeys: React.Key[], selectedRows: ExamClassItem[]) => {
+    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+  },
+  getCheckboxProps: (record: ExamClassItem) => ({
+    disabled: record.name === 'Disabled User', // Column configuration not to be checked
+    name: record.name,
+  }),
 };
 
 export default () => {
+  const navigate = useNavigate()
   const formRef = useRef<ProFormInstance>()
   const [invigilate, setInvigilate] = useState<InvigilateItem[]>([])
   const [subject, setSubject] = useState<SubjectItem[]>([])
+  const [classList, setClassList] = useState<ExamClassItem[]>([])
+  const [selectionType, setSelectionType] = useState<'checkbox' | 'radio'>('radio')
+  const [data, setData] = useState<ExamClassItem[]>([])
+  const [testItem, setTestItem] = useState<TestItem>()
+
 
   const getInvigilate = async () => {
     const res = await getInvigilateApi()
@@ -35,10 +55,16 @@ export default () => {
     const res = await getSubjectApi()
     setSubject(res.data.data.list)
   }
+  
+  const getStudentGroup = async () => {
+    const res = await getStudentGroupApi()
+    setClassList(res.data.data.list)
+  }
 
   useEffect(() => {
     getInvigilate()
     getSubject()
+    getStudentGroup()
   }, [])
 
   return (
@@ -50,6 +76,8 @@ export default () => {
         onFinish={async (value) => {
           console.log(value)
           message.success('提交成功')
+          navigate('/exam/record')
+
         }}
         formProps={{
           validateMessages: {
@@ -63,9 +91,21 @@ export default () => {
           name="base"
           title="考试基本信息"
           onFinish={async () => {
-            console.log(formRef.current?.getFieldsValue());
-            await waitTime(2000);
-            return true;
+            console.log(formRef.current?.getFieldsValue())
+            const data = formRef.current?.getFieldsValue()
+            setTestItem(data)
+            const res = await getQuestionsListApi({ 
+              classify: formRef.current?.getFieldsValue().classify
+            })
+            const list = res.data.data.list.map((item: any) => {
+              return {
+                ...item,
+                key: item._id
+              }
+            }) 
+            setData(list)
+            return true
+
           }}
         >
           <ProFormText
@@ -76,13 +116,13 @@ export default () => {
             placeholder="请输入名称"
             rules={[{ required: true }]}
           />
-          <ProFormDateRangePicker 
-            name="dateTime" 
+          <ProFormDateTimeRangePicker 
+            name="dateTime"
             label="考试时间" 
             rules={[{ required: true }]}
           />
           <ProFormSelect
-              name="stor"
+              name="classify"
               label="科目分类"
               rules={[{ required: true }]}
               fieldProps={{
@@ -111,9 +151,9 @@ export default () => {
               fieldProps={{
               }}
               // width="lg"
-              options={['吴家豪', '周星星', '陈拉风'].map((item) => ({
-                label: item,
-                value: item,
+              options={classList.map((item) => ({
+                label: item.name,
+                value: item.name,
               }))}
           />
         </StepsForm.StepForm>
@@ -123,14 +163,19 @@ export default () => {
           name="checkbox"
           title="配置试卷"
           onFinish={async () => {
-            console.log(formRef.current?.getFieldsValue());
+            console.log(testItem)
+            console.log(formRef.current?.getFieldsValue())
             return true;
           }}
         >
           
           <ProForm.Group>
-            
-
+            <Table<ExamClassItem>
+              style={{width: '100%'}}
+              rowSelection={{ type: selectionType, ...rowSelection }}
+              columns={columns}
+              dataSource={data}
+            />
             
           </ProForm.Group>
         </StepsForm.StepForm>
@@ -138,45 +183,13 @@ export default () => {
           name="time"
           title="发布考试"
         >
-          <ProFormCheckbox.Group
-            name="checkbox"
-            label="部署单元"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-            options={['部署单元1', '部署单元2', '部署单元3']}
-          />
-          <ProFormSelect
-            label="部署分组策略"
-            name="remark"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-            initialValue="1"
-            options={[
-              {
-                value: '1',
-                label: '策略一',
-              },
-              { value: '2', label: '策略二' },
-            ]}
-          />
-          <ProFormSelect
-            label="Pod 调度策略"
-            name="remark2"
-            initialValue="2"
-            options={[
-              {
-                value: '1',
-                label: '策略一',
-              },
-              { value: '2', label: '策略二' },
-            ]}
-          />
+          <div style={{marginBottom: '20px'}}>
+            <p style={{lineHeight: '25px'}}>考试名称: {testItem?.name}</p>
+            <p style={{lineHeight: '25px'}}>科目分类: {testItem?.classify}</p>
+            <p style={{lineHeight: '25px'}}>监考人员: {testItem?.invigilate}</p>
+            <p style={{lineHeight: '25px'}}>考试班级: {testItem?.class}</p>
+            <p style={{lineHeight: '25px'}}>考试时间: {testItem?.dateTime.map( v => dayjs(v).format('YYYY-MM-DD HH:mm:ss')) + '\r\n'}</p>
+          </div>
         </StepsForm.StepForm>
       </StepsForm>
     </ProCard>
