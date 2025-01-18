@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import { getClassListApi } from "../../services"
+import { getClassListApi } from "../../services/index"
 import { ClassListData } from "../../types"
 
 export type params={

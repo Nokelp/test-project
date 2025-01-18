@@ -13,7 +13,6 @@ import {getColumns} from './constant';
 import CreateItem from './components/createItem'
 import {editeClassListApi,delClassListApi,getClassListApi} from '../../../services/index'
 
-
 export default () => {
   const actionRef = useRef<ActionType>();
   const classList = useSelector((state:RootState)=>state.classList)
