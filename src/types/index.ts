@@ -158,6 +158,12 @@ export type BaseRes<T=null> = {
     msg: string
     data: T
 }
+//试题列表
+export type questionlist={
+    list:questionItem[]
+    total: number
+    totalPage: number
+}
 
 // 考试记录
 export type QuestionsListItem = {
@@ -210,4 +216,31 @@ export type SubjectItem = {
 }
 export type SubjectRes = {
     list: []
+}
+
+export  type questionItem = {
+    answer: string
+    classify: string
+    options: string[]
+    question: string
+    type: string
+    _v: number
+    _id: string
+}
+
+export type exampaperInfo = {
+    classify: string
+    name: string
+    createTime: number
+    creator: string
+    _v: number
+    _id: string
+    questions: questionItem[]
+}
+
+export type exampaper = {
+    list: exampaperInfo[]
+    total: number
+    totalPage: number
+    
 }

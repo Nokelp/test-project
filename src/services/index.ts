@@ -17,7 +17,11 @@ import type {
   StudentListItem,
   ExamRecordRes,
   updateUserParams,
-  SubjectRes
+  SubjectRes,
+  exampaper,
+  exampaperInfo,
+  questionlist,
+  questionItem
 } from "../types"
 import request from "./request"
 
@@ -155,4 +159,32 @@ export const getSubjectApi = () => {
 //创建班级
 export const createClassApi = (data:{name: string,classify:string,teacher:string,students:[]}) => {
   return request.post<BaseRes>('/studentGroup/create', data)
+}
+
+
+//试卷接口
+export const getExamApi = (params:any) => {
+  return request.get<BaseRes<exampaper>>('/exam/list',{
+    params
+  })
+}
+//查询试卷详情
+export const getExamItemApi = (params:{id:string}) => {
+  return request.get<BaseRes<exampaperInfo>>('/exam/detail',{
+    params
+  })
+}
+
+//试题列表接口
+export const getquestionsApi = (params:{classify:string}) => {
+  return request.get<BaseRes<questionlist>>('/question/list',{
+    params
+  })
+}
+//创建试卷
+
+export const createExampaper = (params:Partial<exampaperInfo>) => {
+  return request.post<BaseRes>('/exam/create',
+    params
+  )
 }
