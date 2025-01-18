@@ -1,96 +1,34 @@
-import type { ActionType, ProColumns } from '@ant-design/pro-components';
+import { useState, useRef } from 'react';
+import { message } from 'antd';
+import type { ActionType } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
-import { Button, Space, Image } from 'antd';
-import { useRef } from 'react';
-import { getUserListApi } from '../../../services';
+import { getUserListApi, RemoveUserApi } from '../../../services';
 import type { ListItem } from '../../../types';
 import UserModal from './userModal/UserModal';
-
-const columns: ProColumns<ListItem>[] = [
-  {
-    dataIndex: 'index',
-    key: 'index',
-    valueType: 'indexBorder',
-    width: 48,
-  },
-  {
-    title: '头像',
-    dataIndex: 'avator',
-    key: 'avator',
-    hideInSearch: true,
-    render: (_, record) => {
-      return (
-        <Image src={record.avator || 'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg'} width={80}/>
-      )
-    },
-  },
-  {
-    title: '启用状态',
-    dataIndex: 'status',
-    key: 'status',
-    valueType: 'select',
-    valueEnum: {
-      0: {
-        text: '禁用',
-        status: 'Error',
-      },
-      1: {
-        text: '启用',
-        status: 'Success',
-      },
-    },
-  },
-  {
-    title: '用户名',
-    dataIndex: 'username',
-    key: 'username',
-  },
-  {
-    title: '密码',
-    dataIndex: 'password',
-    key: 'password',
-    hideInSearch: true,
-  },
-  {
-    title: '最近登录',
-    dataIndex: 'lastOnlineTime',
-    key: 'lastOnlineTime',
-    valueType: 'dateTime',
-    sorter: (a, b) => a.lastOnlineTime - b.lastOnlineTime,
-  },
-  {
-    title: '创建人',
-    dataIndex: 'creator',
-    key: 'creator',
-  },
-  {
-    title: '操作',
-    valueType: 'option',
-    key: 'option',
-    render: (text, record, _, action) => (
-      <Space key={record._id}>
-        <Button type='primary'>
-          分配角色
-        </Button>
-        <Button>
-          编辑
-        </Button>
-        <Button danger>
-          删除
-        </Button>
-      </Space>
-    )
-    ,
-  },
-];
+import { useDispatch } from 'react-redux';
+import { changeModalOpen, isAdd } from '../../../store/models/userInfo';
+import { getColumns } from './constant';
 
 const ManagePage = () => {
   const actionRef = useRef<ActionType>();
+  const dispatch = useDispatch();
+  const [ editRowInfo, setEditRowInfo ] = useState<ListItem | null>(null);
 
   return (
     <>
       <ProTable<ListItem>
-        columns={columns}
+        columns={getColumns({
+          onClickEdit: (row) => {
+            dispatch(changeModalOpen(true))
+            dispatch(isAdd(false))
+            setEditRowInfo(row);
+          },
+          onConfirm: async (row) => {
+            await RemoveUserApi({id: row._id});
+            actionRef.current?.reload();
+            message.success('删除成功');
+          }
+        })}
         actionRef={actionRef}
         cardBordered
         rowKey="_id"
@@ -129,7 +67,10 @@ const ManagePage = () => {
         }}
         dateFormatter="string"
       />
-      <UserModal reload={actionRef.current?.reload()}/>
+      <UserModal
+        reload={() => actionRef.current?.reload()}
+        editRowInfo={editRowInfo}
+      />
     </>
   );
 };

@@ -56,6 +56,7 @@ return (
         onFinish={async (values) => {
             if(values.name){
                 createClass({name:values.name,classify:values.classify,teacher:values.teacher,students:[]})
+                
             }
         console.log(values?'a':'b');
         message.success('提交成功');

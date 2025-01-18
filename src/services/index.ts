@@ -1,4 +1,3 @@
-import axios from "axios"
 import type {
   AxiosRes,
   BaseRes,
@@ -16,24 +15,36 @@ import type {
   createUserParams,
   createUserRes,
   StudentListItem,
+  ExamRecordRes,
+  updateUserParams,
+  SubjectRes,
+  exampaper,
+  exampaperInfo,
+  questionlist,
+  questionItem
 } from "../types"
 import request from "./request"
 
 
 // 验证码
 export const getCaptchaApi = () => {
-  return request.get<BaseRes<CaptchaRes>>('/login/captcha')
+  return request.get<AxiosRes<CaptchaRes>>('/login/captcha')
 }
 
 
 // 登录
 export const getLoginApi = (params: LoginRes) => {
-  return request.post<BaseRes<LoginResData>>('/login', params)
+  return request.post<AxiosRes<LoginResData>>('/login', params)
+}
+
+// 退出登录
+export const getLogoutApi = () => {
+  return request.post<AxiosRes<LoginResData>>('/user/logout',{})
 }
 
 // 个人信息
 export const getInfoApi = () => {
-  return request.get<BaseRes<InfoData>>('/user/info')
+  return request.get<AxiosRes<InfoData>>('/user/info')
 }
 
 // 当前用户菜单
@@ -41,10 +52,7 @@ export const getUserMenuListApi = () => {
   return request.get<AxiosRes<MenuRes>>('/user/menulist', {
   })
 }
-// 退出登录
-export const getLogoutApi = () => {
-  return request.post<BaseRes<LoginResData>>('/user/logout')
-}
+
 
 // 角色列表
 export const getRoleListApi = () => {
@@ -55,14 +63,14 @@ export const getRoleListApi = () => {
 
 //用户管理列表
 export const getUserListApi = (params: UserListParams) => {
-  return request.get<UserListRes>('/user/list', {
+  return request.get<AxiosRes<UserListRes>>('/user/list', {
     params,
   })
 }
-  
+
 //班级列表
 export const getClassListApi = (params:{page?:number,pagesize?:number,name?:string}={page:1},current?:number) => {
-  return request.get<BaseRes<ClassListData>>('/studentGroup/list',{
+  return request.get<AxiosRes<ClassListData>>('/studentGroup/list',{
     params
   })
 }
@@ -81,10 +89,10 @@ export const delClassListApi = (params:{id:string}) => {
     params
   )
 }
-//学生列表
 
+//学生列表
 export const getstudentListApi = ( params:{page:number,pagesize:number}) => {
-  return request.get<BaseRes<StudentListData>>('/student/list',{
+  return request.get<AxiosRes<StudentListData>>('/student/list',{
     params,
   })
 }
@@ -103,17 +111,80 @@ export const delStudentListApi = (params:{id:string}) => {
 }
 // 新增角色
 export const getCreateRoleApi = (params:{name: string, value: string}) => {
-  return request.get('/role/create',{
-    params,
+  return request.post<AxiosRes<LoginResData>>('/role/create',params)
+}
+
+// 删除角色
+export const getRemoveRoleApi = (params: {id: string}) => {
+  return request.post<AxiosRes<LoginResData>>('/role/remove',params)
+}
+
+// 考试记录
+export const getExaminationApi = (params: {page: number, pagesize: number}) => {
+  return request.get<AxiosRes<ExamRecordRes>>('/examination/list',{
+    params
   })
 }
-  
+
 // 创建用户
 export const createUserApi = (params: createUserParams) => {
   return request.post<createUserRes>('/user/create', params)
 }
 
+// 编辑用户
+export const UpdateUserApi = (params: updateUserParams) => {
+  return request.post<createUserRes>('/user/update', params)
+}
+
+// 删除用户
+export const RemoveUserApi = (params: { id: string }) => {
+  return request.post<createUserRes>('/user/remove', params)
+}
+
+// 创建考试
+export const createExamApi = (params: {name: string, time: number}) => {
+  return request.post<createUserRes>('/examination/create', params)  
+}
+
+// 监考人
+export const getInvigilateApi = () => {
+  return request.get<AxiosRes<UserListRes>>('/user/list')
+}
+
+// 考试科目
+export const getSubjectApi = () => {
+  return request.get<AxiosRes<SubjectRes>>('/classify/list')
+}
+
 //创建班级
 export const createClassApi = (data:{name: string,classify:string,teacher:string,students:[]}) => {
   return request.post<BaseRes>('/studentGroup/create', data)
+}
+
+
+//试卷接口
+export const getExamApi = (params:any) => {
+  return request.get<BaseRes<exampaper>>('/exam/list',{
+    params
+  })
+}
+//查询试卷详情
+export const getExamItemApi = (params:{id:string}) => {
+  return request.get<BaseRes<exampaperInfo>>('/exam/detail',{
+    params
+  })
+}
+
+//试题列表接口
+export const getquestionsApi = (params:{classify:string}) => {
+  return request.get<BaseRes<questionlist>>('/question/list',{
+    params
+  })
+}
+//创建试卷
+
+export const createExampaper = (params:Partial<exampaperInfo>) => {
+  return request.post<BaseRes>('/exam/create',
+    params
+  )
 }

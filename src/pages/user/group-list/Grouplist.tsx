@@ -26,6 +26,44 @@ export default () => {
   const searchform=useRef()
   console.log(searchform)
   const [create, setCreate] = useState<boolean>(false);
+  const [jumpPage, setJumpPage] = useState<number>();
+  const [allPage, setAllPage] = useState<number>();
+  const [prevData, setPrevData] = useState<number>();
+  const [pagesize, setPagesize] = useState<number>(5);
+
+
+  const fetchData = async (params: { [x: string]: any; current?: any; pageSize?: any; }) => {
+    // 这里应该是你的实际数据请求逻辑
+    // 假设返回的数据格式是 { data: [...], success: true, total: number }
+    const{current,pageSize,...keywords}=params
+    setJumpPage(params.current)
+    console.log(params)
+    const res=await getClassListApi({page:params.current,pagesize:params.pageSize,...keywords})
+    const mockData = {
+      data: res.data.data.list,
+      success: true,
+      total: res.data.data.total, // 假设总条目数为100
+    };
+    setPrevData(params.current)
+    // 根据实际情况更新状态和返回数据
+    setAllPage(mockData.total)
+    setPagesize(params.pageSize)
+    return {
+      data: mockData.data,
+      success: mockData.success,
+      total: mockData.total,
+    };
+  };
+  useEffect(() => {
+    if (allPage! > 0) {
+      const lastPage = Math.ceil(allPage! / pagesize!) // 假设每页显示10条数据，计算总页数
+      const surplus = allPage! % pagesize! // 计算最后一页的剩余数据条数
+      if(prevData===lastPage-1 && surplus===1){
+        setJumpPage(lastPage); // 跳转到最后一页
+      }
+    }
+  }, [allPage])
+
   interface saveclass{
     id:string,
     classify:string
@@ -65,8 +103,11 @@ export default () => {
   }
 
   useEffect(() => {
+    actionRef.current?.reload()
+  }, [modalVisible]);
+  useEffect(() => {
     dispatch(getClassList())
-  }, [create,data]);
+  }, [create,data])
   return (
     <>
     <CreateItem  modalVisible={modalVisible} setModalVisible={setModalVisible} setCreate={setCreate} creat={create}/>
@@ -75,17 +116,9 @@ export default () => {
       actionRef={actionRef}
       formRef={searchform}
       cardBordered
-      request={async (params, sort, filter) => {
-        console.log(sort, filter,params);
-        const{current,pageSize,...keywords}=params
-        console.log(keywords)
-        const res=await getClassListApi({page:params.current,pagesize:params.pageSize,...keywords})
-        return {
-          data: res.data.data.list,
-          success: true,
-          total: res.data.data.total,
-        };
-      }}
+      
+      request={fetchData}
+
       editable={{
         type: 'multiple',
         
@@ -99,6 +132,7 @@ export default () => {
           console.log( data,row)
           setData(()=>Date.now())
           delListItem(row._id)
+          if(row.index===0 && allPage!>pagesize)setJumpPage(prev=>prev!-1)
           actionRef.current?.reload()
         },
 
@@ -137,7 +171,9 @@ export default () => {
       }}
       pagination={{
         pageSize: 5,
-        onChange: (page) => console.log(page),
+        current: jumpPage!
+
+        
       }}
       dateFormatter="string"
       headerTitle="班级列表"

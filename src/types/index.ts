@@ -28,7 +28,7 @@ export type MenuItem = {
     __v: number,
     _id: string,
     children?: MenuItem[]
- 
+
 }
 export type MenuRes = {
     list: MenuItem[]
@@ -146,7 +146,7 @@ export type UserListRes = {
 }
 
 // 创建用户入参格式
-export type createUserParams = Record<'username' | 'password' | 'status', string>
+export type createUserParams = Pick<ListItem, 'username' | 'password' | 'status' | 'role'>
 
 // 创建用户返回值
 export type createUserRes = {
@@ -157,4 +157,90 @@ export type BaseRes<T=null> = {
     code: number
     msg: string
     data: T
+}
+//试题列表
+export type questionlist={
+    list:questionItem[]
+    total: number
+    totalPage: number
+}
+
+// 考试记录
+export type QuestionsListItem = {
+    answer: string
+    classify: string
+    options: string[]
+    question: string
+    type: string
+    __v: number
+    _id: string
+}
+export type ExamRecordItem = {
+    classify: string
+    createTime: number
+    creator: string
+    endTime: number
+    examId: string
+    examiner: string[]
+    group: string[]
+    name: string
+    questionsList: QuestionsListItem[]
+    startTime: number
+    status: 0 | 1
+    __v: number
+    _id: string
+}
+export type ExamRecordRes = {
+    list: ExamRecordItem[]
+    total: number
+    totalPage: number
+}
+
+// 编辑用户入参格式
+export type updateUserParams = Partial<Omit<ListItem, 'creator' | 'lastOnlineTime'>> & {id: string}
+
+// 监考人
+export type InvigilateItem = {
+    username: string
+    _id: string
+}
+
+// 考试科目
+export type SubjectItem = {
+    createTime: number
+    creator: string
+    name: string
+    value: string
+    __v: number
+    _id: string
+}
+export type SubjectRes = {
+    list: []
+}
+
+export  type questionItem = {
+    answer: string
+    classify: string
+    options: string[]
+    question: string
+    type: string
+    _v: number
+    _id: string
+}
+
+export type exampaperInfo = {
+    classify: string
+    name: string
+    createTime: number
+    creator: string
+    _v: number
+    _id: string
+    questions: questionItem[]
+}
+
+export type exampaper = {
+    list: exampaperInfo[]
+    total: number
+    totalPage: number
+    
 }

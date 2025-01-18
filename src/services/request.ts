@@ -2,7 +2,7 @@ import axios from "axios";
 import { message } from "antd";
 
 //根据环境变量配置请求的基础路径
-const baseURL =process.env.NODE_ENV === 'development'?'/bwapi':'https://zyxcl.xyz/exam_api'
+const baseURL = process.env.NODE_ENV === 'development'?'/bwapi':'https://zyxcl.xyz/exam_api'
 
 const request = axios.create({
     baseURL,
@@ -12,7 +12,7 @@ const request = axios.create({
 //请求拦截，统一处理公告参数，例如：token
 request.interceptors.request.use(config => {
     //统一添加token
-    console.log('请求接口之前执行此函数', config)
+    // console.log('请求接口之前执行此函数', config)
     config.headers.Authorization = localStorage.getItem('token') || ''
     return config
 },function (error) {
