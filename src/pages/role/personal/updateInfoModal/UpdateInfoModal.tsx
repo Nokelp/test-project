@@ -51,6 +51,7 @@ const UpdateInfoModal: React.FC<ChildComponentProps> = props => {
 
   const onFinish = async (values: Values) => {
     try {
+      // 编辑个人信息
       const res = await UpdateUserInfoApi(values);
       if(res.data.code === 200) {
         setIsModalOpen(false);

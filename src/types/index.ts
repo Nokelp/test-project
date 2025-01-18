@@ -247,4 +247,4 @@ export type QuestionsListRes = {
     totalPage: number
 }
 // 修改个人信息返回值
-export type UpdateUserInfoParams = Pick<InfoData, 'username' | 'age' | 'email' | 'sex'>
+export type UpdateUserInfoParams = Pick<InfoData, 'username' | 'age' | 'email' | 'sex' | 'avator'>

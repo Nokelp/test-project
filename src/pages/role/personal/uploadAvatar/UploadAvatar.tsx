@@ -2,27 +2,62 @@ import React, { useState } from 'react';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Flex, message, Upload } from 'antd';
 import type { GetProp, UploadProps } from 'antd';
-import { UploaderAvatarApi } from '../../../../services';
 import { baseURL } from '../../../../services/request';
+import { UpdateUserInfoApi, getInfoApi } from '../../../../services';
+import { updateInfo } from '../../../../store/models/userInfo';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../../../store';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 const getBase64 = (img: FileType, callback: (url: string) => void) => {
-    console.log("getBase64", img)
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result as string));
     reader.readAsDataURL(img);
 };
 
+// 组件
 const UploadAvatar: React.FC = () => {
+    const info = useSelector((state: RootState) => state.userInfo.info);
     const [loading, setLoading] = useState(false);
-    const [imageUrl, setImageUrl] = useState<string>();
-    const [ avatarName, setAvatarName ] = useState<string>('');
+    const [imageUrl, setImageUrl] = useState<string>(info?.avator || '');
+    const dispatch = useDispatch();
+
+    // 获取个人信息
+    const getInfo = async () => {
+        try {
+            const res = await getInfoApi();
+            if(res.data.code === 200) {
+                dispatch(updateInfo(res.data.data));
+            } else {
+                message.error(res.data.msg);
+            }
+        }catch(err) {
+            console.log(err);
+        }
+    }
+
+    // 更新个人信息
+    const updateAvatar = async (avatorUrl: string) => {
+        try {
+            const { username, sex, age, email } = info;
+            const res = await UpdateUserInfoApi({
+                username,
+                sex,
+                age,
+                email,
+                avator: avatorUrl
+            });
+            if(res.data.code === 200) {
+                getInfo();
+            }
+        }catch(err) {
+            console.log(err);
+        }
+    }
 
     // 上传文件之前的钩子，参数为上传的文件，若返回 false 则停止上传。
     const beforeUpload = (file: FileType) => {
-        console.log("beforeUpload:", file);
-        setAvatarName(file.name);
         const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
         if (!isJpgOrPng) {
             message.error('您只能上传JPG/PNG文件！');
@@ -34,26 +69,29 @@ const UploadAvatar: React.FC = () => {
         return isJpgOrPng && isLt2M;
     };
 
+    // 处理服务端响应
     const handleChange: UploadProps['onChange'] = (info) => {
-        console.log("info", info)
-        if (info.file.status === 'uploading') {
-        setLoading(true);
-        return;
+        const { status, response, originFileObj } = info.file;
+        if (status === 'uploading') {
+            setLoading(true);
+            return;
         }
-        if (info.file.status === 'done') {
-        // 从真实世界的响应中获取此url
-        getBase64(info.file.originFileObj as FileType, (url) => {
-            console.log("url", url)
-            setLoading(false);
-            setImageUrl(url);
-        });
+        if (status === 'done') {
+            const { msg, data } = response;
+            message.success(msg);
+            setImageUrl(data.url);
+            getBase64(originFileObj as FileType, (url) => {
+                setLoading(false);
+            });
+            // 请求更新接口
+            updateAvatar(data.url);
         }
     };
 
     const uploadButton = (
         <button style={{ border: 0, background: 'none' }} type="button">
-        {loading ? <LoadingOutlined /> : <PlusOutlined />}
-        <div style={{ marginTop: 8 }}>Upload</div>
+            {loading ? <LoadingOutlined /> : <PlusOutlined />}
+            <div style={{ marginTop: 8 }}>Upload</div>
         </button>
     );
 
@@ -64,8 +102,7 @@ const UploadAvatar: React.FC = () => {
             listType="picture-card"
             className="avatar-uploader"
             showUploadList={false}
-            action=''
-            // customRequest={() => UploaderAvatarApi({ avatar: avatarName })}
+            action={`${baseURL}/profile`}
             beforeUpload={beforeUpload}
             onChange={handleChange}
         >
