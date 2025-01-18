@@ -226,10 +226,6 @@ export const removeQuestionApi = (params: {id: string}) => {
 export const getUpdateQuestionApi = (params: {id: string, question: string }) => {
     return request.post<AxiosRes<LoginRes>>('/question/update', params)
 }
-// 上传头像
-export const UploaderAvatarApi = (params: { avatar: string }) => {
-    return request.post<createUserRes>('/profile', params)
-}
 
 // 修改个人信息
 export const UpdateUserInfoApi = (params: UpdateUserInfoParams) => {
