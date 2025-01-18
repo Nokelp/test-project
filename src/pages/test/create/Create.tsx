@@ -2,8 +2,7 @@ import type { ProFormInstance } from '@ant-design/pro-components'
 import {
   ProCard,
   ProForm,
-  ProFormCheckbox,
-  ProFormDateRangePicker,
+  ProFormDateTimeRangePicker,
   ProFormSelect,
   ProFormText,
   StepsForm,
@@ -117,8 +116,8 @@ export default () => {
             placeholder="请输入名称"
             rules={[{ required: true }]}
           />
-          <ProFormDateRangePicker 
-            name="dateTime" 
+          <ProFormDateTimeRangePicker 
+            name="dateTime"
             label="考试时间" 
             rules={[{ required: true }]}
           />

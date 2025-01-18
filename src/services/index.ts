@@ -16,7 +16,8 @@ import type {
   updateUserParams,
   SubjectRes,
   ExamClassRes,
-  createExamParams
+  createExamParams,
+  QuestionsListRes
 } from "../types"
 import request from "./request"
 
@@ -142,4 +143,21 @@ export const getQuestionsListApi = (params: {classify: string}) => {
 // 创建考试
 export const createExamRecordApi = (params: createExamParams) => {
   return request.post<AxiosRes<LoginRes>>('/examination/create', params)
+}
+
+// 试题库
+export const getQuestionListApi = (params: {page: number, pagesize: number}) => {
+  return request.get<AxiosRes<QuestionsListRes>>('/question/list',{
+    params
+  })
+}
+
+// 删除题目
+export const removeQuestionApi = (params: {id: string}) => {
+  return request.post<AxiosRes<LoginRes>>('/question/remove', params) 
+}
+
+// 编辑题目
+export const getUpdateQuestionApi = (params: {id: string, question: string }) => {
+  return request.post<AxiosRes<LoginRes>>('/question/update', params)
 }

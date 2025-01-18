@@ -234,3 +234,10 @@ export type createExamParams = {
     startTime: string
     endTime: string
 }
+
+// 试题库
+export type QuestionsListRes = {
+    list: QuestionsListItem[]
+    total: number
+    totalPage: number 
+}
