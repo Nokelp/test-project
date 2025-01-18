@@ -162,3 +162,6 @@ export type ExamRecordRes = {
 
 // 编辑用户入参格式
 export type updateUserParams = Partial<Omit<ListItem, 'creator' | 'lastOnlineTime'>> & {id: string}
+
+// 修改个人信息返回值
+export type UpdateUserInfoParams = Pick<InfoData, 'username' | 'age' | 'email' | 'sex'>

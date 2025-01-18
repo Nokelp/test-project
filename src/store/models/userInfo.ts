@@ -32,11 +32,16 @@ const infoSlice = createSlice({
     name: 'info',
     initialState,
     reducers:{
+        // 添加/编辑用户弹窗开关
         changeModalOpen(state, actions) {
             state.userModalOpen = actions.payload
         },
+        // 是否是新增用户操作
         isAdd(state, actions) {
             state.isAddUser = actions.payload
+        },
+        updateInfo(state, actions) {
+            state.info = actions.payload
         }
     },
     extraReducers: builder => {
@@ -49,6 +54,6 @@ const infoSlice = createSlice({
     }
 }) 
 
-export const { changeModalOpen, isAdd } = infoSlice.actions
+export const { changeModalOpen, isAdd, updateInfo } = infoSlice.actions
 
 export default infoSlice.reducer

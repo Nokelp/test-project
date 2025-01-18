@@ -14,6 +14,7 @@ import type {
   createUserRes,
   ExamRecordRes,
   updateUserParams,
+  UpdateUserInfoParams,
 } from "../types"
 import request from "./request"
 
@@ -104,4 +105,14 @@ export const UpdateUserApi = (params: updateUserParams) => {
 // 删除用户
 export const RemoveUserApi = (params: { id: string }) => {
   return request.post<createUserRes>('/user/remove', params)
+}
+
+// 上传头像
+export const UploaderAvatarApi = (params: { avatar: string }) => {
+  return request.post<createUserRes>('/profile', params)
+}
+
+// 修改个人信息
+export const UpdateUserInfoApi = (params: UpdateUserInfoParams) => {
+  return request.post<createUserRes>('/user/update/info', params)
 }

@@ -136,7 +136,7 @@ export default () => {
       cardBordered
       request={async (params, sort, filter) => {
         const res = await getExaminationApi()
-        console.log(res.data.data)
+        // console.log(res.data.data)
         return res.data.data.list
       }}
       editable={{
@@ -149,7 +149,7 @@ export default () => {
           option: { fixed: 'right', disable: true },
         },
         onChange(value) {
-          console.log('value: ', value);
+          // console.log('value: ', value);
         },
       }}
       rowKey="id"
