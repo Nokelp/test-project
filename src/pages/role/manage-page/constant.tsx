@@ -47,6 +47,14 @@ export const getColumns = ({ onClickEdit, onConfirm }: columnsProps) => {
             title: '用户名',
             dataIndex: 'username',
             key: 'username',
+            formItemProps: {
+                rules: [
+                    {
+                        pattern: /^[^\s]*$/,
+                        message: '禁止输入空格',
+                    }
+                ],
+            },
         },
         {
             title: '密码',
@@ -65,6 +73,14 @@ export const getColumns = ({ onClickEdit, onConfirm }: columnsProps) => {
             title: '创建人',
             dataIndex: 'creator',
             key: 'creator',
+            formItemProps: {
+                rules: [
+                    {
+                        pattern: /^[^\s]*$/,
+                        message: '禁止输入空格',
+                    }
+                ],
+            },
         },
         {
             title: '操作',

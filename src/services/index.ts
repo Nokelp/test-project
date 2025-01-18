@@ -20,7 +20,8 @@ import type {
   SubjectRes,
   ExamClassRes,
   createExamParams,
-  QuestionsListRes
+  QuestionsListRes,
+  UpdateUserInfoParams,
 } from "../types"
 import request from "./request"
 
@@ -142,7 +143,7 @@ export const RemoveUserApi = (params: { id: string }) => {
 
 // 创建考试
 export const createExamApi = (params: {name: string, time: number}) => {
-  return request.post<createUserRes>('/examination/create', params)  
+  return request.post<createUserRes>('/examination/create', params)
 }
 
 // 监考人
@@ -186,10 +187,19 @@ export const getQuestionListApi = (params: {page: number, pagesize: number}) => 
 
 // 删除题目
 export const removeQuestionApi = (params: {id: string}) => {
-  return request.post<AxiosRes<LoginRes>>('/question/remove', params) 
+  return request.post<AxiosRes<LoginRes>>('/question/remove', params)
 }
 
 // 编辑题目
 export const getUpdateQuestionApi = (params: {id: string, question: string }) => {
   return request.post<AxiosRes<LoginRes>>('/question/update', params)
+}
+// 上传头像
+export const UploaderAvatarApi = (params: { avatar: string }) => {
+  return request.post<createUserRes>('/profile', params)
+}
+
+// 修改个人信息
+export const UpdateUserInfoApi = (params: UpdateUserInfoParams) => {
+  return request.post<createUserRes>('/user/update/info', params)
 }

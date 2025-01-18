@@ -244,5 +244,7 @@ export type createExamParams = {
 export type QuestionsListRes = {
     list: QuestionsListItem[]
     total: number
-    totalPage: number 
+    totalPage: number
 }
+// 修改个人信息返回值
+export type UpdateUserInfoParams = Pick<InfoData, 'username' | 'age' | 'email' | 'sex'>
