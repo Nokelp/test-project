@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { Flex, message, Upload } from 'antd';
+import ImgCrop from 'antd-img-crop';
+import { message, Upload, Tooltip } from 'antd';
 import type { GetProp, UploadProps } from 'antd';
 import { baseURL } from '../../../../services/request';
 import { UpdateUserInfoApi, getInfoApi } from '../../../../services';
@@ -20,8 +21,12 @@ const getBase64 = (img: FileType, callback: (url: string) => void) => {
 const UploadAvatar: React.FC = () => {
     const info = useSelector((state: RootState) => state.userInfo.info);
     const [loading, setLoading] = useState(false);
-    const [imageUrl, setImageUrl] = useState<string>(info?.avator || '');
+    const [imageUrl, setImageUrl] = useState<string>(info?.avator);
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        setImageUrl(info?.avator);
+    }, [info]);
 
     // 获取个人信息
     const getInfo = async () => {
@@ -80,7 +85,7 @@ const UploadAvatar: React.FC = () => {
             const { msg, data } = response;
             message.success(msg);
             setImageUrl(data.url);
-            getBase64(originFileObj as FileType, (url) => {
+            getBase64(originFileObj as FileType, () => {
                 setLoading(false);
             });
             // 请求更新接口
@@ -96,19 +101,27 @@ const UploadAvatar: React.FC = () => {
     );
 
     return (
-        <Flex gap="middle" wrap>
-        <Upload
-            name="avatar"
-            listType="picture-card"
-            className="avatar-uploader"
-            showUploadList={false}
-            action={`${baseURL}/profile`}
-            beforeUpload={beforeUpload}
-            onChange={handleChange}
-        >
-            {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-        </Upload>
-        </Flex>
+        <ImgCrop rotationSlider>
+            <Upload
+                name="avatar"
+                listType="picture-card"
+                className="avatar-uploader"
+                showUploadList={false}
+                action={`${baseURL}/profile`}
+                beforeUpload={beforeUpload}
+                onChange={handleChange}
+            >
+                <Tooltip
+                    title={info?.avator && "点击修改头像"}
+                    style={{background: 'white', color: '#000'}}
+                    placement="left"
+                >
+                    {imageUrl ? (
+                        <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
+                    ) : uploadButton}
+                </Tooltip>
+            </Upload>
+        </ImgCrop>
     );
 };
 
