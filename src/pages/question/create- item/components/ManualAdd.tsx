@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import {
   FooterToolbar,
   ProForm,
+  ProFormCheckbox,
   ProFormRadio,
   ProFormSelect,
   ProFormTextArea,
@@ -11,6 +12,7 @@ import { SubjectItem } from '../../../../types'
 
 const ManualAdd: React.FC = () => {
   const [subject, setSubject] = useState<SubjectItem[]>([])
+  const [type, setType] = useState('') 
 
   const getSubject = async () => {
     const res = await getSubjectApi()
@@ -20,7 +22,7 @@ const ManualAdd: React.FC = () => {
   useEffect(() => {
     getSubject()
   }, [])
-  // console.log(subjectList.map(item => item.name))
+  console.log(type)
 
   return (
     <div>
@@ -57,6 +59,13 @@ const ManualAdd: React.FC = () => {
               },
             ]}
             rules={[{ required: true }]}
+            onChange={(value: any) => setType(value)}
+            // fieldProps={{
+            //   optionItemRender(item) {
+            //     console.log(item)
+            //     return <></>
+            //   },
+            // }}
           />
           <ProFormSelect
             width="md"
@@ -70,24 +79,59 @@ const ManualAdd: React.FC = () => {
               }
             })}
           />
-        </ProForm.Group>
-        <ProForm.Group>
           <ProFormTextArea 
             width="xl"
-            label="添加试题"
+            label="题目"
             name="question"
             rules={[{ required: true }]}
           />
         </ProForm.Group>
-        <ProForm.Group>
-          <ProFormRadio.Group
-            label="发票类型"
-            name="answer"
-            initialValue="发票"
-            options={['A', 'B', 'C', 'D']}
-            rules={[{ required: true }]}
-          />
-        </ProForm.Group>
+        { Number(type) === 1 &&
+          <ProForm.Group>
+            <ProFormRadio.Group
+              label="选项"
+              name="answer"
+              options={['A', 'B', 'C', 'D']}
+              rules={[{ required: true }]}
+            />
+          </ProForm.Group>
+        }
+        { (Number(type) === 2) &&
+          <>
+          <ProForm.Group>
+            <ProFormCheckbox.Group
+              label="选项"
+              name="answer"
+              options={['A', 'B', 'C', 'D']}
+              rules={[{ required: true }]}
+            />
+          </ProForm.Group>
+          </>
+        }
+        { (Number(type) === 3) &&
+          <>
+          <ProForm.Group>
+            <ProFormRadio.Group
+              label="选项"
+              name="answer"
+              options={['对', '错']}
+              rules={[{ required: true }]}
+            />
+          </ProForm.Group>
+          </>
+        }
+        { (Number(type) === 4) &&
+          <>
+          <ProForm.Group>
+            <ProFormTextArea 
+              label="正确答案"
+              width="xl"
+              name="answer"
+              rules={[{ required: true }]}
+            />
+          </ProForm.Group>
+          </>
+        }
         <ProFormTextArea width="xl" label="解析" name="remark" />
       </ProForm>
     </div>

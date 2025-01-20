@@ -45,8 +45,8 @@ const ManagePage = () => {
         request={async (params) => {
           const { current, pageSize, ...other } = params;
           const res = await getUserListApi({
-            page: current,
-            pagesize: pageSize,
+            page: current!,
+            pagesize: pageSize!,
             ...other
           })
           return {

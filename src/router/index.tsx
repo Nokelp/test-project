@@ -3,7 +3,7 @@ import Login from "../pages/login/Login"
 
 import NotFound from "../pages/notfound/NotFound"
 import Layout from "../Layout/Layout"
-// 考试管理
+//考试管理
 import Record from "../pages/test/record/Record"
 import Create from "../pages/test/create/Create"
 //班级管理
@@ -179,7 +179,7 @@ const  routes:Route[]=[
 ]
 
 
-export default routes.map(route => {
+ const routerConfig = routes.map(route => {
     if (route.layout) {
         route.element = <Layout>{route.element}</Layout>
         
@@ -191,3 +191,5 @@ export default routes.map(route => {
     return route
     
 })
+
+export default routerConfig

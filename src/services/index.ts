@@ -25,7 +25,7 @@ import type {
     exampaper,
     exampaperInfo,
     questionlist,
-    questionItem
+    PermissionRes
 } from "../types"
 import request from "./request"
 
@@ -185,8 +185,8 @@ export const getquestionsApi = (params:{classify:string}) => {
     params
     })
 }
-//创建试卷
 
+//创建试卷
 export const createExampaper = (params:Partial<exampaperInfo>) => {
     return request.post<BaseRes>('/exam/create',
     params
@@ -230,4 +230,15 @@ export const getUpdateQuestionApi = (params: {id: string, question: string }) =>
 // 修改个人信息
 export const UpdateUserInfoApi = (params: UpdateUserInfoParams) => {
     return request.post<createUserRes>('/user/update/info', params)
+}
+
+
+// 权限列表
+export const getPermissionListApi = () => {
+    return request.get<AxiosRes<PermissionRes>>('/permission/list')
+}
+
+// 删除权限菜单
+export const getRemovePermissionApi = (params: {id: string}) => {
+    return request.post<AxiosRes<LoginRes>>('/permission/remove', params)
 }

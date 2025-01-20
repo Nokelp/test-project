@@ -281,3 +281,11 @@ export type QuestionsListRes = {
 }
 // 修改个人信息返回值
 export type UpdateUserInfoParams = Pick<InfoData, 'username' | 'age' | 'email' | 'sex' | 'avator'>
+
+
+// 权限管理
+export type PermissionRes = {
+    list: MenuItem[]
+    total: number
+    totalPage: number
+}

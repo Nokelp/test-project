@@ -15,7 +15,6 @@ import type { RootState } from '../store'
         // 根据当前访问的地址去权限中查找是否有此权限
         const isPermission = permission.find((item) => item.path === location.pathname)
         // 如果有此权限就显示页面，没有就跳转到403页面
-        console.log(isPermission)
         if (userInfo === null) return null
         if (isPermission) {
             return children

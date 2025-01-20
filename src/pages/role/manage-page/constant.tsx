@@ -67,7 +67,7 @@ export const getColumns = ({ onClickEdit, onConfirm }: columnsProps) => {
             dataIndex: 'lastOnlineTime',
             key: 'lastOnlineTime',
             valueType: 'dateTime',
-            sorter: (a, b) => a.lastOnlineTime - b.lastOnlineTime,
+            sorter: (a, b) => a.lastOnlineTime! - b.lastOnlineTime!,
         },
         {
             title: '创建人',
