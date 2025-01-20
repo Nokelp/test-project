@@ -60,12 +60,6 @@ const ManualAdd: React.FC = () => {
             ]}
             rules={[{ required: true }]}
             onChange={(value: any) => setType(value)}
-            // fieldProps={{
-            //   optionItemRender(item) {
-            //     console.log(item)
-            //     return <></>
-            //   },
-            // }}
           />
           <ProFormSelect
             width="md"
