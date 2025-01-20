@@ -2,7 +2,7 @@ import { ModalForm, ProFormText, ProFormDateTimeRangePicker, ProFormSelect } fro
 import { Button, Space, message, Popconfirm, Drawer } from 'antd'
 import type { PopconfirmProps } from 'antd'
 import { QuestionsListItem } from '../../../../types'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { getUpdateQuestionApi, removeQuestionApi } from '../../../../services'
 import type { ProFormInstance } from '@ant-design/pro-components'
 
@@ -35,6 +35,10 @@ const ModalEditor: React.FC<Props> = ({ record, actionRef }) => {
     }
     setCurItem(record)
   }
+
+  useEffect(() => {
+    curData(record)
+  }, [record, formRef]) 
 
   const getRemove = async (id: string) => {
     try{

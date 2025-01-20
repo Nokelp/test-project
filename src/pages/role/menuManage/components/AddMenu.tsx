@@ -1,23 +1,34 @@
-import React from 'react'
-import { PlusOutlined } from '@ant-design/icons';
+import React, { MutableRefObject, useRef } from 'react'
+import type { ProFormInstance, ActionType } from '@ant-design/pro-components'
 import {
   ModalForm,
   ProForm,
-  ProFormDateRangePicker,
   ProFormSelect,
   ProFormText, 
 } from '@ant-design/pro-components'
 import { Button, Form, message } from 'antd'
+import { getAddPermissionApi } from '../../../../services'
 
-const AddMenu: React.FC = () => {
-  const [form] = Form.useForm<{ name: string; company: string }>()
+interface Item {
+    name: string
+    path: string
+    disabled: boolean
+    isBtn: boolean
+}
+
+interface Props {
+    actionRef: any
+}
+
+const AddMenu: React.FC<Props> = ({ actionRef }) => {
+  const [form] = Form.useForm<Item>()
+  const restFormRef = useRef<ProFormInstance>()
+
+
   return (
     <div>
-        <ModalForm<{
-        name: string;
-        company: string;
-        }>
-        title="新建表单"
+        <ModalForm<Item>
+        title="添加新菜单"
         trigger={
             <Button
             key="primary"
@@ -26,17 +37,22 @@ const AddMenu: React.FC = () => {
             添加新菜单
         </Button>   
         }
-        form={form}
+        formRef={restFormRef}
         autoFocusFirstInput
         modalProps={{
             destroyOnClose: true,
-            onCancel: () => console.log('run'),
+            // onCancel: () => console.log('run'),
         }}
         submitTimeout={2000}
         onFinish={async (values) => {
-            console.log(values.name);
-            message.success('提交成功');
-            return true;
+            const res = await getAddPermissionApi(values)
+            if(res.data.code === 200){
+                message.success('添加成功')
+                actionRef.current.reload()
+            }else{
+                message.error(res.data.msg)
+            }
+            return true
         }}
         >
         <ProForm.Group>
@@ -46,27 +62,51 @@ const AddMenu: React.FC = () => {
                 label="菜单名称"
                 tooltip="最长为 24 位"
                 placeholder="请输入名称"
+                rules={[{required: true, message: '请输入菜单名称'}]}
             />
 
             <ProFormText
                 width="md"
                 name="path"
                 label="路径"
-                placeholder="请输入名称"
+                placeholder="请输入路径"
+                rules={[{required: true, message: '请输入路径'}]}
             />
         </ProForm.Group>
         <ProForm.Group>
-            <ProFormText
+            <ProFormSelect
             width="md"
-            name="contract"
-            label="子项名称"
-            placeholder="请输入名称"
+            name="disabled"
+            label="状态"
+            placeholder="请选择状态"
+            options={[
+                {
+                    label: '禁用',
+                    value: false, 
+                },
+                {
+                    label: '启用',
+                    value: true, 
+                }  
+            ]}
+            rules={[{required: true, message: '请选择状态'}]}
             />
-             <ProFormText
-            width="md"
-            name="contract"
-            label="子项路径"
-            placeholder="请输入名称"
+             <ProFormSelect
+                width="md"
+                name="isBtn"
+                label="权限类型"
+                placeholder="请选择类型"
+                options={[
+                    {
+                        label: '页面',
+                        value: false, 
+                    },
+                    {
+                        label: '按钮',
+                        value: true, 
+                    }  
+                ]}
+                rules={[{required: true, message: '请选择权限类型'}]}
             />
         </ProForm.Group>
         </ModalForm>

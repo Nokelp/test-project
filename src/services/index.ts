@@ -242,3 +242,8 @@ export const getPermissionListApi = () => {
 export const getRemovePermissionApi = (params: {id: string}) => {
     return request.post<AxiosRes<LoginRes>>('/permission/remove', params)
 }
+
+// 添加权限菜单
+export const getAddPermissionApi = (params: {name: string, path: string, disabled: boolean, isBtn: boolean}) => {
+    return request.post<AxiosRes<LoginRes>>('/permission/create', params)
+}

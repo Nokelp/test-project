@@ -24,7 +24,7 @@ const Record: React.FC = () => {
 
   const getSubject = async () => {
     const res = await getSubjectApi()
-    console.log(res.data.data.list)
+    // console.log(res.data.data.list)
     setSubject(res.data.data.list)
   }
 

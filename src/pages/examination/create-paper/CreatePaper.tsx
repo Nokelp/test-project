@@ -1,24 +1,16 @@
-import type { ProFormInstance } from '@ant-design/pro-components';
-import {Form,Input} from 'antd'
+import type { ProFormInstance } from '@ant-design/pro-components'
 import {
   
   ProCard,
-  ProForm,
-  ProFormCheckbox,
-  ProFormDatePicker,
-  ProFormDateRangePicker,
   ProFormSelect,
   ProFormText,
   ProFormTextArea,
   StepsForm,
   ProFormRadio,
-  ProFormFieldSet
-} from '@ant-design/pro-components';
-import { Button, message } from 'antd';
-import FormItem from 'antd/es/form/FormItem';
-import { useRef,useState,useEffect, SetStateAction } from 'react';
-import { Descriptions,Divider,List,Typography } from 'antd';
-import type { DescriptionsProps } from 'antd';
+} from '@ant-design/pro-components'
+import { Button, message } from 'antd'
+import { useRef,useState,useEffect } from 'react'
+import { Descriptions,Divider,List } from 'antd'
 import {getExamApi} from '../../../services/index'
 import type { exampaperInfo,questionItem} from '../../../types'
 import Modal from './components/modal'
@@ -27,25 +19,25 @@ import {createExampaper} from '../../../services/index'
 const waitTime = (time: number = 100) => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve(true);
-    }, time);
-  });
-};
+      resolve(true)
+    }, time)
+  })
+}
 
 type FieldType = {
   count?: number
-};
+}
 
 export default () => {
-  const formRef = useRef<ProFormInstance>();
-  const [curValue, setCurValue] = useState('a');
+  const formRef = useRef<ProFormInstance>()
+  const [curValue, setCurValue] = useState('a')
   const [examList, setexamList] = useState<exampaperInfo[]>([])
-  const [title, setTitle] = useState<string | null>(null);
-  const [name, setName] = useState<string>();
-  const [qustions, setQustions] = useState<questionItem[]>([]);
-  const [examDatasource, setExamDatasource] = useState<questionItem[]>([]);
+  const [title, setTitle] = useState<string | null>(null)
+  const [name, setName] = useState<string>()
+  const [qustions, setQustions] = useState<questionItem[]>([])
+  const [examDatasource, setExamDatasource] = useState<questionItem[]>([])
 
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [modalVisible, setModalVisible] = useState<boolean>(false)
 
   // 初始化状态变量
   const [inputValue, setInputValue] = useState(0)
@@ -61,7 +53,7 @@ export default () => {
     }
     
     setInputValue(Number(event.target.value)) // 更新状态
-  };
+  }
 
 
 
@@ -80,7 +72,7 @@ export default () => {
   console.log(qustions)
   useEffect(() => {
     getExamList()
-  }, []);
+  }, [])
   return (
     <>
     <Modal 
@@ -111,7 +103,7 @@ export default () => {
         }}
       >
         <StepsForm.StepForm<{
-          name: string;
+          name: string
         }>
           name="base"
           title="试卷基础信息"
@@ -122,8 +114,8 @@ export default () => {
             console.log(formRef.current?.getFieldsValue());
             setName(formRef.current?.getFieldsValue().name)
             console.log(name)
-            await waitTime(2000);
-            return true;
+            await waitTime(2000)
+            return true
           }}
         >
           <ProFormText
@@ -151,9 +143,9 @@ export default () => {
           //   description: '这里填入运维参数',
           // }}
           onFinish={async () => {
-            console.log(formRef.current?.getFieldsValue());
+            // console.log(formRef.current?.getFieldsValue())
             
-            return true;
+            return true
           }}
         >
           <ProFormSelect
@@ -190,7 +182,7 @@ export default () => {
         {
           curValue==='a'?<Button type='primary' style={{marginBottom:'20px'}}
           onClick={()=>{
-            setModalVisible(true);
+            setModalVisible(true)
           }}
           >选择试题</Button>:
         <div style={{display:'flex',alignItems:'center',marginBottom:'15px'}}>
@@ -209,7 +201,7 @@ export default () => {
               // setQustions(randomArray)
               for (let i = newArry.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                [newArry[i], newArry[j]] = [newArry[j], newArry[i]]; // 交换元素
+                [newArry[i], newArry[j]] = [newArry[j], newArry[i]] // 交换元素
               }
               setQustions(()=>newArry.slice(0, inputValue))
             }
@@ -244,5 +236,5 @@ export default () => {
       </StepsForm>
     </ProCard>
     </>
-  );
-};
+  )
+}

@@ -91,7 +91,6 @@ export default () => {
           name="base"
           title="考试基本信息"
           onFinish={async () => {
-            console.log(formRef.current?.getFieldsValue())
             const data = formRef.current?.getFieldsValue()
             setTestItem(data)
             const res = await getQuestionsListApi({ 
@@ -163,8 +162,8 @@ export default () => {
           name="checkbox"
           title="配置试卷"
           onFinish={async () => {
-            console.log(testItem)
-            console.log(formRef.current?.getFieldsValue())
+            // console.log(testItem)
+            // console.log(formRef.current?.getFieldsValue())
             return true;
           }}
         >

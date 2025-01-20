@@ -9,25 +9,19 @@ import React, { useEffect, useState, useRef } from 'react'
 import { getCreateRoleApi, getRemoveRoleApi, getRoleListApi } from '../../../services'
 import { RoleItem } from '../../../types'
 import dayjs from 'dayjs'
-import type { PopconfirmProps } from 'antd'
 import Tree from './components/Tree';
 
-const waitTime = (time: number = 100) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(true)
-    }, time)
-  })
-}
 
 
 const Role: React.FC = () => {
   const [roles, setRoles] = useState<RoleItem[]>([])
   const [open, setOpen] = useState(false);
   const restFormRef = useRef<ProFormInstance>()
+  const [selectedKeys, setSelectedKeys] = useState()
   const formRef = useRef()
 
-  const showDrawer = () => {
+  const showDrawer = (value: RoleItem) => {
+    setSelectedKeys(value.permission)
     setOpen(true);
   };
 
@@ -99,7 +93,7 @@ const Role: React.FC = () => {
       valueType: 'option',
       render: (_, value) => [
         <>
-          <Button key="link" type="primary" onClick={showDrawer}>分配角色</Button>
+          <Button key="link" type="primary" onClick={()=>showDrawer(value)}>分配角色</Button>
           <Popconfirm
             title="确定删除吗？"
             onConfirm={() => confirm(value._id)}
@@ -178,7 +172,7 @@ const Role: React.FC = () => {
         search={false}
       />
       <Drawer title="分配权限" onClose={onClose} open={open}>
-        <Tree />
+        <Tree roles={selectedKeys} />
       </Drawer>
     </div>
   )

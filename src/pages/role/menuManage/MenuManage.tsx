@@ -1,23 +1,21 @@
-import React from 'react'
+import React, { useRef, MutableRefObject } from 'react'
 import { getPermissionListApi, getRemovePermissionApi } from '../../../services'
 import type { MenuItem } from '../../../types'
 import dayjs from 'dayjs'
-import type { ProColumns } from '@ant-design/pro-components'
+import type { ProColumns, ProFormInstance, ActionType } from '@ant-design/pro-components'
 import { ProTable } from '@ant-design/pro-components'
 import { Button, message, Space, Tag, Popconfirm } from 'antd'
 import AddMenu from './components/AddMenu'
   
-
-
-
-
-
 const MenuManage: React.FC = () => {
+  const formRef = useRef<ProFormInstance>()
+  const actionRef = useRef<ActionType>()
 
   const getRemove = async (id: string) => {
     const res = await getRemovePermissionApi({id})
     if(res.data.code === 200) {
       message.success('删除成功')
+      actionRef.current?.reload() 
     }
   }
 
@@ -67,28 +65,30 @@ const MenuManage: React.FC = () => {
       render: (text, record) => [
         
         <Space>
-          <Button type="primary">编辑</Button>
+          <Button type="primary" key="edit">编辑</Button>
           <Popconfirm
             title="确定删除吗？"
             onConfirm={() => confirm(record._id)}
             onCancel={cancel}
             okText="确定"
             cancelText="取消"
+            key="delete"
           >
             <Button type="primary" danger >删除</Button>
           </Popconfirm>
         </Space>
       ],
     },
-  ];
+  ]
 
 
   return (
     <ProTable<MenuItem>
       columns={columns}
-      request={async(params, sorter, filter) => {
+      formRef={formRef}
+      actionRef={actionRef}
+      request={async() => {
         const res = await getPermissionListApi()
-        console.log(res.data.data.list)
         return {
           data: res.data.data.list,
           success: true,
@@ -101,7 +101,7 @@ const MenuManage: React.FC = () => {
           },
         },
         actions: [
-          <AddMenu />
+          <AddMenu actionRef={actionRef} />
         ],
       }}
       rowKey="_id"

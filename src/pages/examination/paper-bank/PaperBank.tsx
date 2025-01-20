@@ -1,20 +1,19 @@
-import { EllipsisOutlined, PlusOutlined } from '@ant-design/icons';
-import type { ActionType, ProColumns } from '@ant-design/pro-components';
-import { ProTable, TableDropdown } from '@ant-design/pro-components';
-import { Button, Dropdown, Space, Tag,Drawer } from 'antd';
-import { useRef,useState } from 'react';
-import request from 'umi-request';
+import { PlusOutlined } from '@ant-design/icons'
+import type { ActionType } from '@ant-design/pro-components'
+import { ProTable } from '@ant-design/pro-components'
+import { Button } from 'antd'
+import { useRef,useState } from 'react'
 import type { exampaperInfo} from '../../../types'
 import {getExamApi} from '../../../services/index'
 import {getColumns} from './constant'
 import DrawerCompoment from './components/drawer'
-import { Navigate ,useNavigate} from 'react-router-dom';
+import { useNavigate} from 'react-router-dom'
 
 
 export default () => {
-  const actionRef = useRef<ActionType>();
-  const [open, setOpen] = useState(false);
-  const [rowdata, setRowdata] = useState<exampaperInfo |null>(null);
+  const actionRef = useRef<ActionType>()
+  const [open, setOpen] = useState(false)
+  const [rowdata, setRowdata] = useState<exampaperInfo |null>(null)
   const navigate=useNavigate()
   // const openDrawer=()=>{
   //   setOpen(true)
@@ -39,9 +38,9 @@ export default () => {
         actionRef={actionRef}
         cardBordered
         request={async (params, sort, filter) => {
-          console.log(sort, filter,params);
+          // console.log(sort, filter,params)
           const {current,pageSize,...keywords}=params
-          console.log(keywords)
+          // console.log(keywords)
           const res=await getExamApi({...keywords})
           return {
             data: res.data.data.list,
@@ -66,7 +65,7 @@ export default () => {
             option: { fixed: 'right', disable: true },
           },
           onChange(value) {
-            console.log('value: ', value);
+            // console.log('value: ', value)
           },
         }}
         rowKey="_id"
@@ -93,7 +92,7 @@ export default () => {
         }}
         pagination={{
           pageSize: 5,
-          onChange: (page) => console.log(page),
+          // onChange: (page) => console.log(page),
         }}
         dateFormatter="string"
         headerTitle="高级表格"
