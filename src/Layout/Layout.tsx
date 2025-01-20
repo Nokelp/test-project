@@ -46,7 +46,7 @@ const Layout:React.FC<{children: React.ReactNode}>=(props) => {
             <ProConfigProvider hashed={false}>
                 <ConfigProvider
                     getTargetContainer={() => {
-                    return document.getElementById('test-pro-layout') || document.body;
+                        return document.getElementById('test-pro-layout') || document.body;
                     }}
                 >
                     <ProLayout

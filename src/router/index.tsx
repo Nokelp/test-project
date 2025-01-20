@@ -40,7 +40,9 @@ const  routes:Route[]=[
     // 考试管理
     {
         path: '/exam',
-        element: <Navigate to="/exam/record" />
+        element: <></>,
+        layout: true,
+
     },
     {
         path: '/exam/record',
@@ -57,7 +59,8 @@ const  routes:Route[]=[
     // 试题管理
     {
         path: '/question',
-        element: <Navigate to="/question/item-bank" />
+        element: <></>,
+        layout: true,
     },
     {
         path: '/question/item-bank',
@@ -74,37 +77,44 @@ const  routes:Route[]=[
     // 系统管理
     {
         path: '/userManage',
-        element: <Navigate to="/userManage/manage-page" />
+        element: <></>,
+        layout: true,
     },
     {
         path: '/userManage/manage-page',  // 用户管理
         element: <ManagePage />,
-        layout: true
+        layout: true,
+        permission: true
     },
     {
         path: '/userManage/menuManage',  // 权限管理
         element: <MenuManage />,
-        layout: true
+        layout: true,
+        permission: true
     },
     {
         path: '/userManage/system',  // 角色管理
         element: <System />,
-        layout: true
+        layout: true,
+        permission: true
     },
     {
         path: '/userManage/personal', //个人信息
         element: <Personal />,
-        layout: true
+        layout: true,
+        permission: true
     },
     {
         path: '/userManage/userOptions', //用户管理
         element: <ManagePage />,
-        layout: true
+        layout: true,
+        permission: true
     },
     // 试卷管理
     {
         path: '/paper',
-        element: <Navigate to="/paper/paper-bank" />
+        element: <></>,
+        layout: true,
     },
     {
         path: '/paper/paper-bank',
@@ -121,7 +131,8 @@ const  routes:Route[]=[
     // 班级管理
     {
         path: '/manage-group',
-        element: <Navigate to="/manage-group/group-list" />
+        element: <></>,
+        layout: true,
     },
     {
         path: '/manage-group/group-list',
@@ -141,14 +152,12 @@ const  routes:Route[]=[
         layout: true,
         permission: true
     },
-    
     {
         path: '/group-detail/:id',
         element: <Groupdetail />,
         layout: true,
         permission: true
     },
-    
     {
         path: '/systemManage/manage-page',
         element: <ManagePage />,
@@ -175,21 +184,17 @@ const  routes:Route[]=[
         path: '*',
         element: <NotFound />,
     }
-    
 ]
 
 
  const routerConfig = routes.map(route => {
     if (route.layout) {
         route.element = <Layout>{route.element}</Layout>
-        
-}
+    }
     if (route.permission) {
     route.element = <PrivateRoute>{route.element}</PrivateRoute>
-    
     }
     return route
-    
 })
 
 export default routerConfig
