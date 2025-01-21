@@ -3,22 +3,23 @@ import { Tree } from 'antd'
 import type { TreeProps } from 'antd'
 import { getPermissionListApi } from '../../../../services';
 import { MenuItem, RoleItem } from '../../../../types'
+import { DataNode, EventDataNode } from 'antd/es/tree';
 
 interface Props{
-  roles: RoleItem[]
+  roles: any
 }
 
 
 
 const TreeStructure: React.FC<Props> = ({roles}) => {
+  const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([])
   const [checkedKeys, setCheckedKeys] = useState<React.Key[]>([])
   const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([])
   const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true)
   const [treeData, setTreeData] = useState<MenuItem[]>([])
-  console.log(roles)
 
   const onExpand: TreeProps['onExpand'] = (expandedKeysValue) => {
-    console.log('onExpand', expandedKeysValue)
+    // console.log('onExpand', expandedKeysValue)
     // setExpandedKeys(expandedKeysValue)
     setAutoExpandParent(false)
   }
@@ -30,12 +31,13 @@ const TreeStructure: React.FC<Props> = ({roles}) => {
 
   const onSelect: TreeProps['onSelect'] = (selectedKeysValue, info) => {
     console.log('onSelect', info)
+    setSelectedKeys(selectedKeysValue)
   }
 
   const getPermissionList = async () => {
     try {
       const res = await getPermissionListApi()
-      console.log(res.data.data.list) 
+      // console.log(res.data.data.list) 
       const list = res.data.data.list.map((item: MenuItem) => {
         return {
           ...item,
@@ -58,14 +60,25 @@ const TreeStructure: React.FC<Props> = ({roles}) => {
 
   useEffect(() => {
     getPermissionList()
-    // setSelectedKeys(treeData.dis)
   },[])
+
+  useEffect(() => {
+    if(roles.length > 0){
+      const keys = roles.map((item: RoleItem) => {
+        return item
+      })
+      setCheckedKeys(keys)
+    }
+    setExpandedKeys(treeData.map((item: MenuItem) => item._id))
+  },[roles,treeData])
+
 
   return (
     <Tree
       checkable
       onExpand={onExpand}
       autoExpandParent={autoExpandParent}
+      expandedKeys={expandedKeys}
       onCheck={onCheck}
       checkedKeys={checkedKeys}
       onSelect={onSelect}

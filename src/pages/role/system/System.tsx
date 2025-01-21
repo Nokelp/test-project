@@ -17,7 +17,7 @@ const Role: React.FC = () => {
   const [roles, setRoles] = useState<RoleItem[]>([])
   const [open, setOpen] = useState(false);
   const restFormRef = useRef<ProFormInstance>()
-  const [selectedKeys, setSelectedKeys] = useState()
+  const [selectedKeys, setSelectedKeys] = useState([])
   const formRef = useRef()
 
   const showDrawer = (value: RoleItem) => {
